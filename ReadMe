@@ -1,1 +1,20 @@
-#Sae R301
+Besoins de l'application
+
+Présentation d'information
+L'application doit permettre la présentation d'information sur les personnes et les films présents dans les données (attention, certains films sont en fait des séries et ont des épisodes). Lorsque c'est pertinent, il faut pouvoir passer d'une fiche à une autre.
+
+Recherche
+Il faut pouvoir chercher une personne par son nom, son prénom ou un film par son titre, en
+recherche simple, et proposer une recherche avancée qui permet de sélectionner par
+d'autres critères (plage de temps pour la naissance d'une personne ou pour la création d'un
+film, par exemple). La recherche avancée doit pouvoir permettre de trouver une ressemblance approximative.
+Les résultats pourront être triés selon différents critères (en particulier: date, ordre
+alphabétique, etc.)
+
+Trouver des films ou personnes en commun
+
+Après avoir sélectionné deux films ou deux personnes, trouver les personnes (ou les films)
+en commun pour les deux. Par exemple, Thierry Lhermitte et Gérard Jugnot ont joués tous
+les deux dans Fallait Pas, Grosse Fatigue, Le père Noël est une ordure. Les 1001 nuits, Les
+Bronzés, Les Bronzés font du ski, Les Bronzés 3, Les Secrets professionnels du Dr
+Apfelglück, Papy fait de la résistance, Trafic d'influence, Vous n'aurez pas l'Alsace et la Lorraine.
