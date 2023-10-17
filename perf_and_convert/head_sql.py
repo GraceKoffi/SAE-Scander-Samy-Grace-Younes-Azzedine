@@ -88,8 +88,3 @@ def generate_sql_header(file, name_table):
         return 
 
 
-file = "test.tsv"
-
-name_table = "test"
-
-print(generate_sql_header(file, name_table))
