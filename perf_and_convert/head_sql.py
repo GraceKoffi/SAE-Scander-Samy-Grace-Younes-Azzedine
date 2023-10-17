@@ -64,7 +64,7 @@ def generate_sql_header(file, name_table):
             for i in range(1,len(types_line)):
                 column_types.append(sql_type(types_line[i]))
             
-            print(column_types)
+            
 
             # Créer la commande CREATE TABLE
             create_table_command = f"CREATE TABLE IF NOT EXISTS {name_table} (\n"
