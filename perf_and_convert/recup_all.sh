@@ -14,7 +14,7 @@ fichier_sql="$2"
 nom_table=$(basename "$fichier_sql" .sql)
 
 # Exécuter le script Python pour générer la commande CREATE TABLE
-python3 -c "
+python -c "
 import re
 
 def sql_type_primary(value):
@@ -88,14 +88,17 @@ except Exception as e:
 "
 # Écrire les requêtes SQL à la fin du fichier SQL
 awk -F'\t' -v nom_table="$nom_table" '
-  NR > 1 {
-    printf "INSERT INTO %s VALUES (", nom_table;
-    for (i = 1; i <= NF; i++) {
-      if (i == 1)
-        printf "\047%s\047", $i;  # Première colonne
-      else
-        printf ",\047%s\047", $i;  # Colonnes suivantes
-    }
-    printf ");\n";
-  }
+  NR > 1 { 
+     printf "INSERT INTO %s VALUES (", nom_table; 
+     for (i = 1; i <= NF; i++) { 
+       if ($i == "\\N")  # Si la valeur est "\N", mettre NULL
+         printf "NULL";
+       else
+         printf "\047%s\047", $i;  # Autres valeurs
+       
+       if (i < NF)  # Ajouter la virgule sauf pour la dernière colonne
+         printf ",";
+     } 
+     printf ");\n"; 
+   } 
 ' "$fichier_tsv" >> "$fichier_sql"
