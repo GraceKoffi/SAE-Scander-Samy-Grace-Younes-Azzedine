@@ -9,8 +9,8 @@ fi
 # Assigner les arguments à des variables
 fichier_tsv="$1"
 fichier_sql="$2"
-max_lignes="$3"  # Ajout de 1 à nombre_lignes
-((max_lignes++))
+max_lignes="$3"  
+((max_lignes++)) # Ajout de 1 à nombre_lignes
 # Extraire le nom du fichier (enlever l'extension .sql)
 nom_table=$(basename "$fichier_sql" .sql)
 
