@@ -1,7 +1,7 @@
 from time import time
 import subprocess
 import os
-import sys
+
 
 try:
  
@@ -28,18 +28,17 @@ try:
         tac = time()
         seconde = tac - tic
         if seconde < 60 :
-        
             print(f"Opération terminée avec succès en {round(seconde, 2)}s.\n")
-            sys.exit()
+            
 
         elif seconde >= 60 and seconde < 3600 :
             minute = (tac - tic)/60
             print(f"Opération terminée avec succès en {round(minute, 2)}m.\n")
-            sys.exit()
+            
         else :
             heure = (tac - tic)/3600
             print(f"Opération terminée avec succès en {round(heure, 2)}h.\n")
-            sys.exit()
+            
     
     
     else :
