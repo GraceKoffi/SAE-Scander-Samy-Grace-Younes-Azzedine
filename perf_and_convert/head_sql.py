@@ -21,35 +21,23 @@ def sql_type_primary(value):
 
 def sql_type(value):
     if ',' in value :
-
-        value_first_word = value.split(',')[0]
-        if re.match(r'^[+-]?[0-9]+$', value_first_word):
-            return "INTEGER"
-        elif re.match(r'^[+-]?([0-9]*[.])?[0-9]+$', value_first_word):
-            return "FLOAT"
-        elif re.match(r'^[0-1]$', value_first_word):
-            return "BOOLEAN"
-        elif re.match(r'^\d{4}-\d{2}-\d{2}$', value_first_word):
-            return "DATE"
-        elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value_first_word):
-            return "DATETIME"
-        else:
-            return f"VARCHAR(255)"
+        value = value.split(',')[0]
+        
+    if re.match(r'^[+-]?[0-9]+$', value):
+        return "INTEGER"
+    elif re.match(r'^[+-]?([0-9]*[.])?[0-9]+$', value):
+        return "FLOAT"
+    elif re.match(r'^[0-1]$', value):
+        return "BOOLEAN"
+    elif re.match(r'^\d{4}-\d{2}-\d{2}$', value):
+        return "DATE"
+    elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value):
+        return "DATETIME"
+    else:
+        return f"VARCHAR(255)"
     
     
-    else :
-        if re.match(r'^[+-]?[0-9]+$', value):
-            return "INTEGER"
-        elif re.match(r'^[+-]?([0-9]*[.])?[0-9]+$', value):
-            return "FLOAT"
-        elif re.match(r'^[0-1]$', value):
-            return "BOOLEAN"
-        elif re.match(r'^\d{4}-\d{2}-\d{2}$', value):
-            return "DATE"
-        elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value):
-            return "DATETIME"
-        else:
-            return f"VARCHAR(255)"
+    
 
 
 def generate_sql_header(file, name_table):
