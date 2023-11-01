@@ -2,8 +2,7 @@
 #
 # Copyright (c) 2023, OKI
 # Tous droits réservés.
-#
-# Ce fichier source est soumis aux termes de la licence OKI
+#
 #
 #Consultez le fichier README pour les détails de l'utilisation.
 #
