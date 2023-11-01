@@ -4,9 +4,9 @@
 # Tous droits réservés.
 #
 # Ce fichier source est soumis aux termes de la licence OKI
-# Consultez le fichier README
-# pour les détails de l'utilisation.
-
+#
+#Consultez le fichier README pour les détails de l'utilisation.
+#
 # Le code ci-dessous est le contenu principal du fichier convertisseur.py.
 
 import subprocess, os, re
