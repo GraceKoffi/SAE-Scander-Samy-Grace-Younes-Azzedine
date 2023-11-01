@@ -55,6 +55,4 @@ Ce répertoire contient tous les livrables associés au projet [Nom du Projet]. 
 - [livrable11](./livrable11/): Mise en place d'une plateforme de démonstration de l'application
 - [livrable12](./livrable12/): Soutenance de présentation du projet
 
-N'hésitez pas à explorer chaque sous-répertoire pour accéder aux détails de chaque livrable.
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
