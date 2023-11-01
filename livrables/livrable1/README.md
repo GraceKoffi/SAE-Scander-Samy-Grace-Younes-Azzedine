@@ -18,4 +18,5 @@ Le Livrable 1 doit être rendu le 16 octobre 2023.
 ## Auteurs
 
 - [OKI Samy](https://github.com/Samy93000)
+- [KOFFI Grace](https://github.com/GraceKoffi)
 
