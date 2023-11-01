@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2023, Votre OKI
+# Copyright (c) 2023, OKI
 # Tous droits réservés.
 #
 # Ce fichier source est soumis aux termes de la licence OKI
