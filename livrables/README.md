@@ -1,4 +1,4 @@
-# Livrables du Projet [Nom du Projet]
+# Livrables du Projet 
 
 Ce répertoire contient tous les livrables associés au projet [Nom du Projet]. Les livrables sont organisés en sous-répertoires pour une meilleure structure. Chaque livrable est accompagné d'une description et de la date de rendu.
 
