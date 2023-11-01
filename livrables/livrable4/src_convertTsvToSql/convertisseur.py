@@ -2,7 +2,8 @@
 #
 # Copyright (c) 2023,
 # Tous droits réservés.
-#
+#
+
 #
 #Consultez le fichier README pour les détails de l'utilisation.
 #
@@ -154,9 +155,9 @@ finally:
 
     elif time_code >= 60 and time_code < 3600 :
         minute = time_code/60
-        print(f"OK convert in {round(minute, 2)}m.")
+        print(f"Finish in {round(minute, 2)}m.")
 
     else :
         heure = time_code/3600
-        print(f"OK convert in {round(heure, 2)}h.")
+        print(f"Finish in {round(heure, 2)}h.")
 
