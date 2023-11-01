@@ -63,7 +63,6 @@ Divers logiciels vous seront aussi nécessaires pour rendre vos livrables. Ce do
 
 12. **Soutenance de présentation du projet** (présentation individuelle ; 8 mars 2024) (Toutes les compétences mais en particulier la 6).
 
-13. **Cette liste est incomplète**
 
 # Besoins de l’application
 
