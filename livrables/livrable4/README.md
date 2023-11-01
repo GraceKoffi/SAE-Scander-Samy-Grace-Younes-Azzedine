@@ -20,8 +20,5 @@ Le Livrable 4 doit être rendu le 22 décembre 2023.
 
 ## Auteurs
 
-- [OKI Samy]([lien vers le profil](https://github.com/Samy93000))
-- [KOFFI Grace]([lien vers le profil](https://github.com/GraceKoffi))
-- ...
-
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+- [OKI Samy](https://github.com/Samy93000)
+- [KOFFI Grace](https://github.com/GraceKoffi)
