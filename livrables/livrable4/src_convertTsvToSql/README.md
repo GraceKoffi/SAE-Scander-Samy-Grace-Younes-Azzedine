@@ -18,6 +18,7 @@ Le programme Python prend en charge la conversion de fichiers TSV en fichiers SQ
 Avant d'utiliser ce programme, assurez-vous d'avoir installé les dépendances suivantes :
 - Python 3.x
 - Les scripts shell `recup_n.sh` et `recup_all.sh`
+- Script `unzip`
 
 ## Dépendances
 
