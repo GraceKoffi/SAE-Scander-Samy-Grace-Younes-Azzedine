@@ -40,7 +40,7 @@ Pour utiliser le programme, suivez ces étapes :
 
 2. Suivez les instructions à l'écran pour fournir les informations nécessaires, telles que le nombre de lignes, les fichiers Gzip (`.gz`) à traiter, etc.
 
-3. Le programme effectuera la conversion en utilisant les scripts shell et affichera un message de réussite avec le temps écoulé.
+3. Le programme effectuera la conversion en utilisant les scripts shell et affichera un message de réussite avec le temps écoulé de la conversion des fichiers Tsv en Sql ainsi que le temps d'exécution du programme `convertisseur.py`.
 
 ## Exemples
 
@@ -59,7 +59,7 @@ Finish in 30.4s.
 
 ### Conversion avec `recup_all.sh`
 
-```bash
+```python
 python convertisseur.py
 Veuillez saisir le chemin d'accès au script : recup_all.sh
 Veuillez saisir le chemin d'accès des ou du fichier gz : fichier1.gz fichier2.gz 
