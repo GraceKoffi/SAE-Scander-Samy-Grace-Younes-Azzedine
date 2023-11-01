@@ -37,7 +37,7 @@ Ce projet ne dépend que des bibliothèques standard de Python, ce qui signifie 
 - `subprocess` : Pour l'exécution de commandes externes et la gestion des processus.
 - `os` : Pour effectuer des opérations liées au système de fichiers et au système d'exploitation.
 - `re` : Pour la manipulation de chaînes à l'aide d'expressions régulières.
-- `unzip` : Code en python permettant l'extraction des fichiers tsv (`.tsv`) contenu par les fichiers Gzip (`.gz`)
+- `unzip` : Code en python permettant l'extraction des fichiers tsv (`.tsv`) contenu dans les fichiers Gzip (`.gz`)
 
 Vous n'avez pas besoin d'installer ces bibliothèques séparément, car elles sont incluses dans l'installation standard de Python sauf pour `unzip` qui doit être installé.
 
