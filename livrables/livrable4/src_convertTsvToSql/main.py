@@ -1,3 +1,23 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2023, Votre OKI
+# Tous droits réservés.
+#
+# Ce fichier source est soumis aux termes de la licence OKI
+# Consultez le fichier README
+# pour les détails de l'utilisation.
+
+# Le code ci-dessous est le contenu principal du fichier Python.
+
+def fonction_principale():
+    # Votre code ici
+    pass
+
+if __name__ == "__main__":
+    fonction_principale()
+
+
+
 import subprocess, os, re
 from unzip import unzip
 from time import time
