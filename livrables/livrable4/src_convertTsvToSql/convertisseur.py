@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2023, OKI
+# Copyright (c) 2023,
 # Tous droits réservés.
 #
 #
@@ -106,22 +106,22 @@ try:
         else :
             raise ValueError(f"'{path_script}' n'est pas un fichier de convertion.")
     
-    time_code_end = time()
+    
 
 
    
 except FileNotFoundError as e :
     print(f"KO: FileNotFoundError\nDescription: {e}")
-    time_code_end = time()
+    
 except ValueError as e :
     print(f"KO: ValueError\nDescription: {e}")
-    time_code_end = time()
+    
 except TypeError as e :
     print(f"KO: TypeError\nDescription: {e}")
-    time_code_end = time()
+    
 except Exception as e:
     print(f"KO: Exception\nDescription: {e}")
-    time_code_end = time()
+    
 
 else :
     if time_value < 60 :
@@ -146,6 +146,7 @@ else :
 
     
 finally:
+    time_code_end = time()
     time_code = time_code_end - time_code_begin
     
     if time_code < 60 :
