@@ -29,7 +29,7 @@ try:
 
         if "recup_n.sh" in path_script :
             nb_lignes = input("Veuillez saisir le nombre de ligne : ")
-            if not  re.match(r'^[+-]?[0-9]+$', nb_lignes):
+            if not  re.match(r'^[0-9]+$', nb_lignes):
                 
                 raise TypeError(f"'{nb_lignes}' n'est pas un entier.")
                 
