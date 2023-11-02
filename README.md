@@ -35,7 +35,7 @@ Les données sont disponibles à l’adresse suivante : [https://www.imdb.com/in
 - JQuery pour la partie présentation si nécessaire
 - Un serveur web (par exemple apache2)
 
-Divers logiciels vous seront aussi nécessaires pour rendre vos livrables. Ce document sera complété au fur et à mesure de votre avancée.
+Divers logiciels vous seront aussi nécessaires pour rendre vos livrables.
 
 ## Livrables
 
