@@ -1,6 +1,6 @@
 # Convertisseur de fichiers TSV en SQL
 
-Ce programme Python permet de convertir des fichiers TSV en fichiers SQL à l'aide de scripts shell spécifiques.
+Ce programme Python permet de convertir des fichiers TSV (`.tsv`) en fichiers SQL (`.sql`) contenu dans des fichiers gz (`.gz`) à l'aide de scripts shell spécifiques.
 
 ## Table des matières
 
