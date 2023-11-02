@@ -74,7 +74,7 @@ try:
             for fichier_gz in fichiers_gz :
                 if not os.path.exists(fichier_gz) :
 
-                    raise FileNotFoundError(f"'{fichiers_gz}' n'existe pas.")
+                    raise FileNotFoundError(f"'{fichier_gz}' n'existe pas.")
                 elif not fichier_gz.endswith(".gz") :
                     raise ValueError(f"'{fichier_gz}' n'est pas un fichier gz.")
                 
