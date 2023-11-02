@@ -17,7 +17,7 @@ Le programme Python prend en charge la conversion de fichiers TSV en fichiers SQ
 - Avant d'utiliser ce programme, assurez-vous d'avoir installé les dépendances suivantes :
 - Python 3.x
 - Les scripts shell `recup_n.sh` et `recup_all.sh`
-- Script `unzip`
+- Script `unzip.py`
 
 - Ce programme est recommandé pour une utilisation sous les systèmes d'exploitation Unix/Linux (comme macOS et Linux) où l'exécution des scripts shell est native. Cependant, il peut également être utilisé sous Windows en installant un interpréteur de commandes Bash compatible, tel que Git Bash ou Windows Subsystem for Linux (WSL), pour exécuter les scripts shell inclus.
 Pour installer Git Bash, vous pouvez télécharger l'installeur à partir du site officiel de Git (https://git-scm.com/downloads) et suivre les étapes d'installation.
