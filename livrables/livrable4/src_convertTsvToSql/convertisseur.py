@@ -64,9 +64,7 @@ try:
                     # Exécution du script shell avec les arguments
                     subprocess.run(["sh", path_script, fichier_tsv, fichier_sql, nb_lignes], stdout=subprocess.PIPE, text=True)
 
-                    # Mesure du temps de fin
-                    tac = time()
-                    time_value = tac - tic
+                   
 
     
         elif "recup_all.sh" in path_script :
@@ -101,9 +99,7 @@ try:
                 # Exécution du script shell avec les arguments
                 subprocess.run(["sh", path_script, fichier_tsv, fichier_sql], stdout=subprocess.PIPE, text=True)
 
-                # Mesure du temps de fin
-                tac = time()
-                time_value = tac - tic
+                
         else :
             raise ValueError(f"'{path_script}' n'est pas un fichier de convertion.")
     
@@ -125,6 +121,9 @@ except Exception as e:
     
 
 else :
+    # Mesure du temps de fin
+    tac = time()
+    time_value = tac - tic
     if time_value < 60 :
         s = ""
         if len(fichiers_tsv) > 1 :
