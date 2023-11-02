@@ -63,7 +63,7 @@ def sql_type(value):
 
 try:
     with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
-        print('Test')
+        
         column_names = tsv_file.readline().strip().split('\t')
         primary_key = column_names[0].split()[0]
         types_line = tsv_file.readline().strip().split('\t')
