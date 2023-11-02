@@ -15,7 +15,6 @@
    10. [Première démonstration de l’application fonctionnelle](#livrable10)
    11. [Mise en place d’une plateforme de démonstration de l’application](#livrable11)
    12. [Soutenance de présentation du projet](#livrable12)
-   13. [Cette liste est incomplète](#livrable13)
 4. [Besoins de l’application](#besoins-de-lapplication)
    1. [Présentation d'information](#presentation-dinformation)
    2. [Recherche](#recherche)
