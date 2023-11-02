@@ -15,7 +15,6 @@
    10. [Première démonstration de l’application fonctionnelle](#livrable-10)
    11. [Mise en place d’une plateforme de démonstration de l’application](#livrable-11)
    12. [Soutenance de présentation du projet](#livrable-12)
-   13. [Cette liste est incomplète](#livrable-13)
 4. [Besoins de l’application](#besoins-de-lapplication)
    1. [Présentation d'information](#presentation-dinformation)
    2. [Recherche](#recherche)
@@ -35,7 +34,7 @@ Les données sont disponibles à l’adresse suivante : [https://www.imdb.com/in
 - JQuery pour la partie présentation si nécessaire
 - Un serveur web (par exemple apache2)
 
-Divers logiciels vous seront aussi nécessaires pour rendre vos livrables. Ce document sera complété au fur et à mesure de votre avancée.
+Divers logiciels vous seront aussi nécessaires pour rendre vos livrables.
 
 ## Livrables
 
@@ -63,7 +62,6 @@ Divers logiciels vous seront aussi nécessaires pour rendre vos livrables. Ce do
 
 12. **Soutenance de présentation du projet** (présentation individuelle ; 8 mars 2024) (Toutes les compétences mais en particulier la 6).
 
-13. **Cette liste est incomplète**
 
 # Besoins de l’application
 
