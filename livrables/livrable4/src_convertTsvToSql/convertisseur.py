@@ -16,9 +16,9 @@ from time import time
 
 
 try:
-    conversion_times = []
+    
     time_code_begin = time()
-
+    conversion_times = []
     path_script = input("Veuillez saisir le chemin d'accès au script : ")
 
 
