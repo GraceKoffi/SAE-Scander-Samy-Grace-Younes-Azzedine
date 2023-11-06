@@ -27,7 +27,7 @@ def sql_type_primary(value):
     elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value):
         return 'DATETIME'
     else:
-        return 'VARCHAR(' + str(len(value)) + ') CHARACTER SET utf8 COLLATE utf8_general_ci'
+        return 'VARCHAR(' + str(len(value)) + ')'
 
 def sql_type(value):
     if ',' in value:
@@ -43,7 +43,7 @@ def sql_type(value):
         elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value_first_word):
             return 'DATETIME'
         else:
-            return 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci'
+            return 'VARCHAR(255)'
     else:
         
         if re.match(r'^[+-]?[0-9]+$', value):
@@ -55,7 +55,7 @@ def sql_type(value):
         elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value):
             return 'DATETIME'
         else:
-            return 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci'
+            return 'VARCHAR(255)'
 
 try:
     with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
