@@ -74,19 +74,32 @@ try:
             for i in range(0, len(types_line)):
                 
                 column_types.append(sql_type(types_line[i]))
+
+            for i in range(len(column_names)):
+            
+                create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                if i < len(column_names) - 1 :
+                    create_table_command += ','
+                create_table_command += '\n'
+            create_table_command += ');'
+
+            
         else :
             primary_key = column_names[0].split()[0]
+            
             column_types.append(sql_type_primary(types_line[0]))
             for i in range(1, len(types_line)):
 
                 column_types.append(sql_type(types_line[i]))
-        
-        for i in range(len(column_names)):
-            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
-            if i < len(column_names) - 1 :
-                create_table_command += ','
-            create_table_command += '\n'
-        create_table_command += ');'
+            
+            create_table_command += ' ' + column_names[0]+' PRIMARY KEY,\n'
+            for i in range(1, len(column_names)):
+
+                create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                if i < len(column_names) - 1 :
+                    create_table_command += ','
+                create_table_command += '\n'
+            create_table_command += ');'
         
 
         with open('$fichier_sql', 'w', encoding='utf8') as sql_file:
