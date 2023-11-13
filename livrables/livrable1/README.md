@@ -1,6 +1,6 @@
 # Livrable 1 : Composition de l'équipe, planification de la répartition du rôle de manager
 
-Ce README contient des informations sur le Livrable 1 du projet [Nom du Projet].
+Ce README contient des informations sur le Livrable 1 du projet SAE.
 
 ## Description
 
