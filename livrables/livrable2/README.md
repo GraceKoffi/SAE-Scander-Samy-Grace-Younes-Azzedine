@@ -12,7 +12,7 @@ Le Livrable 2 doit être rendu le 17 novembre 2023.
 
 ## Contenu
 
--Rapport pdf
+- Rapport pdf
 
 
 ## Auteurs
