@@ -20,7 +20,7 @@ Le Livrable 1 doit être rendu le 16 octobre 2023.
 - [OKI Samy](https://github.com/Samy93000)
 - [Grace Koffi](https://github.com/GraceKoffi)
 - [Hatem Azzedine](https://github.com/azzedineh27)
-- [Aloui Scander](https://github.com/a-scander)
+- [Alioui Scander](https://github.com/a-scander)
 - [Chrimni Younes](https://github.com/youneschrimni)
 
 
