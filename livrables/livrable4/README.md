@@ -1,6 +1,6 @@
 # Livrable 4 : Analyse de la base de données et Scripts SQL
 
-Ce README contient des informations sur le Livrable 4 du projet [Nom du Projet].
+Ce README contient des informations sur le Livrable 4 du projet SAE.
 
 ## Description
 
