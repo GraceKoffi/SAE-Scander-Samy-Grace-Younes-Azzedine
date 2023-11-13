@@ -1,6 +1,6 @@
 # Livrable 3 : Mise en place d'une plateforme de développement
 
-Ce README contient des informations sur le Livrable 3 du projet [Nom du Projet].
+Ce README contient des informations sur le Livrable 3 du projet SAE.
 
 ## Description
 
