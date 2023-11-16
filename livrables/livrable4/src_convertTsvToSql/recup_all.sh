@@ -123,17 +123,34 @@ awk -F'\t' -v nom_table="$nom_table" '
     }
     formatted_line = formatted_line ")";
   }
-  NR > 1 { 
-     printf "INSERT INTO %s %s VALUES (", nom_table, formatted_line; 
-     for (i = 1; i <= NF; i++) { 
-       if ($i == "\\N")  
-         printf "NULL";
-       else
-         printf "\047%s\047", $i;  # Autres valeurs
-       
-       if (i < NF)  # Ajouter la virgule sauf pour la dernière colonne
-         printf ",";
-     } 
-     printf ");\n"; 
-   } 
+
+  NR > 1 {
+    printf "INSERT INTO %s %s VALUES (", nom_table, formatted_line;
+
+    for (i = 1; i <= NF; i++) {
+      if ($i == "\\N") {
+        printf "NULL";
+      } else {
+        # Ajout de la condition pour détecter les tableaux
+        if (split($i, array_values, ",") > 1) {
+          printf "ARRAY[";
+          for (j = 1; j <= length(array_values); j++) {
+            printf "\047%s\047", array_values[j];
+            if (j < length(array_values)) {
+              printf ",";
+            }
+          }
+          printf "]";
+        } else {
+          printf "\047%s\047", $i;
+        }
+      }
+
+      if (i < NF) {
+        printf ",";
+      }
+    }
+    printf ");\n";
+  }
 ' "$fichier_tsv" >> "$fichier_sql"
+
