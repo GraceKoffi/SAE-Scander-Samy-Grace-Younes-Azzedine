@@ -71,17 +71,22 @@ try:
         create_table_command = 'CREATE TABLE IF NOT EXISTS ' + '$nom_table' + ' (\n'
         
         if '$nom_table' == 'title_akas' or '$nom_table' == 'title_principals':
-            create_table_command += '  id INT AUTO_INCREMENT PRIMARY KEY,\n'
             for i in range(0, len(types_line)):
                 
                 column_types.append(sql_type(types_line[i]))
-
+            
             for i in range(len(column_names)):
             
-                create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                
                 if i < len(column_names) - 1 :
+                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
                     create_table_command += ','
+                else :
+                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+
                 create_table_command += '\n'
+
+            create_table_command += '  PRIMARY KEY('+column_names[0]+','+' '+column_names[1]+')\n'
             create_table_command += ');'
 
             
@@ -130,7 +135,19 @@ awk -F'\t' -v nom_table="$nom_table" -v max_lignes="$max_lignes" '
       if ($i == "\\N") {
         printf "NULL";
       } else {
-        printf "\047%s\047", $i;
+        # Ajout de la condition pour détecter les tableaux
+        if (split($i, array_values, ",") > 1) {
+          printf "ARRAY[";
+          for (j = 1; j <= length(array_values); j++) {
+            printf "\047%s\047", array_values[j];
+            if (j < length(array_values)) {
+              printf ",";
+            }
+          }
+          printf "]";
+        } else {
+          printf "\047%s\047", $i;
+        }
       }
 
       if (i < NF) {
