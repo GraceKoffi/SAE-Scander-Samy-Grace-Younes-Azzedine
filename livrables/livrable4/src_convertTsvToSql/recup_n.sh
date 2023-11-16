@@ -10,12 +10,12 @@ fi
 fichier_tsv="$1"
 fichier_sql="$2"
 max_lignes="$3"  
-((max_lignes++)) # Ajout de 1 à nombre_lignes
+max_lignes=$(($max_lignes+1)) # Ajout de 1 à nombre_lignes
 # Extraire le nom du fichier (enlever l'extension .sql)
 nom_table=$(basename "$fichier_sql" .sql)
 
 # Appeler le script Python pour obtenir la commande CREATE TABLE
-python -c "
+python3 -c "
 import re
 def sql_type_primary(value):
     if re.match(r'^[+-]?[0-9]+$', value):
@@ -67,7 +67,11 @@ try:
         
        
 
-        create_table_command = 'CREATE TABLE IF NOT EXISTS ' + '$nom_table' + ' (\n'
+        create_table_command ='DROP TABLE IF EXISTS ' + '$nom_table' + ';'
+        create_table_command +='\n'
+
+        
+        create_table_command += 'CREATE TABLE IF NOT EXISTS ' + '$nom_table' + ' (\n'
         
         if '$nom_table' == 'title_akas' or '$nom_table' == 'title_principals':
             for i in range(0, len(types_line)):
