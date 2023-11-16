@@ -57,8 +57,7 @@ def sql_type(value):
         else:
             return 'VARCHAR(255)'
 
-try:
-    with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
+ with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
         
         column_names = tsv_file.readline().strip().split('\t')
         
@@ -70,17 +69,22 @@ try:
         create_table_command = 'CREATE TABLE IF NOT EXISTS ' + '$nom_table' + ' (\n'
         
         if '$nom_table' == 'title_akas' or '$nom_table' == 'title_principals':
-            create_table_command += '  id INT AUTO_INCREMENT PRIMARY KEY,\n'
             for i in range(0, len(types_line)):
                 
                 column_types.append(sql_type(types_line[i]))
-
+            
             for i in range(len(column_names)):
             
-                create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                
                 if i < len(column_names) - 1 :
+                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
                     create_table_command += ','
+                else :
+                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+
                 create_table_command += '\n'
+
+            create_table_command += '  PRIMARY KEY('+column_names[0]+','+' '+column_names[1]+')\n'
             create_table_command += ');'
 
             
@@ -92,7 +96,7 @@ try:
 
                 column_types.append(sql_type(types_line[i]))
             
-            create_table_command += ' ' + column_names[0]+' PRIMARY KEY,\n'
+            create_table_command += '  ' + column_names[0]+' '+ column_types[0] +' PRIMARY KEY,\n'
             for i in range(1, len(column_names)):
 
                 create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
@@ -100,8 +104,7 @@ try:
                     create_table_command += ','
                 create_table_command += '\n'
             create_table_command += ');'
-        
-
+            
         with open('$fichier_sql', 'w', encoding='utf8') as sql_file:
             sql_file.write(create_table_command)
             sql_file.write('\n')
