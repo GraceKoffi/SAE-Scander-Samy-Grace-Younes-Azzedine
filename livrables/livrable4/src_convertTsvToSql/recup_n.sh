@@ -17,7 +17,6 @@ nom_table=$(basename "$fichier_sql" .sql)
 # Appeler le script Python pour obtenir la commande CREATE TABLE
 python -c "
 import re
-
 def sql_type_primary(value):
     if re.match(r'^[+-]?[0-9]+$', value):
         return 'INTEGER'
@@ -35,16 +34,16 @@ def sql_type(value):
         value_first_word = value.split(',')[0]
         
         if re.match(r'^[+-]?[0-9]+$', value_first_word):
-            return 'INTEGER'
+            return 'INTEGER[]'
         elif re.match(r'^[+-]?([0-9]*[.])?[0-9]+$', value_first_word):
-            return 'FLOAT'
+            return 'DATE[]'
         
         elif re.match(r'^\d{4}-\d{2}-\d{2}$', value_first_word):
             return 'DATE'
         elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value_first_word):
-            return 'DATETIME'
+            return 'TIMESTAMP[]'
         else:
-            return 'VARCHAR(255)'
+            return 'VARCHAR(255)[]'
     else:
         
         if re.match(r'^[+-]?[0-9]+$', value):
@@ -54,7 +53,7 @@ def sql_type(value):
         elif re.match(r'^\d{4}-\d{2}-\d{2}$', value):
             return 'DATE'
         elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value):
-            return 'DATETIME'
+            return 'TIMESTAMP'
         else:
             return 'VARCHAR(255)'
 
