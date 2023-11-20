@@ -15,7 +15,7 @@ Le Livrable 4 doit être rendu le 22 décembre 2023.
 - Schémas SQL créés pour la base de données
 - Scripts shells de récupération des données
 - Processus de chargement ou de remplacement des données
-- Graphiques UML pour la structure de la base de données
+- Graphiques UML pour la structure du code
 - Indicateurs de performance (temps de chargement, récupération, etc.)
 
 ## Auteurs
