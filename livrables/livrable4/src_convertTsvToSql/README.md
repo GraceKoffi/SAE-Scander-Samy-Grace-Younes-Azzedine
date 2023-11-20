@@ -43,7 +43,7 @@ Voici quelques exemples d'utilisation du programme :
 ### Conversion avec `recup_n.sh`
 
 ```bash
-python convertisseur.py
+python3 convertisseur.py
 Veuillez saisir le chemin d'accès au script : recup_n.sh
 Veuillez saisir le nombre de ligne : 100
 Veuillez saisir le chemin d'accès des ou du fichier gz : fichier1.gz fichier2.gz fichier3.gz
@@ -54,7 +54,7 @@ Finish in 30.4s.
 ### Conversion avec `recup_all.sh`
 
 ```bash
-python convertisseur.py
+python3 convertisseur.py
 Veuillez saisir le chemin d'accès au script : recup_all.sh
 Veuillez saisir le chemin d'accès des ou du fichier gz : fichier1.gz fichier2.gz 
 OK converti en 48.2s (2 fichiers).
