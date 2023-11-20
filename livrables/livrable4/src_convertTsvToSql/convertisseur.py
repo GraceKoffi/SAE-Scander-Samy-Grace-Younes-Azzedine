@@ -95,7 +95,7 @@ try:
 
             for fichier_tsv in fichiers_tsv :
                 tic = time()
-                fichier_sql = fichiertsv.split('.tsv')[0].replace(".","_")+".sql"
+                fichier_sql = fichier_tsv.split('.tsv')[0].replace(".","_")+".sql"
 
                 # Exécution du script shell avec les arguments
                 subprocess.run(["sh", path_script, fichier_tsv, fichier_sql], stdout=subprocess.PIPE, text=True)
