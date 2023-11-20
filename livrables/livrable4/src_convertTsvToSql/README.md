@@ -34,7 +34,7 @@ Pour utiliser le programme, suivez ces étapes :
 
 2. Suivez les instructions à l'écran pour fournir les informations nécessaires, telles que le nombre de lignes, les fichiers Gzip (`.gz`) à traiter.
 
-3. Le programme effectuera la conversion en utilisant les scripts shell et affichera un message de réussite avec le temps écoulé de la conversion des fichiers Tsv en Sql ainsi que le temps d'exécution du programme `convertisseur.py`.
+3. Le programme effectuera la conversion en utilisant les scripts shell et affichera un message de réussite avec le temps écoulé de la conversion des fichiers Tsv en Sql ainsi que le temps d'exécution du programme `convertisseur.py`. Sinon une erreur sera levée en vous expliquant la source.
 
 ## Exemples
 
