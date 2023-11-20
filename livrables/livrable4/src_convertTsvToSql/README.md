@@ -30,7 +30,7 @@ Assurez-vous d'avoir correctement configuré votre interpréteur de commandes Ba
 
 Pour utiliser le programme, suivez ces étapes :
 
-1. Exécutez le programme Python en spécifiant le chemin d'accès au script shell approprié (par exemple, `recup_n.sh` ou `recup_all.sh`).
+1. Exécutez le programme Python en spécifiant le chemin d'accès au script shell approprié (par exemple, `recup_n.sh` ou `recup_all.sh`). Par précaution veuillez à ce que vos fichiers `.sh` se trouve dans le même répertoire que le fichier `convertisseur.py`.
 
 2. Suivez les instructions à l'écran pour fournir les informations nécessaires, telles que le nombre de lignes, les fichiers Gzip (`.gz`) à traiter.
 
