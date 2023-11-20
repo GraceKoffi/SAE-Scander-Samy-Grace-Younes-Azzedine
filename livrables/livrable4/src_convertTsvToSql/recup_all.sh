@@ -39,7 +39,7 @@ def sql_type(value):
             return 'DATE[]'
         
         elif re.match(r'^\d{4}-\d{2}-\d{2}$', value_first_word):
-            return 'DATE'
+            return 'FLOAT[]'
         elif re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', value_first_word):
             return 'TIMESTAMP[]'
         else:
