@@ -73,7 +73,6 @@ Ce script en shell (`bash`) permet de supprimer les fichiers avec les extensions
 
 Pour utiliser le script, exécutez la commande suivante :
 
-```bash
 bash supp.sh
 ```
 Cette commande supprime tous les fichiers .sql et .tsv du répertoire actu
