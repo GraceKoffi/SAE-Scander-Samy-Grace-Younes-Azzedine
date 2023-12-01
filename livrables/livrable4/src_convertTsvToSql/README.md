@@ -25,14 +25,13 @@ Pour installer Git Bash, vous pouvez télécharger l'installeur à partir du sit
 Pour activer WSL sur Windows 10 ou une version ultérieure, suivez les instructions de Microsoft pour installer une distribution Linux de votre choix (par exemple, Ubuntu) via Microsoft Store. Une fois installée, vous pourrez exécuter des commandes Bash via WSL.
 Assurez-vous d'avoir correctement configuré votre interpréteur de commandes Bash pour qu'il puisse exécuter les scripts shell inclus dans ce projet.
 
-
 ## Utilisation
 
 Pour utiliser le programme, suivez ces étapes :
 
-1. Exécutez le programme Python en spécifiant le chemin d'accès au script shell approprié (par exemple, `recup_n.sh` ou `recup_all.sh`). Par précaution veuillez à ce que vos fichiers `.sh` se trouve dans le même répertoire que le fichier `convertisseur.py`.
+1. Exécutez le programme Python en spécifiant le mode de récupération du fichier (`.tsv`) contenu dans le (`.gz`) soit `n` pour n nombre de ligne ou `all` pour le fichier en entier. A noté qu'il faut que vos fichier (`.gz`) se trouve dans le méme répertoire que le fichier `convertisseur.py`, pour cela vous pouvez utiliser le script `mouv.sh`.
 
-2. Suivez les instructions à l'écran pour fournir les informations nécessaires, telles que le nombre de lignes, les fichiers Gzip (`.gz`) à traiter.
+2. Si vous choisisais le mode `n` alors il faudra renseigner le nombre de ligne.
 
 3. Le programme effectuera la conversion en utilisant les scripts shell et affichera un message de réussite avec le temps écoulé de la conversion des fichiers Tsv en Sql ainsi que le temps d'exécution du programme `convertisseur.py`. Sinon une erreur sera levée en vous expliquant la source.
 
@@ -40,23 +39,21 @@ Pour utiliser le programme, suivez ces étapes :
 
 Voici quelques exemples d'utilisation du programme :
 
-### Conversion avec `recup_n.sh`
+### Conversion avec mode `n`
 
 ```bash
-python3 convertisseur.py
-Veuillez saisir le chemin d'accès au script : recup_n.sh
+python convertisseur.py
+all for recup_all or n for recup_n : n
 Veuillez saisir le nombre de ligne : 100
-Veuillez saisir le chemin d'accès des ou du fichier gz : fichier1.gz fichier2.gz fichier3.gz
 OK converti en 12.34s (3 fichiers).
 Finish in 30.4s.
 ```
 
-### Conversion avec `recup_all.sh`
+### Conversion avec mode `all`
 
 ```bash
 python3 convertisseur.py
-Veuillez saisir le chemin d'accès au script : recup_all.sh
-Veuillez saisir le chemin d'accès des ou du fichier gz : fichier1.gz fichier2.gz 
+all for recup_all or n for recup_n : all
 OK converti en 48.2s (2 fichiers).
 Finish in 1.4m.
 
