@@ -13,8 +13,29 @@ fichier_sql="$2"
 # Extraire le nom du fichier (enlever l'extension .sql)
 nom_table=$(basename "$fichier_sql" .sql)
 
-# Exécuter le script Python pour générer la commande CREATE TABLE
-python3 -c "
+
+#renvoie la commande Python appropriée en fonction de la disponibilité de python3 ou python
+detect_python_command() {
+    if [ "$OSTYPE" == "msys" ] || [ -n "$MSYSTEM" ]; then
+        # Windows (Git Bash)
+        echo "python"
+    elif command -v python3 &> /dev/null ; then
+        # Autres systèmes compatibles avec python3
+        echo "python3"
+    elif command -v python &> /dev/null ; then
+        # Autres systèmes compatibles avec python
+        echo "python"
+    else
+        echo "Aucune commande Python n'est disponible."
+        exit 1
+    fi
+}
+
+python_cmd=$(detect_python_command)
+
+
+# Appeler le script Python pour obtenir la commande CREATE TABLE
+"$python_cmd" -c "
 import re
 
 def sql_type_primary(value):
@@ -57,7 +78,8 @@ def sql_type(value):
         else:
             return 'VARCHAR(255)'
 
- with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
+try:
+    with open('$fichier_tsv', 'r', encoding='utf8') as tsv_file:
         
         column_names = tsv_file.readline().strip().split('\t')
         

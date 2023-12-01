@@ -14,8 +14,29 @@ max_lignes=$(($max_lignes+1)) # Ajout de 1 à nombre_lignes
 # Extraire le nom du fichier (enlever l'extension .sql)
 nom_table=$(basename "$fichier_sql" .sql)
 
+
+#renvoie la commande Python appropriée en fonction de la disponibilité de python3 ou python
+detect_python_command() {
+    if [ "$OSTYPE" == "msys" ] || [ -n "$MSYSTEM" ]; then
+        # Windows (Git Bash)
+        echo "python"
+    elif command -v python3 &> /dev/null ; then
+        # Autres systèmes compatibles avec python3
+        echo "python3"
+    elif command -v python &> /dev/null ; then
+        # Autres systèmes compatibles avec python
+        echo "python"
+    else
+        echo "Aucune commande Python n'est disponible."
+        exit 1
+    fi
+}
+
+python_cmd=$(detect_python_command)
+
+
 # Appeler le script Python pour obtenir la commande CREATE TABLE
-python3 -c "
+"$python_cmd" -c "
 import re
 def sql_type_primary(value):
     if re.match(r'^[+-]?[0-9]+$', value):
@@ -117,7 +138,6 @@ except Exception as e:
     print('Une erreur s\'est produite lors de la génération de la commande CREATE TABLE : ' + str(e))
 "
 # Générer les INSERT INTO à partir du fichier TSV
-
 # Utiliser head pour extraire la première ligne du fichier TSV
 awk -F'\t' -v nom_table="$nom_table" -v max_lignes="$max_lignes" '
   NR == 1 {
