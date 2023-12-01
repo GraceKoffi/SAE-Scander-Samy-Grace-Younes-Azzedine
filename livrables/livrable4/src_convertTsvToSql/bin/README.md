@@ -37,9 +37,9 @@ Ce script en shell (`bash`) permet de déplacer des fichiers compressés (`.gz`)
 Pour utiliser le script, exécutez la commande suivante :
 
 ```bash
-bash mouv.sh <direction> <répertoire_source>
+bash mouv.sh <mode> <répertoire_source>
 ```
-- '<direction>' : 'get' pour obtenir du répertoire source ou 'push' pour pousser vers le répertoire source.
+- '<mode>' : 'get' pour obtenir du répertoire source ou 'push' pour pousser vers le répertoire source.
 - '<répertoire_source>' : Le chemin d'accès au répertoire source.
 
 
