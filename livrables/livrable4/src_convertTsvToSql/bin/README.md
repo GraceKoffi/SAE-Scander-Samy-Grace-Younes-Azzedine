@@ -20,7 +20,6 @@ Le projet comprend des scripts shell (`bash`) qui sont utiles en conjonction ave
 
 Avant d'utiliser ces scripts, assurez-vous d'avoir les dépendances suivantes installées :
 - Un interpréteur de commandes Bash compatible avec Windows, comme Git Bash ou Windows Subsystem for Linux (WSL).
-- Les scripts `convertisseur.py`, `mouv.sh`, et `supp.sh`.
 
 ## Scripts Inclus
 
