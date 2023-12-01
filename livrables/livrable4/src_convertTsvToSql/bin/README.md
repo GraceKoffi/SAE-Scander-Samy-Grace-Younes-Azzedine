@@ -39,8 +39,8 @@ Pour utiliser le script, exécutez la commande suivante :
 ```bash
 bash mouv.sh <mode> <répertoire_source>
 ```
- '<mode>' : 'get' pour obtenir du répertoire source ou 'push' pour pousser vers le répertoire source.
- '<répertoire_source>' : Le chemin d'accès au répertoire source.
+- '`mode`' : 'get' pour obtenir du répertoire source ou 'push' pour pousser vers le répertoire source.
+- '`répertoire_source`' : Le chemin d'accès au répertoire source.
 
 
 ## Exemples
