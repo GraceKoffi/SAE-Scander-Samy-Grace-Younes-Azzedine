@@ -72,7 +72,7 @@ class Converter:
             if choice != "all" and choice != "n":
                 raise ValueError(f"'{choice}' Value error.")
 
-            if platform.system() == "Windows":
+            if plateform.system() == "Windows":
                 self.path_script = ".\\bin\\recup_n.sh" if choice == "n" else ".\\bin\\recup_all.sh"
 
             else :
