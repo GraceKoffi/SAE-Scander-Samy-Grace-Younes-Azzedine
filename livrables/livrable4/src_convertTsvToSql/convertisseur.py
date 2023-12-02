@@ -14,7 +14,7 @@ import os
 import re
 from unzip import unzip
 from time import time
-import plateform 
+import platform  
 
 class Converter:
     def __init__(self):
@@ -72,7 +72,7 @@ class Converter:
             if choice != "all" and choice != "n":
                 raise ValueError(f"'{choice}' Value error.")
 
-            if plateform.system() == "Windows":
+            if platform .system() == "Windows":
                 self.path_script = ".\\bin\\recup_n.sh" if choice == "n" else ".\\bin\\recup_all.sh"
 
             else :
