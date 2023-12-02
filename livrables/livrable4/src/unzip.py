@@ -16,7 +16,7 @@ def unzip(input_gzip_file, nb_lignes=None):
         else:
             # Copiez le contenu complet du fichier Gzip dans le fichier TSV
             shutil.copyfileobj(gz_file, tsv_file)
-    print(1)
+    
     return output_tsv_file
 
 

@@ -47,7 +47,7 @@ class Converter:
 
         
             tic = time()
-            print(1)
+            
             subprocess.run(shell_command, shell=True, stdout=subprocess.PIPE, text=True)
             
             tac = time()
