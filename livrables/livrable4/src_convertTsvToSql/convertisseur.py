@@ -14,6 +14,7 @@ import os
 import re
 from unzip import unzip
 from time import time
+import plateform 
 
 class Converter:
     def __init__(self):
@@ -37,7 +38,7 @@ class Converter:
             
             fichier_sql = fichier_tsv.split('.tsv')[0].replace(".", "_") + ".sql"
                      
-            shell_command = f'sh {self.path_script.replace("\\", "\\")} "{fichier_tsv}" "{fichier_sql}"'
+            shell_command = f'sh {self.path_script} "{fichier_tsv}" "{fichier_sql}"'
             if self.nb_lignes is not None:
                 shell_command += f' {self.nb_lignes}'
 
@@ -71,8 +72,13 @@ class Converter:
             if choice != "all" and choice != "n":
                 raise ValueError(f"'{choice}' Value error.")
 
-            self.path_script = ".\\bin\\recup_n.sh" if choice == "n" else ".\\bin\\recup_all.sh"
+            if platform.system() == "Windows":
+                self.path_script = ".\\bin\\recup_n.sh" if choice == "n" else ".\\bin\\recup_all.sh"
 
+            else :
+                self.path_script = "./bin/recup_n.sh" if choice == "n" else "./bin/recup_all.sh"
+                
+            
             if choice == "n":
                 self.nb_lignes = input("Veuillez saisir le nombre de ligne : ")
                 if not re.match(r'^[0-9]+$', self.nb_lignes):
