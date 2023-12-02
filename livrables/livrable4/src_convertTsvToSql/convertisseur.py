@@ -36,12 +36,12 @@ class Converter:
             fichier_tsv = self.create_tsv(fichier_gz)
             
             fichier_sql = fichier_tsv.split('.tsv')[0].replace(".", "_") + ".sql"
-            
-            tic = time()
-            
+                     
             shell_command = f'sh {self.path_script.replace("\\", "\\")} "{fichier_tsv}" "{fichier_sql}"'
             if self.nb_lignes is not None:
                 shell_command += f' {self.nb_lignes}'
+
+            tic = time()
             
             subprocess.run(shell_command, shell=True, stdout=subprocess.PIPE, text=True)
             
