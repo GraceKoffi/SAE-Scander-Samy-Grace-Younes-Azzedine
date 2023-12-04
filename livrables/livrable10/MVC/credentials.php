@@ -1,4 +1,4 @@
 <?php 
-$DSN = "";
-$USER = "";
-$PWD = "";
+$DSN = "pgsql:host=localhost;dbname=sae";
+$USER = "samy";
+$PWD = "SAE";
