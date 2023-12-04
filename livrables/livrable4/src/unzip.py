@@ -8,7 +8,7 @@ def unzip(input_gzip_file, nb_lignes=None):
     with gzip.open(input_gzip_file, 'rb') as gz_file, open(output_tsv_file, 'wb') as tsv_file:
         if nb_lignes:
             # Si nb_lignes est spécifié, copiez uniquement le nombre spécifié de lignes du fichier Gzip dans le fichier TSV
-            for _ in range(nb_lignes):
+            for _ in range(nb_lignes + 1):
                 line = gz_file.readline()
                 if not line:
                     break
