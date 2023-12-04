@@ -9,7 +9,7 @@ require_once "Controllers/Controller.php";
 
 
 //Liste des contrôleurs -- A RENSEIGNER
-$controllers = ['home'];
+$controllers = ['home','recherche'];
 //Nom du contrôleur par défaut-- A RENSEIGNER
 $controller_default = 'home';
 

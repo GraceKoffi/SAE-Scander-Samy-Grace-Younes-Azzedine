@@ -1,5 +1,5 @@
 <ul>
     <?php for($i=0; $i<3; $i++) : ?>
-    <a href="?controller=<?php echo $tab[1][$i]; ?>"><?php echo $tab[0][$i]; ?></a>
+    <a href="?controller=<?php echo $tab['controller'][$i]; ?>&action=<?php echo $tab['action'][$i]; ?>"><?php echo $tab['value'][$i]; ?></a>
     <?php endfor; ?>
 </ul>
