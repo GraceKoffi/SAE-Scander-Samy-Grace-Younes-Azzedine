@@ -184,12 +184,23 @@ awk -F'\t' -v nom_table="$nom_table" '
         printf "NULL";
       } else {
         # Ajout de conditions pour détecter les colonnes spécifiques
-        if (nom_table == "title_akas" && (i == 3 || i == 4)) {
+        if ((nom_table == "title_akas" || nom_table == "title_basics") && (i == 3 || i == 4)) {
           gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
           printf "\047%s\047", $i;
-        } else if (nom_table == "title_basics" && i == NF) {
-          printf "ARRAY['%s']", $i;
-        } else if (nom_table == "title_crew" && i > 1) {
+        }
+      else if (nom_table == "title_basics" && i == NF) {
+    split($i, array_values, ",");
+    printf "ARRAY[";
+    for (j = 1; j <= length(array_values); j++) {
+        gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
+        printf "\047%s\047", array_values[j];
+        if (j < length(array_values)) {
+            printf ",";
+          }
+        }
+        printf "]";
+      }
+        else if (nom_table == "title_crew" && i > 1) {
           printf "ARRAY[";
           split($i, array_values, ",");
           for (j = 1; j <= length(array_values); j++) {
@@ -200,7 +211,7 @@ awk -F'\t' -v nom_table="$nom_table" '
             }
           }
           printf "]";
-        } else if (nom_table == "name_basics" && i == NF - 1) {
+        }else if (nom_table == "name_basics" && i == NF - 1) {
           printf "ARRAY[";
           split($i, array_values, ",");
           for (j = 1; j <= length(array_values); j++) {
@@ -211,10 +222,10 @@ awk -F'\t' -v nom_table="$nom_table" '
             }
           }
           printf "]";
-        } else if (substr($i, 1, 1) == "[" && substr($i, length($i), 1) == "]") {
+        }else if (nom_table != "title_akas" && nom_table != "title_crew" && substr($i, 1, 1) == "[" && substr($i, length($i), 1) == "]") {
           gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
           printf "\047%s\047", $i;
-        } else if (split($i, array_values, ",") > 1) {
+        } else if (nom_table != "title_akas" && nom_table != "title_crew" && split($i, array_values, ",") > 1) {
           printf "ARRAY[";
           for (j = 1; j <= length(array_values); j++) {
             gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
