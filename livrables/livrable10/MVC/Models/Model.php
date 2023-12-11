@@ -118,6 +118,26 @@ class Model
     }
     
 
+    public function get_info($acteur){
+        $request = $this->bd->prepare("
+        SELECT *
+        FROM name_basics AS nb
+        LEFT JOIN title_principals AS tp ON nb.nconst = tp.nconst
+        LEFT JOIN title_basics AS tb ON tp.tconst = tb.tconst
+        LEFT JOIN title_ratings AS tr ON tb.tconst = tr.tconst
+        WHERE nb.primaryname   = :acteur;
+        ");
+
+        $request->bindValue(':acteur', $acteur);
+
+        $request->execute();
+
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
+
     
 
 

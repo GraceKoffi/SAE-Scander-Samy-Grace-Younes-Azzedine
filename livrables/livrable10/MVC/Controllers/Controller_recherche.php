@@ -75,6 +75,17 @@ public function action_afficher_form_avancer(){
 }
 
 
+    public function action_afficher_acteur(){
+        $db = Model::getModel();
+        $data = ["data" => $db->get_info(e($_GET['nom']))];
+        $this->render("afficher", $data);
+
+
+    }
+
+
+
+
     public function action_default()
     {
         $this->action_fom_rechercher() ;
