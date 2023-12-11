@@ -125,7 +125,7 @@ try:
             
             
             if '$nom_table' == 'title_basics' :
-                for i in range(len(column_names)) :
+                for i in range(1,len(column_names)) :
                     if column_names[i] == 'isAdult' :
                         create_table_command += '  ' + column_names[i] + ' ' + 'BOOLEAN'+','
                         create_table_command += '\n'
@@ -135,7 +135,7 @@ try:
                             create_table_command += ','
                             create_table_command += '\n'
                         else :
-                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
                             create_table_command += '\n'
 
             elif '$nom_table' == 'title_crew' :
@@ -191,9 +191,19 @@ awk -F'\t' -v nom_table="$nom_table" -v max_lignes="$max_lignes" '
         if ((nom_table == "title_akas" || nom_table == "title_basics") && (i == 3 || i == 4)) {
           gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
           printf "\047%s\047", $i;
-        }else if (nom_table == "title_basics" && i == NF) {
-          printf "ARRAY['%s']", $i;
-        } 
+        }
+      else if (nom_table == "title_basics" && i == NF) {
+    split($i, array_values, ",");
+    printf "ARRAY[";
+    for (j = 1; j <= length(array_values); j++) {
+        gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
+        printf "\047%s\047", array_values[j];
+        if (j < length(array_values)) {
+            printf ",";
+          }
+        }
+        printf "]";
+      }
         else if (nom_table == "title_crew" && i > 1) {
           printf "ARRAY[";
           split($i, array_values, ",");
