@@ -82,16 +82,32 @@ try:
                 
                 column_types.append(sql_type(types_line[i]))
             
-            for i in range(len(column_names)):
+            if '$nom_table' == 'title_akas' :
+                for i in range(len(column_names)) :
+                    if column_names[i] == 'isOriginalTitle' :
+                        create_table_command += '  ' + column_names[i] + ' ' + 'BOOLEAN'+','
+                        create_table_command += '\n' 
+                    else :
+                        if i < len(column_names) - 1 :
+                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                            create_table_command += ','
+                            create_table_command += '\n' 
+                        else :
+                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
             
-                
-                if i < len(column_names) - 1 :
-                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
-                    create_table_command += ','
-                else :
-                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+            else :
 
-                create_table_command += '\n'
+            
+                for i in range(len(column_names)):
+
+
+                    if i < len(column_names) - 1 :
+                        create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                        create_table_command += ','
+                    else :
+                        create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+
+                    create_table_command += '\n'
 
             create_table_command += '  PRIMARY KEY('+column_names[0]+','+' '+column_names[1]+')\n'
             create_table_command += ');'
@@ -106,12 +122,42 @@ try:
                 column_types.append(sql_type(types_line[i]))
             
             create_table_command += '  ' + column_names[0]+' '+ column_types[0] +' PRIMARY KEY,\n'
-            for i in range(1, len(column_names)):
+            
+            
+            if '$nom_table' == 'title_basics' :
+                for i in range(len(column_names)) :
+                    if column_names[i] == 'isAdult' :
+                        create_table_command += '  ' + column_names[i] + ' ' + 'BOOLEAN'+','
+                        create_table_command += '\n'
+                    else :
+                        if i < len(column_names) - 1 :
+                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                            create_table_command += ','
+                            create_table_command += '\n'
+                        else :
+                            create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+','
+                            create_table_command += '\n'
 
-                create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
-                if i < len(column_names) - 1 :
-                    create_table_command += ','
-                create_table_command += '\n'
+            elif '$nom_table' == 'title_crew' :
+                for i in range(len(column_names)) :
+
+                    if column_names[i] == 'directors' :
+                        create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+'[]'+','
+                        create_table_command += '\n'
+
+                    elif column_names[i] == 'writers' : 
+                        create_table_command += '  ' + column_names[i] + ' ' + column_types[i]+'[]'
+                        create_table_command += '\n'
+
+            
+            
+            else :
+                for i in range(1, len(column_names)):
+
+                    create_table_command += '  ' + column_names[i] + ' ' + column_types[i]
+                    if i < len(column_names) - 1 :
+                        create_table_command += ','
+                    create_table_command += '\n'
             create_table_command += ');'
             
         with open('$fichier_sql', 'w', encoding='utf8') as sql_file:
@@ -141,11 +187,39 @@ awk -F'\t' -v nom_table="$nom_table" -v max_lignes="$max_lignes" '
       if ($i == "\\N") {
         printf "NULL";
       } else {
-        # Ajout de la condition pour détecter les tableaux déjà encadrés par des crochets
-        if (substr($i, 1, 1) == "[" && substr($i, length($i), 1) == "]") {
+        # Ajout de conditions pour détecter les colonnes spécifiques
+        if ((nom_table == "title_akas" || nom_table == "title_basics") && (i == 3 || i == 4)) {
           gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
           printf "\047%s\047", $i;
-        } else if (split($i, array_values, ",") > 1) {
+        }else if (nom_table == "title_basics" && i == NF) {
+          printf "ARRAY['%s']", $i;
+        } 
+        else if (nom_table == "title_crew" && i > 1) {
+          printf "ARRAY[";
+          split($i, array_values, ",");
+          for (j = 1; j <= length(array_values); j++) {
+            gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
+            printf "\047%s\047", array_values[j];
+            if (j < length(array_values)) {
+              printf ",";
+            }
+          }
+          printf "]";
+        }else if (nom_table == "name_basics" && i == NF - 1) {
+          printf "ARRAY[";
+          split($i, array_values, ",");
+          for (j = 1; j <= length(array_values); j++) {
+            gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
+            printf "\047%s\047", array_values[j];
+            if (j < length(array_values)) {
+              printf ",";
+            }
+          }
+          printf "]";
+        }else if (nom_table != "title_akas" && nom_table != "title_crew" && substr($i, 1, 1) == "[" && substr($i, length($i), 1) == "]") {
+          gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
+          printf "\047%s\047", $i;
+        } else if (nom_table != "title_akas" && nom_table != "title_crew" && split($i, array_values, ",") > 1) {
           printf "ARRAY[";
           for (j = 1; j <= length(array_values); j++) {
             gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
@@ -168,4 +242,3 @@ awk -F'\t' -v nom_table="$nom_table" -v max_lignes="$max_lignes" '
     printf ");\n";
   }
 ' "$fichier_tsv" >> "$fichier_sql"
-
