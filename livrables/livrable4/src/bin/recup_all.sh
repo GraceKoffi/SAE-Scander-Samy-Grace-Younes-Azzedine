@@ -141,10 +141,14 @@ awk -F'\t' -v nom_table="$nom_table" '
       if ($i == "\\N") {
         printf "NULL";
       } else {
-        # Ajout de la condition pour détecter les tableaux
-        if (split($i, array_values, ",") > 1) {
+        # Ajout de la condition pour détecter les tableaux déjà encadrés par des crochets
+        if (substr($i, 1, 1) == "[" && substr($i, length($i), 1) == "]") {
+          gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
+          printf "\047%s\047", $i;
+        } else if (split($i, array_values, ",") > 1) {
           printf "ARRAY[";
           for (j = 1; j <= length(array_values); j++) {
+            gsub(/'\''/, "''", array_values[j]); # Échapper les apostrophes simples
             printf "\047%s\047", array_values[j];
             if (j < length(array_values)) {
               printf ",";
@@ -152,6 +156,7 @@ awk -F'\t' -v nom_table="$nom_table" '
           }
           printf "]";
         } else {
+          gsub(/'\''/, "''", $i); # Échapper les apostrophes simples
           printf "\047%s\047", $i;
         }
       }
@@ -163,4 +168,3 @@ awk -F'\t' -v nom_table="$nom_table" '
     printf ");\n";
   }
 ' "$fichier_tsv" >> "$fichier_sql"
-
