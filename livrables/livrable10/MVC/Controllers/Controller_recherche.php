@@ -7,81 +7,86 @@ Class Controller_recherche extends Controller{
 
     }
 
-    public function action_afficher(){
-        if((isset($_POST['nom']) && preg_match("/^[A-Za-z\s\-\'']+$/", $_POST['nom'])) || (isset($_POST['titre']) && preg_match("/^[A-Za-z0-9\s\-\'']+$/", $_POST['titre']))){
+
+    public function action_get_suggestions() {
+        if (isset($_GET['type']) && isset($_GET['recherche'])) {
+            $type = $_GET['type'];
+            $recherche = $_GET['recherche'];
+
             $db = Model::getModel();
-            $tab = $db->from_recherche($_POST['nom'], $_POST['titre']);
+
+            if ($type === 'nom') {
+                $suggestions = $db->get_NameSuggestions($recherche);
+            } elseif ($type === 'titre') {
+                $suggestions = $db->get_TitleSuggestions($recherche);
+            } else {
+                // Gérer le type inconnu, si nécessaire
+                $suggestions = [];
+            }
+
+            // Envoyer les suggestions au format JSON
+            echo json_encode($suggestions);
+        } else {
+            // Gérer les paramètres manquants, si nécessaire
+            echo json_encode([]);
+        }
+    }
+
+    public function action_afficher(){
+        if(isset($_POST['type']) and (isset($_POST['recherche']) and $_POST['recherche'] !=='')){
+            if($_POST['type'] == 'nom'){
+                $db = Model::getModel();
+                if (sizeof($db->form_recherche_acteur(e($_POST['recherche']))) != 0){
+                    $data = ["data" => $db->form_recherche_acteur(e($_POST['recherche']))];
+                    $this->render("afficher", $data);
+                }
+                else{
+                    $data = ["data" => $db->get_info_acteur(e($_POST['recherche']))];
+                    $this->render("afficher", $data);
+                }
+            }
+            else if($_POST['type'] == 'titre'){
+                $db = Model::getModel();
+                if(sizeof($db->form_recherche_film(e($_POST['recherche']))) != 0){
+                    $data = ["data" => $db->form_recherche_film(e($_POST['recherche']))];
+                    $this->render("afficher", $data);
+                }
+                else{
+                    $data = ["data" => $db->get_info_film(e($_POST['recherche']))];
+                    $this->render("afficher", $data);
+                }
+            }
+            else {
+                $message = ["message" => "Une erreur dans la selection de la recherche"];
+                $this->render("error", $message);
+
+            }
+      
             
-            if(sizeof($tab) == 0){
-
-                $this->render("error");
-
-
-            }
-            else{
-
-                $data = ["data" => $tab];
-                $this->render("afficher", $data);
-
-            }
-
         }
         else{
-            
-            $this->render("error");
-
-        }
-
-
-    }
-
-    public function action_form_avancer(){
-
-        $this->render("formAvancer");
-
+                $message = ["message" => "Valeur manquante"];
+                $this->render("error", $message);
+        }    
     }
 
 
-public function action_afficher_form_avancer(){
-    if (
-        (isset($_POST['nom']) && preg_match("/^[A-Za-z\s\-\'']+$/", $_POST['nom'])) ||
-        (isset($_POST['titre']) && preg_match("/^[A-Za-z0-9\s\-\'']+$/", $_POST['titre'])) ||
-        (isset($_POST['startBirthYear']) && is_numeric($_POST['startBirthYear'])) ||
-        (isset($_POST['endBirthYear']) && is_numeric($_POST['endBirthYear'])) ||
-        (isset($_POST['startFilmYear']) && is_numeric($_POST['startFilmYear'])) ||
-        (isset($_POST['endFilmYear']) && is_numeric($_POST['endFilmYear'])) ||
-        (isset($_POST['order']) && in_array($_POST['order'], ['name', 'titre', 'birthYear', 'startYear']))
-    ) {
+    public function action_afficher_film(){
         $db = Model::getModel();
-        $tab = $db->form_recherche_avancer(
-            $_POST['nom'],
-            $_POST['titre'],
-            $_POST['startBirthYear'],
-            $_POST['endBirthYear'],
-            $_POST['startFilmYear'],
-            $_POST['endFilmYear'],
-            $_POST['order']
-        );
+        $data = ["data" => $db->form_recherche_film(e($_GET['id']))];
+        $this->render("afficher_film", $data);
 
-        if (sizeof($tab) == 0) {
-            $this->render("error");
-        } else {
-            $data = ["data" => $tab];
-            $this->render("afficher", $data);
-        }
-    } else {
-        $this->render("error");
     }
-}
 
 
     public function action_afficher_acteur(){
         $db = Model::getModel();
-        $data = ["data" => $db->get_info(e($_GET['nom']))];
+        $data = ["data" => $db->form_recherche_acteur(e($_GET['nom']))];
         $this->render("afficher", $data);
 
 
     }
+
 
 
 

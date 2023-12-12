@@ -34,39 +34,53 @@ class Model
         return self::$instance;
     }
 
-    public function from_recherche($name, $title){
+    public function get_NameSuggestions($recherche) {
+        $query = "SELECT primaryName FROM name_basics WHERE primaryName LIKE :recherche LIMIT 5";
+        return $this->getSuggestions($query, $recherche);
+    }
+
+    public function get_TitleSuggestions($recherche) {
+        $query = "SELECT primaryTitle FROM title_basics WHERE primaryTitle LIKE :recherche LIMIT 5";
+        return $this->getSuggestions($query, $recherche);
+    }
+
+    private function getSuggestions($query, $recherche) {
+        $stmt = $this->bd->prepare($query);
+        $stmt->bindValue(':recherche', "%$recherche%", PDO::PARAM_STR);
+        $stmt->execute();
+
+        $suggestions = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $suggestions;
+    }
     
-            $request = $this->bd->prepare("
-                SELECT 
-                nb.primaryName AS PersonName,
-                nb.birthYear AS BirthYear,
-                nb.deathYear AS DeathYear,
-                tb.primaryTitle AS FilmTitle,
-                tb.startYear AS FilmStartYear,
-                tb.endYear AS FilmEndYear
-                
-                FROM 
-                name_basics nb
-                LEFT JOIN 
-                title_principals tp ON nb.nconst = tp.nconst
-                LEFT JOIN 
-                title_basics tb ON tp.tconst = tb.tconst
-                
-                WHERE 
-                nb.primaryName ILIKE :name OR tb.primaryTitle ILIKE :titre
-                
-                ORDER BY 
-                nb.primaryName ASC, tb.primaryTitle ASC"
-            );
+    public function form_recherche_acteur($acteur){
 
-            $request->bindValue(':name', '%'.$name.'%');
-            $request->bindValue(':titre', '%'.$title.'%');
-
-            $request->execute();
-
-            return $request->fetchAll(PDO::FETCH_ASSOC);
+        $request = $this->bd->prepare("
+        SELECT *
+        FROM name_basics 
+        WHERE primaryName = :nom
     
+        ");
+       
+        $request->bindValue(':nom', e($acteur));
+        $request->execute();
 
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function form_recherche_film($id){
+        $request = $this->bd->prepare("
+            SELECT *
+            FROM title_basics   
+            WHERE tconst = :id
+        ");
+        
+        $request->bindValue(':id', e($id));
+
+        $request->execute();
+
+        return $request->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -118,26 +132,35 @@ class Model
     }
     
 
-    public function get_info($acteur){
+
+    public function get_info_acteur($acteur_like){
         $request = $this->bd->prepare("
-        SELECT *
-        FROM name_basics AS nb
-        LEFT JOIN title_principals AS tp ON nb.nconst = tp.nconst
-        LEFT JOIN title_basics AS tb ON tp.tconst = tb.tconst
-        LEFT JOIN title_ratings AS tr ON tb.tconst = tr.tconst
-        WHERE nb.primaryname   = :acteur;
+            SELECT primaryName FROM name_basics WHERE primaryName LIKE :acteur
         ");
 
-        $request->bindValue(':acteur', $acteur);
+        $acteur = '%'.$acteur_like.'%';
+
+        $request->bindValue(':acteur', e($acteur));
 
         $request->execute();
 
         return $request->fetchAll(PDO::FETCH_ASSOC);
 
-
     }
 
+    public function get_info_film($film_like){
+        $request = $this->bd->prepare("
+            SELECT primaryTitle FROM title_basics WHERE primaryTitle LIKE :film
+        ");        
+        
+        $film = '%'.$film_like.'%';
+        
+        $request->bindValue(':film', $film);
+        $request->execute();
 
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+    
+    }
     
 
 
