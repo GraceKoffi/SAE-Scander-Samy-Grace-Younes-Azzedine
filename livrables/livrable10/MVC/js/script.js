@@ -1,15 +1,16 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Déclarer la variable rechercheInput2 en dehors de la fonction pour qu'elle soit accessible globalement
-    const rechercheInput2 = document.querySelector("input[name='recherche']");
+    const rechercheInput = document.getElementById("rechercheInput");
+    const suggestionsList = document.getElementById("suggestions");
+
+    rechercheInput.addEventListener("input", getSuggestions);
 
     function getSuggestions() {
         const type = document.querySelector("select[name='type']").value;
-        const recherche = rechercheInput2.value;
+        const recherche = rechercheInput.value;
 
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                const suggestionsList = document.getElementById("suggestions");
                 suggestionsList.innerHTML = '';
 
                 const suggestions = JSON.parse(xhr.responseText);
@@ -22,15 +23,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 suggestions.forEach(suggestion => {
                     const suggestionItem = document.createElement("div");
                     suggestionItem.className = "suggestion-item";
-                    if (type == 'nom') {
-                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
-                    } else {
-                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
-                    }
-
+                    suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
+                    
                     suggestionItem.addEventListener("click", function(event) {
                         event.preventDefault();
-                        rechercheInput2.value = event.target.dataset.value;
+                        rechercheInput.value = event.target.dataset.value;
                         suggestionsList.style.display = 'none';
                     });
 
@@ -42,6 +39,4 @@ document.addEventListener("DOMContentLoaded", function() {
         xhr.open("GET", `?controller=recherche&action=get_suggestions&type=${type}&recherche=${recherche}`, true);
         xhr.send();
     }
-
-    document.querySelector("input[name='recherche']").addEventListener("input", getSuggestions);
 });

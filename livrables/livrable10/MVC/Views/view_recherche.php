@@ -14,7 +14,7 @@
     <p class="position-relative">
         <label>
             Terme de recherche :
-            <input type="text" name="recherche" value="">
+            <input type="text" name="recherche" value="" id="rechercheInput">
         </label>
     </p>
 

@@ -73,7 +73,7 @@ Class Controller_recherche extends Controller{
 
     public function action_afficher_film(){
         $db = Model::getModel();
-        $data = ["data" => $db->form_recherche_film(e($_GET['id']))];
+        $data = ["data" => $db->form_recherche_film_id(e($_GET['id']))];
         $this->render("afficher_film", $data);
 
     }

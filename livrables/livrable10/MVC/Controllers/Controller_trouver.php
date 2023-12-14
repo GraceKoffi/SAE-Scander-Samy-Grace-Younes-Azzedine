@@ -35,7 +35,32 @@ Class Controller_trouver extends Controller{
 
     public function action_afficher()
     {
-        
+        if(isset($_POST['type']) and (isset($_POST['recherche1']) and $_POST['recherche1'] !== '') and (isset($_POST['recherche2']) and $_POST['recherche2'] !== ''))
+        {
+            if($_POST['type'] == 'acteur')
+            {
+                $db = Model::getModel();
+                $data = ["data" => $db->recherche_film($_POST['recherche1'], $_POST['recherche2'])];
+                $this->render("trouver_afficher_film", $data);
+
+            }
+            else if($_POST['type'] == 'film')
+            {
+                $db = Model::getModel();
+                $data = ["data" => $db->rechercher_acteur($_POST['recherche1'], $_POST['recherche2'])];
+                $this->render("trouver_afficher_acteur", $data);
+            }
+            else 
+            {
+                $message = ["message" => "Une erreur est survenue"];
+                $this->render("error", $message);
+            }
+        }
+        else
+        {
+            $message = ["message" => "Valeur manquante"];
+            $this->render("error", $message);
+        }
 
         
 

@@ -69,16 +69,31 @@ class Model
     }
 
 
-    public function form_recherche_film($id){
+    public function form_recherche_film($film){
+        $request = $this->bd->prepare("
+            SELECT *
+            FROM title_basics   
+            WHERE primaryTitle = :film  
+        ");
+        
+
+        $request->bindValue(':film', e($film));
+
+        $request->execute();
+
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function form_recherche_film_id($id){
         $request = $this->bd->prepare("
             SELECT *
             FROM title_basics   
             WHERE tconst = :id  
         ");
         
-        $id = $this->get_tconst($id);
 
-        $request->bindValue(':id', $id['tconst']);
+        $request->bindValue(':id', e($id));
 
         $request->execute();
 
@@ -130,7 +145,13 @@ class Model
 
         $request->execute();
 
-        return $request->fetch(PDO::FETCH_ASSOC);
+        $result = $request->fetch(PDO::FETCH_ASSOC);
+        if ($result !== false) {
+            return $result;
+        } else {
+            // Gérer le cas où aucun résultat n'est trouvé
+            return null;
+        }
 
     }
 
@@ -156,20 +177,24 @@ class Model
     
     }
     
-    public function get_tconst($film){
+    public function get_tconst($film) {
         $request = $this->bd->prepare("
-        SELECT tconst
-        FROM title_basics
-        WHERE primaryTitle = :film;
-        
+            SELECT tconst
+            FROM title_basics
+            WHERE primaryTitle = :film;
         ");
-
+    
         $request->bindValue(':film', e($film));
-
         $request->execute();
-
-        return $request->fetch(PDO::FETCH_ASSOC);
-
+    
+        // Vérifier si la requête a renvoyé un résultat valide
+        $result = $request->fetch(PDO::FETCH_ASSOC);
+        if ($result !== false) {
+            return $result;
+        } else {
+            // Gérer le cas où aucun résultat n'est trouvé
+            return null;
+        }
     }
 
 

@@ -31,7 +31,7 @@
         echo 'Aucune information disponible.';
     }
     ?>
-<?php else : ?> 
+<?php elseif (sizeof($data) > 1) : ?> 
     
         <p>Name</p>
         <ol>
@@ -39,6 +39,11 @@
             <li><a href="?controller=recherche&action=afficher_acteur&nom=<?php echo $cle['primaryname']; ?>"><?php echo $cle['primaryname']; ?></a></li>
     <?php endforeach; ?>
     </ol>
+
+
+<?php else : ?>
+    <?php echo "Aucune valeur"."\n"; ?> 
+
 <?php endif; ?>
 
 <a href="?controller=home">home</a>
