@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // Déclarer la variable rechercheInput2 en dehors de la fonction pour qu'elle soit accessible globalement
+    const rechercheInput2 = document.querySelector("input[name='recherche']");
+
     function getSuggestions() {
         const type = document.querySelector("select[name='type']").value;
-        const recherche = document.querySelector("input[name='recherche']").value;
+        const recherche = rechercheInput2.value;
 
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
@@ -19,13 +22,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 suggestions.forEach(suggestion => {
                     const suggestionItem = document.createElement("div");
                     suggestionItem.className = "suggestion-item";
-                    if(type == 'nom'){
-                        suggestionItem.innerHTML = `<a href="?controller=recherche&action=afficher_acteur&nom=${suggestion}">${suggestion}</a>`;
+                    if (type == 'nom') {
+                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
+                    } else {
+                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
                     }
-                    else{
-                        suggestionItem.innerHTML = `<a href="?controller=recherche&action=afficher_film&nom=${suggestion}">${suggestion}</a>`;
-                    }
-                   
+
+                    suggestionItem.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        rechercheInput2.value = event.target.dataset.value;
+                        suggestionsList.style.display = 'none';
+                    });
+
                     suggestionsList.appendChild(suggestionItem);
                 });
             }

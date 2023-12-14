@@ -1,4 +1,4 @@
-<?php require "Views/view_begin.php"; ?>
+<?php require "Views/view_begin_recherche.php"; ?>
 
 <form action="?controller=recherche&action=afficher" method="post">
     <p>
@@ -27,4 +27,4 @@
 <a href="?controller=home">Accueil</a>
 <a href="?controller=recherche&action=form_avancer">Recherche avancée</a>
 
-<?php require "Views/view_end.php"; ?>
+<?php require "Views/view_end_recherche.php"; ?>

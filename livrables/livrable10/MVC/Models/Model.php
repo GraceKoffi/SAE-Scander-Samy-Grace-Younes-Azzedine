@@ -73,10 +73,12 @@ class Model
         $request = $this->bd->prepare("
             SELECT *
             FROM title_basics   
-            WHERE tconst = :id
+            WHERE tconst = :id  
         ");
         
-        $request->bindValue(':id', e($id));
+        $id = $this->get_tconst($id);
+
+        $request->bindValue(':id', $id['tconst']);
 
         $request->execute();
 
@@ -84,52 +86,6 @@ class Model
     }
 
 
-    public function form_recherche_avancer($name, $titre, $startBirthYear, $endBirthYear, $startFilmYear, $endFilmYear, $order) {
-
-        $request = $this->bd->prepare("
-            SELECT 
-            nb.primaryName AS PersonName,
-            nb.birthYear AS BirthYear,
-            nb.deathYear AS DeathYear,
-            tb.primaryTitle AS FilmTitle,
-            tb.startYear AS FilmStartYear,
-            tb.endYear AS FilmEndYear
-    
-            FROM 
-            name_basics nb
-            LEFT JOIN 
-            title_principals tp ON nb.nconst = tp.nconst
-            LEFT JOIN 
-            title_basics tb ON tp.tconst = tb.tconst
-    
-            WHERE 
-            (nb.primaryName ILIKE :name OR nb.primaryName ILIKE :name)
-            AND (tb.primaryTitle ILIKE :titre)
-            AND (nb.birthYear BETWEEN :startBirthYear::integer AND :endBirthYear::integer OR :startBirthYear IS NULL)
-            AND (tb.startYear BETWEEN :startFilmYear::integer AND :endFilmYear::integer OR :startFilmYear IS NULL)
-    
-            ORDER BY 
-            CASE
-                WHEN :order = 'name' THEN nb.primaryName
-                WHEN :order = 'titre' THEN tb.primaryTitle
-                WHEN :order = 'birthYear' THEN nb.birthYear::text
-                WHEN :order = 'startYear' THEN tb.startYear::text
-                ELSE nb.primaryName
-            END ASC;
-        ");
-    
-        $request->bindValue(':name', '%' . $name . '%');
-        $request->bindValue(':titre', '%' . $titre . '%');
-        $request->bindValue(':startBirthYear', $startBirthYear !== '' ? $startBirthYear : null, PDO::PARAM_INT);
-        $request->bindValue(':endBirthYear', $endBirthYear !== '' ? $endBirthYear : null, PDO::PARAM_INT);
-        $request->bindValue(':startFilmYear', $startFilmYear !== '' ? $startFilmYear : null, PDO::PARAM_INT);
-        $request->bindValue(':endFilmYear', $endFilmYear !== '' ? $endFilmYear : null, PDO::PARAM_INT);
-        $request->bindValue(':order', $order);
-    
-        $request->execute();
-    
-        return $request->fetchAll(PDO::FETCH_ASSOC);
-    }
     
 
 
@@ -161,6 +117,84 @@ class Model
         return $request->fetchAll(PDO::FETCH_ASSOC);
     
     }
+
+    public function get_nconst($name){
+        $request = $this->bd->prepare("
+            SELECT nconst
+            FROM name_basics
+            WHERE primaryName = :acteur;
+        
+        ");
+
+        $request->bindValue(':acteur', e($name));
+
+        $request->execute();
+
+        return $request->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    public function recherche_film($acteur_1, $acteur_2){
+        $request = $this->bd->prepare("
+            SELECT DISTINCT tb.tconst, tb.primaryTitle, tb.startYear
+            FROM title_basics tb
+            JOIN title_principals tp1 ON tb.tconst = tp1.tconst
+            JOIN title_principals tp2 ON tb.tconst = tp2.tconst
+            WHERE tp1.nconst = :nconst1 AND tp2.nconst = :nconst2;
+        ");
+
+        $nconst_1 = $this->get_nconst($acteur_1);
+        $nconst_2 = $this->get_nconst($acteur_2);
+
+        $request->bindValue(':nconst1', $nconst_1['nconst']);
+        $request->bindValue(':nconst2', $nconst_2['nconst']);
+
+        $request->execute();
+
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+    
+    
+    }
+    
+    public function get_tconst($film){
+        $request = $this->bd->prepare("
+        SELECT tconst
+        FROM title_basics
+        WHERE primaryTitle = :film;
+        
+        ");
+
+        $request->bindValue(':film', e($film));
+
+        $request->execute();
+
+        return $request->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+
+
+    public function rechercher_acteur($film_1, $film_2){
+        $request = $this->bd->prepare("
+        SELECT nb.primaryName AS acteur_en_commun, tp1.tconst AS film1, tp2.tconst AS film2
+        FROM title_principals tp1
+        JOIN title_principals tp2 ON tp1.nconst = tp2.nconst
+        JOIN name_basics nb ON tp1.nconst = nb.nconst
+        WHERE tp1.tconst = :tconst1 AND tp2.tconst = :tconst2;
+        
+        ");
+
+        $tconst_1 = $this->get_tconst($film_1);
+        $tconst_2 = $this->get_tconst($film_2);
+
+        $request->bindValue(':tconst1', $tconst_1['tconst']);
+        $request->bindValue('::tconst2', $tconst_2['tconst']);
+
+        return $request->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
     
 
 
