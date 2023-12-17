@@ -26,11 +26,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     const suggestionItem = document.createElement("div");
                     suggestionItem.className = "suggestion-item";
 
-                    if (type == 'nom') {
-                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
-                    } else {
-                        suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
-                    }
+                    suggestionItem.innerHTML = `<a href="#" data-value="${suggestion}">${suggestion}</a>`;
+                
+                 
 
                     suggestionItem.addEventListener("click", function(event) {
                         event.preventDefault();

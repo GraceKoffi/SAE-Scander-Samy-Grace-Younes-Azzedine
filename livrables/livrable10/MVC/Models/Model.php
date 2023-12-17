@@ -220,10 +220,87 @@ class Model
 
     }
 
+
+    private function getRelations($node, $type) {
+        $relations = [];
+        $table = '';
     
-
-
-
-
+        // Choix de la table en fonction du type (acteur ou film)
+        if ($type == 'acteur') {
+            $table = 'name_basics';
+        } elseif ($type == 'film') {
+            $table = 'title_basics';
+        }
+    
+        // Requête pour obtenir les relations du nœud
+        $stmt = $this->bd->prepare("
+            SELECT tp.tconst AS source, nb.nconst AS target
+            FROM title_principals AS tp
+            JOIN name_basics AS nb ON tp.nconst = nb.nconst
+            WHERE $table.nconst = :node
+        ");
+        $stmt->bindValue(':node', $node);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        foreach ($results as $result) {
+            $relations[] = ['source' => $result['source'], 'target' => $result['target']];
+        }
+    
+        return $relations;
+    }
+    
+    private function buildPath($start, $end, $previous) {
+        $path = [];
+        $current = $end;
+    
+        while ($current != $start) {
+            array_unshift($path, $current);
+            $current = $previous[$current];
+        }
+    
+        array_unshift($path, $start);
+    
+        return ['path' => $path, 'length' => count($path)];
+    }
+    
+    public function findShortestPath($start, $end, $type) {
+        // Initialisation de la file pour la recherche BFS
+        $queue = new SplQueue();
+        $visited = [];
+        $previous = [];
+    
+        // Ajouter le point de départ à la file
+        $queue->enqueue($start);
+        $visited[$start] = true;
+    
+        while (!$queue->isEmpty()) {
+            $current = $queue->dequeue();
+    
+            // Requête pour obtenir les relations du nœud actuel
+            $relations = $this->getRelations($current, $type);
+    
+            foreach ($relations as $relation) {
+                $neighbor = $relation['target'];
+    
+                if (!isset($visited[$neighbor])) {
+                    $visited[$neighbor] = true;
+                    $previous[$neighbor] = $current;
+    
+                    // Si on atteint la cible, construire le chemin et retourner le résultat
+                    if ($neighbor == $end) {
+                        return $this->buildPath($start, $end, $previous);
+                    }
+    
+                    $queue->enqueue($neighbor);
+                }
+            }
+        }
+    
+        // Aucun chemin trouvé
+        return null;
+    }
+    
+    
 
 }
