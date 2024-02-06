@@ -1,0 +1,70 @@
+.navbar {
+    transition: background-color 1s;
+}
+
+.navbar-transparent {
+    background-color: transparent !important;
+}
+
+.navbar-normal {
+    background-color: #010101 !important; /* Noir absolu */
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    transition: color 0.3s; /* Transition de la couleur sur 0.3 secondes */
+    color: white !important; /* Texte blanc */
+    font-family: 'Calibri', sans-serif; /* Police Calibri */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fafaf8 !important; /* Couleur blanc au survol */
+    font-weight: bold; /* Police en gras */
+    transform: scale(1.1);
+}
+
+/* Espacement entre les onglets */
+.navbar-nav .nav-item {
+    margin-right: 100px; /* Espacement plus large entre les onglets */
+}
+
+/* Logo à gauche de la barre de navigation */
+.navbar-brand img {
+    max-width: 50px; /* Ajustez la largeur du logo selon vos besoins */
+    margin-right: 100px; /* Espacement entre le logo et le texte */
+}
+
+/* Style des favicons */
+.navbar-nav .nav-item img {
+    max-width: 15px; /* Ajustez la largeur des favicons selon vos besoins */
+    margin-right: 5px; /* Espacement entre les favicons et le texte */
+    margin-top: -2px; /* Ajustez cette valeur pour déplacer les favicons vers le haut */
+}
+/* CSS pour le pied de page */
+
+footer {
+    background-color: #000000; /* Fond noir */
+    color: #ffffff; /* Écriture blanche */
+}
+
+
+
+
+.footer-links li {
+    transition: transform 0.4s; /* Animation douce */
+    padding-top: 40px;
+    padding-right: 55px;
+
+}
+footer a {
+    color: #ffffff !important; /* Couleur du texte blanc pour les liens */
+    text-decoration: none !important; /* Supprime le soulignement des liens */
+}
+
+
+.footer-links li:hover {
+    color: #ffffff !important; /* Couleur blanc au survol */
+    font-weight: bold; /* Police en gras */
+    transform: scale(1.3);/*grossissement*/
+}
+
+
