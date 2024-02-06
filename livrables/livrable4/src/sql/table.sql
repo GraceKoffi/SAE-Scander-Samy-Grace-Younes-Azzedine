@@ -67,16 +67,18 @@ CREATE TABLE IF NOT EXISTS title_ratings (
   numVotes INTEGER
 );
 -- Création de la table UserData
+DROP TABLE IF EXISTS UserData;
 CREATE TABLE UserData (
-    userId INT AUTO_INCREMENT PRIMARY KEY,
+    userId SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
     connectionTime TIMESTAMP
 );
 
 -- Création de la table RechercheData
+DROP TABLE IF EXISTS RechercheData;
 CREATE TABLE RechercheData (
-    rechercheId INT AUTO_INCREMENT PRIMARY KEY,
+    rechercheId SERIAL PRIMARY KEY,
     motCle TEXT,
     userId INT,
     typeRecherche TEXT,
