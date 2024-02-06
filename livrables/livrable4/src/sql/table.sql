@@ -66,4 +66,20 @@ CREATE TABLE IF NOT EXISTS title_ratings (
   averageRating DOUBLE PRECISION,
   numVotes INTEGER
 );
+-- Création de la table UserData
+CREATE TABLE UserData (
+    userId INT AUTO_INCREMENT PRIMARY KEY,
+    username TEXT,
+    password TEXT,
+    connectionTime TIMESTAMP
+);
+
+-- Création de la table RechercheData
+CREATE TABLE RechercheData (
+    rechercheId INT AUTO_INCREMENT PRIMARY KEY,
+    motCle TEXT,
+    userId INT,
+    typeRecherche TEXT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);
 
