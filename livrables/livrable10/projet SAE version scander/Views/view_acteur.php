@@ -103,7 +103,7 @@ if (isset($data->biography) && $data->biography !== null) {
                 // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 // $response = curl_exec($ch);
                 // curl_close($ch);
-                $reponse = file_get_contents($url);
+                $response = file_get_contents($url);
                 $data = json_decode($response);
                 $portrait_film = null;
                 $results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
