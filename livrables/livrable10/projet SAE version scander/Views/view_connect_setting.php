@@ -1,4 +1,8 @@
 <!--Website: wwww.codingdung.com-->
+<?php
+$connectionTime = $tab["connectiontime"];
+$formattedDateTime = date("d/m/Y H:i", strtotime($connectionTime));
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,6 +127,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     border-color: rgba(24, 28, 33, 0.03) !important;
 }
     </style>
+
+
 <div class="container light-style flex-grow-1 container-p-y">
     <h4 class="font-weight-bold py-3 mb-4">
         Account settings
@@ -148,7 +154,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <div class="form-group">
                                     <label class="form-label">Username</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control mb-1" value="nmaxwell" id="username" disabled>
+                                        <input type="text" class="form-control mb-1" value="<?php echo $_SESSION['username'];?>" id="username" disabled>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-outline-secondary" id="edit-username">Edit</button>
                                         </div>
@@ -157,7 +163,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <div class="form-group">
                                     <label class="form-label">Name</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" value="Nelle Maxwell" id="Name" disabled>
+                                        <input type="text" class="form-control" value="<?php echo $tab["name"];?>" id="Name" disabled>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-outline-secondary" id="edit-name">Edit</button>
                                         </div>
@@ -166,7 +172,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <div class="form-group">
                                     <label class="form-label">E-mail</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control mb-1" value="nmaxwell@mail.com" id="email" disabled>
+                                        <input type="text" class="form-control mb-1" value="<?php echo $tab["email"];?>" id="email" disabled>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-outline-secondary" id="edit-email">Edit</button>
                                         </div>
@@ -178,12 +184,12 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                             <div class="card-body pb-2">
                                 <div class="form-group">
                                     <label class="form-label">Current password</label>
+                                    <div class="form-group">
                                     <div class="input-group">
-                                        <input type="password" class="form-control" value="test" id="currentPassword" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="show-password">Show</button>
-                                        </div>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['password'];?>" 
+                                        id="password" disabled>
                                     </div>
+                                </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">New password</label>
@@ -199,22 +205,22 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                         <div class="tab-pane fade" id="account-info">
                             <div class="card-body pb-2">
                                 <div class="form-group">
-                                    <label class="form-label">Birthday</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="May 3, 1995" id="birthday" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-birthday">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="form-label">Country</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" value="France" id="country" disabled>
+                                        <input type="text" class="form-control" value="<?php echo $tab["country"]?>" id="country" disabled>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-outline-secondary" id="edit-country">Edit</button>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Connection</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="<?php echo $formattedDateTime;?>" 
+                                        id="last-connection" disabled>
+                                        <span class="input-group-addon">
+                                            <i class="far fa-calendar"></i> <!-- Vous pouvez ajouter une icône de calendrier ici -->
+                                        </span>
                                 </div>
                             </div>
                         </div>
@@ -225,7 +231,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     </div>
     <div class="text-right mt-3">
         <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>&nbsp;
-        <a href="?controller=Connect" class="btn btn-default" id="cancel-changes">Cancel</a>
+        <a href="?controller=connect" class="btn btn-default" id="cancel-changes">Cancel</a>
     </div>
 
     <script>
@@ -254,21 +260,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
             enableField("newPassword");
         });
 
-        document.getElementById("edit-birthday").addEventListener("click", function () {
-            enableField("birthday");
-        });
-
         document.getElementById("edit-country").addEventListener("click", function () {
             enableField("country");
-        });
-
-        // Ajoutez un événement pour le bouton "Show password"
-        document.getElementById("show-password").addEventListener("click", function () {
-            var currentPasswordField = document.getElementById("currentPassword");
-            var showButton = document.getElementById("show-password");
-
-            currentPasswordField.type = (currentPasswordField.type === "password") ? "text" : "password";
-            showButton.textContent = (currentPasswordField.type === "password") ? "Show" : "Hide";
         });
 
         // Ajoutez un événement pour le bouton "Save changes"

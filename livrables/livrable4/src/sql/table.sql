@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS name_basics;
+DROP TABLE IF EXISTS name_basics CASCADE;
 CREATE TABLE IF NOT EXISTS name_basics (
   nconst VARCHAR(11) PRIMARY KEY,
   primaryName TEXT,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS name_basics (
   knownForTitles TEXT
 );
 
-DROP TABLE IF EXISTS title_akas;
+DROP TABLE IF EXISTS title_akas CASCADE;
 CREATE TABLE IF NOT EXISTS title_akas (
   titleId TEXT,
   ordering INTEGER,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS title_akas (
   PRIMARY KEY(titleId, ordering)
 );
 
-DROP TABLE IF EXISTS title_basics;
+DROP TABLE IF EXISTS title_basics CASCADE;
 CREATE TABLE IF NOT EXISTS title_basics (
   tconst VARCHAR(11) PRIMARY KEY,
   titleType TEXT,
@@ -34,14 +34,14 @@ CREATE TABLE IF NOT EXISTS title_basics (
   genres TEXT
 );
 
-DROP TABLE IF EXISTS title_crew;
+DROP TABLE IF EXISTS title_crew CASCADE;
 CREATE TABLE IF NOT EXISTS title_crew (
   tconst VARCHAR(11) PRIMARY KEY,
   directors TEXT,
   writers TEXT
 );
 
-DROP TABLE IF EXISTS title_episode;
+DROP TABLE IF EXISTS title_episode CASCADE;
 CREATE TABLE IF NOT EXISTS title_episode (
   tconst VARCHAR(11) PRIMARY KEY,
   parentTconst TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS title_episode (
   episodeNumber INTEGER
 );
 
-DROP TABLE IF EXISTS title_principals;
+DROP TABLE IF EXISTS title_principals CASCADE;
 CREATE TABLE IF NOT EXISTS title_principals (
   tconst TEXT,
   ordering INTEGER,
@@ -60,23 +60,26 @@ CREATE TABLE IF NOT EXISTS title_principals (
   PRIMARY KEY(tconst, ordering)
 );
 
-DROP TABLE IF EXISTS title_ratings;
+DROP TABLE IF EXISTS title_ratings CASCADE;
 CREATE TABLE IF NOT EXISTS title_ratings (
   tconst VARCHAR(11) PRIMARY KEY,
   averageRating DOUBLE PRECISION,
   numVotes INTEGER
 );
 -- Création de la table UserData
-DROP TABLE IF EXISTS UserData;
+DROP TABLE IF EXISTS UserData CASCADE;
 CREATE TABLE UserData (
     userId SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
-    connectionTime TIMESTAMP
+    connectionTime TIMESTAMP,
+    email TEXT,
+    name TEXT,
+    country TEXT
 );
 
 -- Création de la table RechercheData
-DROP TABLE IF EXISTS RechercheData;
+DROP TABLE IF EXISTS RechercheData CASCADE;
 CREATE TABLE RechercheData (
     rechercheId SERIAL PRIMARY KEY,
     motCle TEXT,

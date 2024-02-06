@@ -47,7 +47,8 @@ Class Controller_Connect extends Controller{
                 $this->render("error", $tab);
             }
             else{
-                $_SESSION['username'] = trim(e($_POST['userName'])); 
+                $_SESSION['username'] = trim(e($_POST['userName']));
+                $_SESSION['password'] = trim(e($_POST['passWord']));
                 $this->action_render_user($_SESSION['username']);
                 exit();
             }
@@ -71,7 +72,8 @@ Class Controller_Connect extends Controller{
                 $this->render("error", $tab);
             }
             else{
-                $_SESSION['username'] = trim(e($_POST['userName'])); 
+                $_SESSION['username'] = trim(e($_POST['userName']));
+                $_SESSION['password'] = trim(e($_POST['passWord']));
                 $this->action_render_user($_SESSION['username']);
                 exit();
             }

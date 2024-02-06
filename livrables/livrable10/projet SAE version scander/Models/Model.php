@@ -532,7 +532,7 @@ class Model
             $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
             $pwdMatchQuery->execute();
             $pwd_match = $pwdMatchQuery->fetch(PDO::FETCH_ASSOC);
-            
+            $this->updateConnectionTime($this->getUserId($data['username'])["userid"]);
             if (password_verify($data["password"], $pwd_match["password"])) {
                 return $this->getUserData($data["username"]);
             } else {
@@ -543,6 +543,14 @@ class Model
             }
         }
     }
+
+    public function updateConnectionTime($userId){
+        $sql = "UPDATE UserData SET connectionTime = CURRENT_TIMESTAMP WHERE userId = :userId";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":userId", $userId, PDO::PARAM_INT);
+        return $query->execute();
+    }
+    
 
     public function updatePassword($data) {
         try {
@@ -593,10 +601,11 @@ class Model
         $userId = $this->getUserId($username)["userid"];
         $sql = "SELECT * FROM UserData WHERE userId = :userId";
         $query = $this->bd->prepare($sql);
-        $query->bindParam(":userid", $userId, PDO::PARAM_STR);
+        $query->bindParam(":userId", $userId, PDO::PARAM_INT); // Utilisez :userId ici
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
-        }   
+    }
+    
 
     public function getRechercherData($data){
         $userId = $this->getUserId($data["username"])["userid"];
