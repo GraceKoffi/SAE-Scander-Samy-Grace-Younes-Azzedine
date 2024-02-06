@@ -9,7 +9,6 @@ Class Controller_rapprochement extends Controller{
     {
         if (isset($_POST['champ1']) && isset($_POST['champ2']) && isset($_POST['type'])) {
             $m = Model::getModel();
-        
             $debut = '';
             $fin = '';
             $val1 = '';
@@ -54,23 +53,39 @@ Class Controller_rapprochement extends Controller{
             // Exécuter la requête HTTP POST et récupérer la réponse
             $apiResponse = @file_get_contents($apiUrl, false, $context); // Utilisation de @ pour supprimer les avertissements
         
-        if ($apiResponse !== false) {
+            if ($apiResponse !== false) {
                 // Traiter la réponse de l'API (la réponse est généralement en format JSON)
                 $result = json_decode($apiResponse, true);
-        
+                if(isset($_SESSION['username'])){
+                    $data = [
+                        "UserName" => $_SESSION['username'],
+                        "TypeRecherche" => "Rapprochement",
+                        "MotsCles" => [
+                            $_POST['champ1'],
+                            $_POST['champ2']
+                        ]
+                    ];
+                    $result = $m->addUserRecherche($data);
+                    if(!empty($result)){
+                        $tab = ["tab" => $result["message"]];
+                        $this->render("error", $tab);
+                    }
+                }
                 // Faire quelque chose avec le résultat
                 $tab = ["tab" => $result];
                 $this->render("rapprochement_result", $tab);
-            
-        }
-        }else{
+            }
+            else{
+                $tab = ["tab" => "Une erreur est survenu"];
+                $this->render("error", $tab);
+            }
+        }         
+        else{
             $tab = ["tab" => "Champ manquant"];
             $this->render("error", $tab);
         }
-        
     }
 
-    
     public function action_default()
     {
         $this->action_fom_rapprochement();

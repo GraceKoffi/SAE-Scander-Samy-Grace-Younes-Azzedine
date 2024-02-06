@@ -415,33 +415,54 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+
     public function getUserData($username) {
-        if ($this->userExist($username)["exists"] == true) {
-            $userId = $this->getUserId($username)["userid"];
-            $userDataSql = "SELECT * FROM UserData WHERE username = :username";
-            $userDataQuery = $this->bd->prepare($userDataSql);
-            $userDataQuery->bindParam(':username', $username, PDO::PARAM_STR);
-            $userDataQuery->execute();
+        $userId = $this->getUserId($username)["userid"];
 
-            $userData = $userDataQuery->fetchAll(PDO::FETCH_ASSOC);
+        $totalSearchSql = "SELECT COUNT(*) AS totalRecherches FROM RechercheData WHERE userId = :userId";
+        $totalSearchQuery = $this->bd->prepare($totalSearchSql);
+        $totalSearchQuery->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $totalSearchQuery->execute();
+        $totalSearch = $totalSearchQuery->fetch(PDO::FETCH_ASSOC);
+        
+        
+        $sql = "SELECT
+        MAX(CASE WHEN typeRecherche = 'Trouver' THEN rehcercheTime END) AS Trouver,
+        MAX(CASE WHEN typeRecherche = 'Rapprochement' THEN rehcercheTime END) AS Rapprochement,
+        MAX(CASE WHEN typeRecherche = 'Recherche' THEN rehcercheTime END) AS Recherche
+        FROM
+            RechercheData
+        WHERE
+            userId = :userId
+        GROUP BY
+            userId;
+        ";
+        $results = $this->bd->prepare($sql);
+        $results->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $results->execute();
 
-            $rechercheSql = "SELECT * FROM UserData JOIN RechercheData ON UserData.userId = RechercheData.userId WHERE UserData.userId = :userId";
-            $rechercheQuery = $this->bd->prepare($rechercheSql);
-            $rechercheQuery->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $rechercheQuery->execute();
+        $RechercheTime = $results->fetch(PDO::FETCH_ASSOC);
 
-            $rechercheData = $rechercheQuery->fetchAll(PDO::FETCH_ASSOC);
-
-            return [
-                "dataUser" => $userData,
-                "dataRecherche" => $rechercheData
-            ];
-        } else {
-            return [
-                "dataUser" => [],
-                "dataRecherche" => [],
-            ];
-        }
+        $sql = "SELECT
+        COUNT(CASE WHEN typeRecherche = 'Trouver' THEN 1 END) AS CountTrouver,
+        COUNT(CASE WHEN typeRecherche = 'Rapprochement' THEN 1 END) AS CountRapprochement,
+        COUNT(CASE WHEN typeRecherche = 'Recherche' THEN 1 END) AS CountRecherche
+        FROM
+            RechercheData
+        WHERE
+            userId = :userId;
+        ";
+        $results = $this->bd->prepare($sql);
+        $results->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $results->execute();
+        $TotalParType = $results->fetch(PDO::FETCH_ASSOC);
+        
+        
+        return [
+            "Total" => $totalSearch,
+            "RecherTime" => $RechercheTime,
+            "TotalParType" => $TotalParType
+        ];
     }
 
     public function addUser($data) {
@@ -482,13 +503,14 @@ class Model
             $query = $this->bd->prepare($sql);
             $query->bindParam(':userId', $userId, PDO::PARAM_INT);
             $query->bindParam(':TypeRecherche', $data["TypeRecherche"], PDO::PARAM_STR);
-            $query->bindParam(':MotsCles', $data["MotsCles"], PDO::PARAM_STR);
+            if(is_array($data["MotsCles"])){
+                $MotCle = implode(", ", $data["MotsCles"]);
+            }
+            else{
+                $MotCle = $data["MotsCles"];
+            }
+            $query->bindParam(':MotsCles', $MotCle, PDO::PARAM_STR);
             $query->execute();
-
-            return [
-                "status" => "OK",
-                "message" => "Add Successfully"
-            ];
         }
         catch(PDOException $e){
             return [
@@ -573,11 +595,6 @@ class Model
         $query = $this->bd->prepare($sql);
         $query->bindParam(":userid", $userId, PDO::PARAM_STR);
         $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }   
 }
-
-
-

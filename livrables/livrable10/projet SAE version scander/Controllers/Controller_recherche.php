@@ -40,7 +40,18 @@ class Controller_recherche extends Controller {
                 "totalResultatFilm" => $resultatRecherche['totalResultatFilm']
                 
             ];
-           
+            if(isset($_SESSION['username'])){
+                $data = [
+                    "UserName" => $_SESSION['username'],
+                    "TypeRecherche" => "Recherche",
+                    "MotsCles" => $_POST['search']
+                ];
+                $result = $m->addUserRecherche($data);
+                if(!empty($result)){
+                    $tab = ["tab" => $result["message"]];
+                    $this->render("error", $tab);
+                }
+            }
             $this->render("recherche", $tab);
 
             
