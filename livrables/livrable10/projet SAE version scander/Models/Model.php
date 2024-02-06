@@ -400,7 +400,7 @@ class Model
     }
     
     public function getUserId($username) {
-        $sql = "SELECT UserId FROM user WHERE UserName = :username";
+        $sql = "SELECT userId FROM UserData WHERE username = :username";
         $query = $this->bd->prepare($sql);
         $query->bindParam(':username', $username, PDO::PARAM_STR);
         $query->execute();
@@ -408,7 +408,7 @@ class Model
     }
 
     public function userExist($username) {
-        $sql = "SELECT EXISTS(SELECT 1 FROM User WHERE UserName = :username) as exists";
+        $sql = "SELECT EXISTS(SELECT 1 FROM UserData WHERE username = :username) as exists";
         $query = $this->bd->prepare($sql);
         $query->bindParam(':username', $username, PDO::PARAM_STR);
         $query->execute();
@@ -418,14 +418,14 @@ class Model
     public function getUserData($username) {
         if ($this->userExist($username)) {
             $userId = $this->getUserId($username);
-            $userDataSql = "SELECT * FROM user WHERE UserName = :username";
+            $userDataSql = "SELECT * FROM UserData WHERE username = :username";
             $userDataQuery = $this->bd->prepare($userDataSql);
             $userDataQuery->bindParam(':username', $username, PDO::PARAM_STR);
             $userDataQuery->execute();
 
             $userData = $userDataQuery->fetchAll(PDO::FETCH_ASSOC);
 
-            $rechercheSql = "SELECT * FROM User JOIN Recherche ON User.userId = Recherche.UserId WHERE User.userId = :userId";
+            $rechercheSql = "SELECT * FROM UserData JOIN RechercheData ON UserData.userId = RechercheData.userId WHERE UserData.userId = :userId";
             $rechercheQuery = $this->bd->prepare($rechercheSql);
             $rechercheQuery->bindParam(':userId', $userId, PDO::PARAM_INT);
             $rechercheQuery->execute();
@@ -447,7 +447,8 @@ class Model
     public function addUser($data) {
         if (!$this->userExist($data["username"])) {
             try {
-                $insertSql = "INSERT INTO User (username, password) VALUES (:username, crypt(:password, gen_salt('bf')))";
+                $insertSql = "INSERT INTO UserData (username, password, connectionTime)
+                VALUES (:username, crypt(:password, gen_salt('bf')), CURRENT_TIMESTAMP);";
                 $insertQuery = $this->bd->prepare($insertSql);
                 $insertQuery->bindParam(':username', $data["username"], PDO::PARAM_STR);
                 $insertQuery->bindParam(':password', $data["password"], PDO::PARAM_STR);
@@ -476,7 +477,7 @@ class Model
         try {
             $userId = $this->getUserId($data["UserName"]);
 
-            $sql = "INSERT INTO recherche (UserId, TypeRecherche, MotsCles, DateConnection) VALUES (:userId, :TypeRecherche, :MotsCles, CURRENT_TIMESTAMP)";
+            $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle) VALUES (:userId, :TypeRecherche, :MotsCles)";
             $query = $this->bd->prepare($sql);
             $query->bindParam(':userId', $userId, PDO::PARAM_INT);
             $query->bindParam(':TypeRecherche', $data["TypeRecherche"], PDO::PARAM_STR);
@@ -503,7 +504,7 @@ class Model
                 "message" => "This user does not exist"
             ];
         } else {
-            $pwdMatchSql = "SELECT (password = crypt(:password, password)) AS pwd_match FROM User WHERE username = :username";
+            $pwdMatchSql = "SELECT (password = crypt(:password, password)) AS pwd_match FROM UserData WHERE username = :username";
             $pwdMatchQuery = $this->bd->prepare($pwdMatchSql);
             $pwdMatchQuery->bindParam(':password', $data['password'], PDO::PARAM_STR);
             $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
@@ -523,7 +524,7 @@ class Model
 
     public function updatePassword($data) {
         try {
-            $sql = "UPDATE User
+            $sql = "UPDATE UserData
                     SET password = :nouveauPassword
                     WHERE userId = :userId;";
             $query = $this->bd->prepare($sql);
@@ -545,7 +546,7 @@ class Model
     
     public function updateUsername($data) {
         try {
-            $sql = "UPDATE User
+            $sql = "UPDATE UserData
                     SET username = :nouveauUsername
                     WHERE userId = :userId;";
             $query = $this->bd->prepare($sql);
@@ -567,7 +568,7 @@ class Model
 
     public function getUserDataSettings($username){
         $userId = $this->getUserId($username);
-        $sql = "SELECT * FROM User WHERE userId = :userId";
+        $sql = "SELECT * FROM UserData WHERE userId = :userId";
         $query = $this->bd->prepare($sql);
         $query->bindParam(":userid", $userId, PDO::PARAM_STR);
         $query->execute();
