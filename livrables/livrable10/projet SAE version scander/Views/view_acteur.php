@@ -38,11 +38,12 @@ $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $id_api=$_GET['id_api'];
 $url = "https://api.themoviedb.org/3/person/{$id_api}?language=fr&api_key={$api_key}";
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
+// $ch = curl_init($url);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// $response = curl_exec($ch);
+// curl_close($ch);
 
+$response = file_get_contents($url);
 
 $data = json_decode($response);
 $portrait= null;
@@ -98,11 +99,11 @@ if (isset($data->biography) && $data->biography !== null) {
                 $id_film = $v['tconst'];
                 $url = "https://api.themoviedb.org/3/find/{$id_film}?api_key={$api_key}&external_source=imdb_id";
 
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($ch);
-                curl_close($ch);
-
+                // $ch = curl_init($url);
+                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                // $response = curl_exec($ch);
+                // curl_close($ch);
+                $reponse = file_get_contents($url);
                 $data = json_decode($response);
                 $portrait_film = null;
                 $results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
