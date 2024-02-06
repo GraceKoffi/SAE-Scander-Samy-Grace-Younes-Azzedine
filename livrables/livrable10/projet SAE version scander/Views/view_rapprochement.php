@@ -313,7 +313,7 @@ else{
         <a class="translate" href="?controller=recherche">Rechercher</a>
         <a class="translate" href="?controller=trouver">Trouver</a>
         <a class="translate" href="?controller=rapprochement">Rapprochement</a>
-        <a class="translate" href="?controller=Connect"><?php echo $var;?></a>
+        <a class="translate" href="?controller=connect"><?php echo $var;?></a>
     </nav>
 </header>
 <div class="header-text-container scroll-reveal">
