@@ -19,6 +19,21 @@ Class Controller_Connect extends Controller{
         $this->render("connect_setting", $tab);
     }
 
+    public function action_render_rechercheData(){
+        $m = Model::getModel();
+        if(isset($_GET["type"])){
+            $data = [
+                "username" => $_SESSION['username'],
+                "type" => trim(e($_GET['type']))
+            ];
+            $tab = ["tab" => $m->getRechercherData($data)];
+            $this->render("rechercheData", $tab);    
+        }
+        else{
+            $tab = ["tab" => "Valeur manquant"];
+            $this->render("error", $tab);
+        }
+    }
 
     public function action_login(){
         if(isset($_POST['userName']) && isset($_POST['passWord'])){

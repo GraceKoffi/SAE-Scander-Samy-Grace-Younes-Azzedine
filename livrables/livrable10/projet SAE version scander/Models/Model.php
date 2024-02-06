@@ -596,5 +596,15 @@ class Model
         $query->bindParam(":userid", $userId, PDO::PARAM_STR);
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
-    }   
+        }   
+
+    public function getRechercherData($data){
+        $userId = $this->getUserId($data["username"])["userid"];
+        $sql = "SELECT * FROM RechercheData WHERE userId = :userId AND TypeRecherche = :typeData;";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":userId", $userId, PDO::PARAM_STR);
+        $query->bindParam(":typeData", $data["type"], PDO::PARAM_STR);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }

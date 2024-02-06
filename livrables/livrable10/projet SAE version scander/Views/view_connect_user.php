@@ -132,13 +132,19 @@
         <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
     </div>
     
+<a href="?controller=connect&action=render_rechercheData&type=Recherche">
 <div class="card-container">
     <div class="card">
         <div class="card-image"></div>
             <div class="card-text">
                 <?php
-                $rechercheTime = $tab["RecherTime"]["recherche"];
-                $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+                if($tab["TotalParType"]["countrecherche"] == 0){
+                    $formattedDateTime = "Pas de recherche realiser";
+                }
+                else{
+                    $rechercheTime = $tab["RecherTime"]["recherche"];
+                    $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+                }
                 ?>
                 <span class="date"><?php echo $formattedDateTime; ?></span>    
                 <h2>Recherche</h2>
@@ -155,13 +161,20 @@
             </div>
         </div>
     </div>
+</a>
     
+<a href="?controller=connect&action=render_rechercheData&type=Trouver">
     <div class="card">
     <div class="card-image"></div>
     <div class="card-text">
         <?php
-        $rechercheTime = $tab["RecherTime"]["trouver"];
-        $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+        if($tab["TotalParType"]["counttrouver"] == 0){
+            $formattedDateTime = "Pas de recherche realiser";
+        }
+        else{
+            $rechercheTime = $tab["RecherTime"]["trouver"];
+            $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+        }
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>
         <h2>Trouver</h2>
@@ -178,6 +191,9 @@
         </div>
     </div>
     </div>
+</a>
+
+<a href="?controller=connect&action=render_rechercheData&type=Rapprochement">
     <div class="card">
     <div class="card-image"></div>
     <div class="card-text">
@@ -191,6 +207,7 @@
         }
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>
+        <h2>Rapprochement</h2>
         <p>Vous retrouver ici votre historique de Rapprochement</p>
     </div>
     <div class="card-stats">
@@ -204,6 +221,8 @@
         </div>
     </div>
     </div>
+</a>
+
 </div>
 <?php require "Views/view_footer.php"; ?>
 </body>
