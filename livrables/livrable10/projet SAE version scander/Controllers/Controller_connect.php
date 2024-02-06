@@ -3,7 +3,7 @@ session_start();
 
 Class Controller_Connect extends Controller{
     public function action_form(){
-        $this->render("connect_user", []);
+        $this->render("connect", []);
     }
     
     public function action_render_user($username){
@@ -14,10 +14,10 @@ Class Controller_Connect extends Controller{
     }
 
     public function action_settings(){
-        #$m = Model::getModel();
-        #$tab = $m->getUserDataSettings($_SESSION['username']);
-        #$this->render("connect_setting", $tab);
-        $this->render("connect_setting", []);
+        $m = Model::getModel();
+        $tab = $m->getUserDataSettings($_SESSION['username']);
+        $this->render("connect_setting", $tab);
+        #$this->render("connect_setting", []);
     }
 
 
@@ -38,7 +38,7 @@ Class Controller_Connect extends Controller{
             }
         }
         else{
-            $tab = ["Champ Manquant"];
+            $tab = ["tab" =>"Champ Manquant"];
             $this->render("error", $tab);
         }
 
@@ -61,7 +61,7 @@ Class Controller_Connect extends Controller{
             }
         }
         else{
-            $tab = ["Champ Manquant"];
+            $tab = ["tab" =>"Champ Manquant"];
             $this->render("error", $tab);
         }
     }

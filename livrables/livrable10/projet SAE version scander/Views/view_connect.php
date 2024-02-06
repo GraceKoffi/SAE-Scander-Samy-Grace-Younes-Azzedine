@@ -127,9 +127,9 @@ body{
     <input type="checkbox" id="check">
     <div class="login form">
         <header>Login</header>
-        <form id="loginForm" action="?controller=Connect&action=login" method="post">
+        <form id="loginForm" action="?controller=connect&action=login" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
-            <input type="text" placeholder="Enter your username" name="username" class="form-control" required>
+            <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
             <input type="password" placeholder="Enter your password" name="passWord" class="form-control" required>
             <a href="#">Forgot password?</a>
@@ -143,7 +143,7 @@ body{
     </div>
     <div class="registration form">
         <header>Signup</header>
-        <form id="signupForm" action="?controller=Connect&action=signup" method="post">
+        <form id="signupForm" action="?controller=connect&action=signup" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
             <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez créer un mot de passe.</div>
