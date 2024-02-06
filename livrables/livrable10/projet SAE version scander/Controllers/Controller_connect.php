@@ -33,7 +33,7 @@ Class Controller_Connect extends Controller{
             }
             else{
                 $_SESSION['username'] = trim(e($_POST['userName'])); 
-                $this->action_render_user(e($_POST['userName']));
+                $this->action_render_user($_SESSION['username']);
                 exit();
             }
         }
@@ -57,7 +57,7 @@ Class Controller_Connect extends Controller{
             }
             else{
                 $_SESSION['username'] = trim(e($_POST['userName'])); 
-                $this->action_render_user(e($_POST['userName']));
+                $this->action_render_user($_SESSION['username']);
                 exit();
             }
         }
