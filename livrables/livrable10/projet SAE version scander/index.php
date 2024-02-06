@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 //Pour avoir la fonction e()
 require_once "Utils/functions.php";
 //Inclusion du modèle

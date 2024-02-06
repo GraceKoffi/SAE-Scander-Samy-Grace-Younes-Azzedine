@@ -1,5 +1,4 @@
 <?php
-session_start(); 
 
 Class Controller_Connect extends Controller{
     public function action_form(){
@@ -9,15 +8,15 @@ Class Controller_Connect extends Controller{
     public function action_render_user($username){
         $m = Model::getModel();
         $result = $m->getUserData($username);   
-        $this->render("connect_user", $result);
+        $tab = ["tab" => $result];
+        $this->render("connect_user", $tab);
         
     }
 
     public function action_settings(){
         $m = Model::getModel();
-        $tab = $m->getUserDataSettings($_SESSION['username']);
+        $tab =["tab" => $m->getUserDataSettings($_SESSION['username'])];
         $this->render("connect_setting", $tab);
-        #$this->render("connect_setting", []);
     }
 
 
@@ -35,6 +34,7 @@ Class Controller_Connect extends Controller{
             else{
                 $_SESSION['username'] = trim(e($_POST['userName'])); 
                 $this->action_render_user(e($_POST['userName']));
+                exit();
             }
         }
         else{
@@ -58,6 +58,7 @@ Class Controller_Connect extends Controller{
             else{
                 $_SESSION['username'] = trim(e($_POST['userName'])); 
                 $this->action_render_user(e($_POST['userName']));
+                exit();
             }
         }
         else{

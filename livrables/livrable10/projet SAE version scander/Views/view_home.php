@@ -135,7 +135,6 @@ foreach ($movies as $movie) {
 
 
 <?php
-
 $genres = [
     'Action' => 28,
     'Thriller' => 53,
@@ -213,6 +212,7 @@ function get_imdb_id($tmdb_id, $api_key) {//recup idImdb avec id tmdb
     $movie = json_decode($response, true);
     return $movie['imdb_id'];
 }
+
 ?>
 
 

@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 class Controller_recherche extends Controller {
 
     public function action_home() {

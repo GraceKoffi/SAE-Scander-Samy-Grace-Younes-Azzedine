@@ -21,12 +21,18 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <?php
+            if(isset($_SESSION['username'])){
+                $var = $_SESSION['username'];
+            }
+            else{
+                $var = 'Login';
+            }
             $navItems = [
                 ['Accueil', '?controller=home&action=home', 'home1.png'],
                 ['Recherche','?controller=recherche&action=home', 'search1.png'],
                 ['Trouver', '?controller=trouver&action=fom_trouver', 'liens.png'],
                 ['Rapprochement', '?controller=rapprochement&action=fom_rapprochement', 'data1.png'],
-                ['Login', '?controller=connect', 'data1.png']
+                [$var, '?controller=connect', 'data1.png']
             ];
 
             foreach ($navItems as $item) {
