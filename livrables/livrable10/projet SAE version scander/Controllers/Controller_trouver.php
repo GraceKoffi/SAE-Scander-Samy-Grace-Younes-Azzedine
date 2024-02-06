@@ -33,7 +33,8 @@ class Controller_trouver extends Controller{
 
         }
         else{
-            $this->render("error", ["Pas tout les champs saisie"]);
+            $tab = ["tab" => "Pas tout les champs saisie"];
+            $this->render("error", $tab);
         }
     }
 

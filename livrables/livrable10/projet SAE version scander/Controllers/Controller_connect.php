@@ -29,7 +29,7 @@ Class Controller_Connect extends Controller{
                 "password" => e($_POST['passWord'])
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
-                $tab = $result['message'];
+                $tab =["tab" => $result['message']];
                 $this->render("error", $tab);
             }
             else{
@@ -52,7 +52,7 @@ Class Controller_Connect extends Controller{
                 "password" => e($_POST['passWord'])
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
-                $tab = $result['message'];
+                $tab =["tab" => $result['message']];
                 $this->render("error", $tab);
             }
             else{

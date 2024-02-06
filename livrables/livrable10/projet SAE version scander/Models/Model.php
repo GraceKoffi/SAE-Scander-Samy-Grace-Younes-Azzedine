@@ -448,10 +448,11 @@ class Model
         if (!$this->userExist($data["username"])) {
             try {
                 $insertSql = "INSERT INTO UserData (username, password, connectionTime)
-                VALUES (:username, crypt(:password, gen_salt('bf')), CURRENT_TIMESTAMP);";
+                VALUES (:username, :password, CURRENT_TIMESTAMP);";
                 $insertQuery = $this->bd->prepare($insertSql);
                 $insertQuery->bindParam(':username', $data["username"], PDO::PARAM_STR);
-                $insertQuery->bindParam(':password', $data["password"], PDO::PARAM_STR);
+                $password = password_hash($data["password"], PASSWORD_BCRYPT);
+                $insertQuery->bindParam(':password', $password, PDO::PARAM_STR);
                 $insertQuery->execute();
     
                 return [
@@ -504,14 +505,13 @@ class Model
                 "message" => "This user does not exist"
             ];
         } else {
-            $pwdMatchSql = "SELECT (password = crypt(:password, password)) AS pwd_match FROM UserData WHERE username = :username";
+            $pwdMatchSql = "SELECT password FROM UserData WHERE username = :username";
             $pwdMatchQuery = $this->bd->prepare($pwdMatchSql);
-            $pwdMatchQuery->bindParam(':password', $data['password'], PDO::PARAM_STR);
             $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
             $pwdMatchQuery->execute();
             $pwd_match = $pwdMatchQuery->fetchColumn();
             
-            if ($pwd_match) {
+            if (password_verify($data["password"], $pwd_match)) {
                 return $this->getUserData($data["username"]);
             } else {
                 return [
@@ -525,10 +525,11 @@ class Model
     public function updatePassword($data) {
         try {
             $sql = "UPDATE UserData
-                    SET password = :nouveauPassword
-                    WHERE userId = :userId;";
+            SET password = :nouveauPassword
+            WHERE userId = :userId;";
             $query = $this->bd->prepare($sql);
-            $query->bindParam(':nouveauPassword', $data['password'], PDO::PARAM_STR);
+            $password = password_hash($data["password"], PASSWORD_BCRYPT);
+            $query->bindParam(':nouveauPassword', $password, PDO::PARAM_STR);
             $query->bindParam(':userId', $data["userId"], PDO::PARAM_STR);
             $query->execute();
     
