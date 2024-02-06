@@ -102,10 +102,7 @@ $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
 
 // Utilisation de cURL pour récupérer les films actuellement en salle
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$movie_data = curl_exec($ch);
-curl_close($ch);
+$movie_data = file_get_contents($url);
 
 $movies = json_decode($movie_data, true)['results'];
 
@@ -195,11 +192,11 @@ function get_movies($genre_id, $api_key) {//recup une liste au hasard en 1 50 de
 
     $url = "https://api.themoviedb.org/3/discover/movie?api_key={$api_key}&include_adult=false&with_genres={$genre_id}&page={$page}";
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
+    // $ch = curl_init($url);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
+    $response = file_get_contents($url);
     $movies = json_decode($response, true)['results'];
     return $allMovies = array_merge($allMovies, $movies);
 }
@@ -208,11 +205,11 @@ function get_movies($genre_id, $api_key) {//recup une liste au hasard en 1 50 de
 function get_imdb_id($tmdb_id, $api_key) {//recup idImdb avec id tmdb
     $url = "https://api.themoviedb.org/3/movie/{$tmdb_id}?api_key={$api_key}";
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
+    // $ch = curl_init($url);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
+    $response = file_get_contents($url);
     $movie = json_decode($response, true);
     return $movie['imdb_id'];
 }
