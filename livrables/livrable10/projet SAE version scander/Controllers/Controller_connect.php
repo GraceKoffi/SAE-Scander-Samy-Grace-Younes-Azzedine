@@ -25,15 +25,15 @@ Class Controller_Connect extends Controller{
         if(isset($_POST['userName']) && isset($_POST['passWord'])){
             $m = Model::getModel();
             $result = $m->loginUser([
-                "username" => e($_POST['userName']), 
-                "password" => e($_POST['passWord'])
+                "username" => trim(e($_POST['userName'])), 
+                "password" => trim(e($_POST['passWord']))
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
                 $tab =["tab" => $result['message']];
                 $this->render("error", $tab);
             }
             else{
-                $_SESSION['username'] = e($_POST['userName']); 
+                $_SESSION['username'] = trim(e($_POST['userName'])); 
                 $this->action_render_user(e($_POST['userName']));
             }
         }
@@ -48,15 +48,15 @@ Class Controller_Connect extends Controller{
         if(isset($_POST['userName']) && isset($_POST['passWord'])){
             $m = Model::getModel();
             $result = $m->addUser([
-                "username" => e($_POST['userName']), 
-                "password" => e($_POST['passWord'])
+                "username" => trim(e($_POST['userName'])), 
+                "password" => trim(e($_POST['passWord']))
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
                 $tab =["tab" => $result['message']];
                 $this->render("error", $tab);
             }
             else{
-                $_SESSION['username'] = e($_POST['userName']); 
+                $_SESSION['username'] = trim(e($_POST['userName'])); 
                 $this->action_render_user(e($_POST['userName']));
             }
         }
