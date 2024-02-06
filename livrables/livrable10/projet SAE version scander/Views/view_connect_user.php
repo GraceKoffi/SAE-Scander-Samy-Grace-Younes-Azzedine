@@ -28,10 +28,10 @@
         <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="#champ1">Acceuil</a></li>
-                <li class="nav-item"><a class="nav-link" href="#champ2">Recherche</a></li>
-                <li class="nav-item"><a class="nav-link" href="#champ3">Trouver</a></li>
-                <li class="nav-item"><a class="nav-link" href="#champ4">Rapprochement</a></li>
+                <li class="nav-item"><a class="nav-link" href="?controller=home">Acceuil</a></li>
+                <li class="nav-item"><a class="nav-link" href="?controller=recherche">Recherche</a></li>
+                <li class="nav-item"><a class="nav-link" href="?controller=trouver">Trouver</a></li>
+                <li class="nav-item"><a class="nav-link" href="?controller=rapprochement">Rapprochement</a></li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a class="nav-link" href="?controller=connect&action=logout">Logout</a></li>
@@ -40,7 +40,7 @@
     </nav>
 
     <div class="jumbotron text-center">
-        <h1 class="display-4">Bonjour, Utilisateur!</h1>
+        <h1 class="display-4">Hello, <?php echo $_SESSION['username'];?>!</h1>
         <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
     </div>
 
