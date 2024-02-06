@@ -49,7 +49,7 @@ $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external
 // $response = curl_exec($ch);
 // curl_close($ch);
 
-$reponse = file_get_contents($url);
+$response = file_get_contents($url);
 $data = json_decode($response);
 $couverture = null;
 $portait= null;
@@ -144,7 +144,7 @@ foreach ($results as $result) {
                 // $response = curl_exec($ch);
                 // curl_close($ch);
 
-                $reponse = file_get_contents($url);
+                $response = file_get_contents($url);
                 $data = json_decode($response);
                 $profilePath = null;
                 $id_api=null;
