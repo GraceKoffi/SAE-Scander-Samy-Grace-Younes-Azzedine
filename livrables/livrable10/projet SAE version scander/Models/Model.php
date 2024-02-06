@@ -220,7 +220,7 @@ class Model
 
         if ($titre !== null) {
             //$titre = '%' . $titre . '%';
-            $requete->bindParam(':titre', trim($titre), PDO::PARAM_STR);
+            $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
         }
 
         if ($types !== null) {
@@ -236,11 +236,11 @@ class Model
         }
     
         if ($dureeMin !== null) {
-            $requete->bindParam(':dureeMin', trim($dureeMin), PDO::PARAM_INT);
+            $requete->bindParam(':dureeMin', $dureeMin, PDO::PARAM_INT);
         }
     
         if ($dureeMax !== null) {
-            $requete->bindParam(':dureeMax', trim($dureeMax), PDO::PARAM_INT);
+            $requete->bindParam(':dureeMax', $dureeMax, PDO::PARAM_INT);
         }
     
 
@@ -250,19 +250,19 @@ class Model
     
     
         if ($noteMin !== null) {
-            $requete->bindParam(':noteMin', trim($noteMin), PDO::PARAM_INT);
+            $requete->bindParam(':noteMin', $noteMin, PDO::PARAM_INT);
         }
     
         if ($noteMax !== null) {
-            $requete->bindParam(':noteMax', trim($noteMax), PDO::PARAM_INT);
+            $requete->bindParam(':noteMax', $noteMax, PDO::PARAM_INT);
         }
     
         if ($votesMin !== null) {
-            $requete->bindParam(':votesMin', trim($votesMin), PDO::PARAM_INT);
+            $requete->bindParam(':votesMin', $votesMin, PDO::PARAM_INT);
         }
     
         if ($votesMax !== null) {
-            $requete->bindParam(':votesMax', trim($votesMax), PDO::PARAM_INT);
+            $requete->bindParam(':votesMax', $votesMax, PDO::PARAM_INT);
         }
 
     

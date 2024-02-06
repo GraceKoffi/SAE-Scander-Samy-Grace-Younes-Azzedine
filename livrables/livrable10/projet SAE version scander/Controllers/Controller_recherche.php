@@ -27,7 +27,7 @@ class Controller_recherche extends Controller {
             $votesMax = isset($_POST['votesMax']) && $_POST['votesMax'] !== '' ? $_POST['votesMax'] : null;
             $genres = $this->buildGenresRegex($genresArray);
             $pageFilm = 1;
-            $perPageFilm =  2;
+            $perPageFilm =  10;
             $_SESSION['orderby']=" CASE WHEN tr.numVotes IS NULL THEN 1 ELSE 0 END, tr.numVotes DESC ";
             $this->storeSessionValuesFilm($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax, $perPageFilm);
             $resultatRecherche = $m->rechercheFilm(
