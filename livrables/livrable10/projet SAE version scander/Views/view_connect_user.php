@@ -131,13 +131,6 @@
         <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
         <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
     </div>
-
-    <div>
-        <?php echo "<br>".var_dump($tab)."</br>";?>
-        <?php echo "<br>".print_r($tab["Total"]["totalrecherches"] )."</br>";?>
-        <?php echo date("d/m/Y H:i:s", strtotime($tab["RecherTime"]["trouver"]));?>
-    </div>
-
     
 <div class="card-container">
     <div class="card">
@@ -145,7 +138,7 @@
             <div class="card-text">
                 <?php
                 $rechercheTime = $tab["RecherTime"]["recherche"];
-                $formattedDateTime = date("d/m/Y H:i:s", strtotime($rechercheTime));
+                $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
                 ?>
                 <span class="date"><?php echo $formattedDateTime; ?></span>    
                 <h2>Recherche</h2>
@@ -168,7 +161,7 @@
     <div class="card-text">
         <?php
         $rechercheTime = $tab["RecherTime"]["trouver"];
-        $formattedDateTime = date("d/m/Y H:i:s", strtotime($rechercheTime));
+        $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>
         <h2>Trouver</h2>
@@ -194,7 +187,7 @@
         }
         else{
             $rechercheTime = $tab["RecherTime"]["rapprochement"];
-            $formattedDateTime = date("d/m/Y H:i:s", strtotime($rechercheTime));
+            $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
         }
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>
