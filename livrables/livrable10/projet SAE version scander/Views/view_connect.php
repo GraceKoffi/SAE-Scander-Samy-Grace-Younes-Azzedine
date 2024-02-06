@@ -122,11 +122,102 @@ body{
     border: 2px solid #4CAF50;
 }
 
-</style>  
+
+      header {
+            background: linear-gradient(#b992db);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            z-index: 1;
+            padding-bottom: 20px;
+
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background-image: url('Images/findercine1.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        nav a:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: black;
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.3s ease-in-out;
+        }
+
+        nav a:hover:before {
+            visibility: visible;
+            transform: scaleX(1);
+        }
+
+        .header-text-container {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            z-index: 1;
+        }
+
+        .header-text-container h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header-text-container p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        h1{
+          padding-bottom: 20px;
+        }
+
+</style>
+<header>
+    <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
+    <nav class="scroll-reveal">
+        <a class="translate" href="?controller=home">Accueil</a>
+        <a class="translate" href="?controller=recherche">Rechercher</a>
+        <a class="translate" href="?controller=trouver">Trouver</a>
+        <a class="translate" href="?controller=rapprochement">Rapprochement</a>
+
+    </nav>
+</header>  
 <div class="container">
     <input type="checkbox" id="check">
     <div class="login form">
-        <header>Login</header>
+        <h1>Login</h1>
         <form id="loginForm" action="?controller=connect&action=login" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
             <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
@@ -142,7 +233,7 @@ body{
         </div>
     </div>
     <div class="registration form">
-        <header>Signup</header>
+        <h1>Signup</h1>
         <form id="signupForm" action="?controller=connect&action=signup" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
             <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>

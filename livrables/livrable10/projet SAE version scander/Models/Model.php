@@ -416,8 +416,8 @@ class Model
     }
 
     public function getUserData($username) {
-        if ($this->userExist($username)) {
-            $userId = $this->getUserId($username);
+        if ($this->userExist($username)["exists"] == true) {
+            $userId = $this->getUserId($username)["userid"];
             $userDataSql = "SELECT * FROM UserData WHERE username = :username";
             $userDataQuery = $this->bd->prepare($userDataSql);
             $userDataQuery->bindParam(':username', $username, PDO::PARAM_STR);
@@ -445,7 +445,7 @@ class Model
     }
 
     public function addUser($data) {
-        if (!$this->userExist($data["username"])) {
+        if ($this->userExist($data["username"])["exists"] == false) {
             try {
                 $insertSql = "INSERT INTO UserData (username, password, connectionTime)
                 VALUES (:username, :password, CURRENT_TIMESTAMP);";
@@ -476,7 +476,7 @@ class Model
 
     public function addUserRecherche($data) {
         try {
-            $userId = $this->getUserId($data["UserName"]);
+            $userId = $this->getUserId($data["UserName"])["userid"];
 
             $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle) VALUES (:userId, :TypeRecherche, :MotsCles)";
             $query = $this->bd->prepare($sql);
@@ -499,7 +499,7 @@ class Model
     }
 
     public function loginUser($data) {
-        if (!$this->userExist($data["username"])) {
+        if ($this->userExist($data["username"])["exists"] == false) {
             return [
                 "status" => "KO",
                 "message" => "This user does not exist"
@@ -509,9 +509,9 @@ class Model
             $pwdMatchQuery = $this->bd->prepare($pwdMatchSql);
             $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
             $pwdMatchQuery->execute();
-            $pwd_match = $pwdMatchQuery->fetchColumn();
+            $pwd_match = $pwdMatchQuery->fetch(PDO::FETCH_ASSOC);
             
-            if (password_verify($data["password"], $pwd_match)) {
+            if (password_verify($data["password"], $pwd_match["password"])) {
                 return $this->getUserData($data["username"]);
             } else {
                 return [
@@ -568,7 +568,7 @@ class Model
     }
 
     public function getUserDataSettings($username){
-        $userId = $this->getUserId($username);
+        $userId = $this->getUserId($username)["userid"];
         $sql = "SELECT * FROM UserData WHERE userId = :userId";
         $query = $this->bd->prepare($sql);
         $query->bindParam(":userid", $userId, PDO::PARAM_STR);
