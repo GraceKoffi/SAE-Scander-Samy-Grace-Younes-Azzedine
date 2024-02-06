@@ -478,7 +478,7 @@ class Model
         try {
             $userId = $this->getUserId($data["UserName"])["userid"];
 
-            $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle) VALUES (:userId, :TypeRecherche, :MotsCles)";
+            $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle, rehcercheTime) VALUES (:userId, :TypeRecherche, :MotsCles, CURRENT_TIMESTAMP)";
             $query = $this->bd->prepare($sql);
             $query->bindParam(':userId', $userId, PDO::PARAM_INT);
             $query->bindParam(':TypeRecherche', $data["TypeRecherche"], PDO::PARAM_STR);

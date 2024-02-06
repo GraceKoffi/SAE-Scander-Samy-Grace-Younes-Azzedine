@@ -82,6 +82,7 @@ CREATE TABLE RechercheData (
     motCle TEXT,
     userId INT,
     typeRecherche TEXT,
+    rehcercheTime TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES UserData(userId)
 );
 
