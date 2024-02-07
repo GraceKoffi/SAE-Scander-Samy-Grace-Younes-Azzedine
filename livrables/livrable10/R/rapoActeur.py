@@ -20,7 +20,8 @@ class rapoActeur:
     chemin_debut: list = field(default_factory=lambda: [])
     chemin_fin: list = field(default_factory=lambda: [])
     con: psycopg2.extensions.connection = field(init=False) 
-    branchTraite: dict = field(default_factory=lambda: {}) 
+    branchTraiteThreadDebut: dict = field(default_factory=lambda: {}) 
+    branchTraiteThreadFin: dict = field(default_factory=lambda: {}) 
 
     def __post_init__(self):
         """
@@ -94,11 +95,18 @@ class rapoActeur:
                     result["commun"]=commun
         return result
     
-    def checkBranch(self, branch: str) -> bool:
-        if branch in self.branchTraite and self.i - self.branchTraite[branch] >=2:
+    def checkBranchDebut(self, branch: str) -> bool:
+        if branch in self.branchTraiteThreadDebut and self.i - self.branchTraiteThreadDebut[branch] >=2:
             return False
         else :
-            self.branchTraite[branch] = self.i
+            self.branchTraiteThreadDebut[branch] = self.i
+            return True
+        
+    def checkBranchFin(self, branch: str) -> bool:
+        if branch in self.branchTraiteThreadFin and self.i - self.branchTraiteThreadFin[branch] >=2:
+            return False
+        else :
+            self.branchTraiteThreadFin[branch] = self.i
             return True
             
 
@@ -284,7 +292,7 @@ class rapoActeur:
                 cur.execute(sql, value)
                 for e in cur.fetchall() :
                     #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
-                    if e[0] != self.nconstDebut and self.checkBranch(e[0]):
+                    if e[0] != self.nconstDebut and self.checkBranchDebut(e[0]):
                         tab_nconst_branche.append(e[0])
                         tab_branch_traite.add(e[0])
 
@@ -351,7 +359,7 @@ class rapoActeur:
                 
                 for e in cur.fetchall():
                     #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
-                    if e[0] != self.nconstDebut and self.checkBranch(e[0]):
+                    if e[0] != self.nconstDebut and self.checkBranchFin(e[0]):
                         tab_nconst_branch.append(e[0])
                         tab_branch_traite.add(e[0])
                 dic[noeud] = tab_nconst_branch
