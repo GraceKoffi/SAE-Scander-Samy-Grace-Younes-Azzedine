@@ -606,6 +606,46 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function updateSettings($username, $name, $email, $newPassword, $country)
+    {
+    $updateFields = [];
+    $updateParams = [];
+
+    if (!$username == null) {
+        $updateFields[] = 'username = :username';
+        $updateParams[':username'] = $username;
+    }
+
+    if (!$name == null) {
+        $updateFields[] = 'name = :name';
+        $updateParams[':name'] = $name;
+    }
+
+    if (!$email == null) {
+        $updateFields[] = 'email = :email';
+        $updateParams[':email'] = $email;
+    }
+
+    if (!$newPassword == null) {
+        $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+        $updateFields[] = 'password = :password';
+        $updateParams[':password'] = $hashedPassword;
+    }
+
+    if (!$country == null) {
+        $updateFields[] = 'country = :country';
+        $updateParams[':country'] = $country;
+    }
+
+    if (!empty($updateFields)) {
+        $sql = 'UPDATE UserData SET ' . implode(', ', $updateFields) . ' WHERE userId = :userId';
+        $query = $this->bd->prepare($sql);
+        $updateParams[':userId'] = $this->getUserId($_SESSION['username'])['userid'];
+
+        return $query->execute($updateParams);
+    }
+    return false;
+    }
 
     public function getRechercherData($data){
         $userId = $this->getUserId($data["username"])["userid"];

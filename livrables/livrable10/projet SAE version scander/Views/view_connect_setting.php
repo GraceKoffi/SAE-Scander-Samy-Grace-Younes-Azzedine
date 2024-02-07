@@ -129,156 +129,177 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     </style>
 
 
-<div class="container light-style flex-grow-1 container-p-y">
-    <h4 class="font-weight-bold py-3 mb-4">
-        Account settings
-    </h4>
-    <div class="card overflow-hidden">
-        <div class="row no-gutters row-bordered row-border-light">
-            <div class="col-md-3 pt-0">
-                <div class="list-group list-group-flush account-settings-links">
-                    <a class="list-group-item list-group-item-action active" data-toggle="list"
-                        href="#account-general">General</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list"
-                        href="#account-change-password">Change password</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list"
-                        href="#account-info">Info</a>
-                </div>
-            </div>
-            <form id="account-settings-form" action="?controller=Connect&action=updateSettings" method="post">
-                <div class="col-md-9">
-                    <div class="tab-content">
-                        <div class="tab-pane fade active show" id="account-general">
-                            <hr class="border-light m-0">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label class="form-label">Username</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control mb-1" value="<?php echo $_SESSION['username'];?>" id="username" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-username">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Name</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="<?php echo $tab["name"];?>" id="Name" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-name">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">E-mail</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control mb-1" value="<?php echo $tab["email"];?>" id="email" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-email">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="account-change-password">
-                            <div class="card-body pb-2">
-                                <div class="form-group">
-                                    <label class="form-label">Current password</label>
-                                    <div class="form-group">
-                                    <div class="input-group">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['password'];?>" 
-                                        id="password" disabled>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">New password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" name="newPassword" id="newPassword" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-new-password">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="account-info">
-                            <div class="card-body pb-2">
-                                <div class="form-group">
-                                    <label class="form-label">Country</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="<?php echo $tab["country"]?>" id="country" disabled>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="edit-country">Edit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Last Connection</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="<?php echo $formattedDateTime;?>" 
-                                        id="last-connection" disabled>
-                                        <span class="input-group-addon">
-                                            <i class="far fa-calendar"></i> <!-- Vous pouvez ajouter une icône de calendrier ici -->
-                                        </span>
-                                </div>
-                            </div>
-                        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodingDung | Profile Template</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light mt-5">
+
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Account settings
+        </h4>
+
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Info</a>
                     </div>
                 </div>
-            </form>
+
+                <div class="col-md-9">
+                    <form id="account-settings-form" action="?controller=connect&action=updateSettings" method="post">
+
+                        <div class="tab-content">
+                            <!-- General Tab -->
+                            <div class="tab-pane fade active show" id="account-general">
+                                <hr class="border-light m-0">
+                                <div class="card-body">
+                                    <!-- Username -->
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control mb-1" value="<?php echo $_SESSION['username']; ?>" id="username" name="username" disabled>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" id="edit-username">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Name -->
+                                    <div class="form-group">
+                                        <label class="form-label">Name</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="<?php echo $tab["name"]; ?>" id="Name" name="Name" disabled>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" id="edit-name">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- E-mail -->
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control mb-1" value="<?php echo $tab["email"]; ?>" id="email" name="email" disabled>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" id="edit-email">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Change Password Tab -->
+                            <div class="tab-pane fade" id="account-change-password">
+                                <div class="card-body pb-2">
+                                    <!-- Current Password -->
+                                    <div class="form-group">
+                                        <label class="form-label">Current password</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="<?php echo $_SESSION['password']; ?>" id="password" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- New Password -->
+                                    <div class="form-group">
+                                        <label class="form-label">New password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="newPassword" id="newPassword" name="newPassword" disabled>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" id="edit-new-password">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Account Info Tab -->
+                            <div class="tab-pane fade" id="account-info">
+                                <div class="card-body pb-2">
+                                    <!-- Country -->
+                                    <div class="form-group">
+                                        <label class="form-label">Country</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="<?php echo $tab["country"] ?>" id="country" name="country" disabled>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" id="edit-country">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Last Connection -->
+                                    <div class="form-group">
+                                        <label class="form-label">Last Connection</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="<?php echo $formattedDateTime; ?>" id="last-connection" disabled>
+                                            <span class="input-group-addon">
+                                                <i class="far fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="text-right mt-3">
+                            <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>&nbsp;
+                            <a href="?controller=connect" class="btn btn-default" id="cancel-changes">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="text-right mt-3">
-        <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>&nbsp;
-        <a href="?controller=connect" class="btn btn-default" id="cancel-changes">Cancel</a>
     </div>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Fonction pour activer le champ et ajouter l'attribut "name"
-        function enableField(fieldId) {
-            var field = document.getElementById(fieldId);
-            field.removeAttribute("disabled");
-            field.setAttribute("name", fieldId);
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            function toggleFieldAndHideButton(editBtn, inputField) {
+                inputField.disabled = !inputField.disabled;
+                editBtn.style.display = inputField.disabled ? 'inline-block' : 'none';
+            }
 
-        // Ajoutez des événements de clic pour chaque bouton "Edit"
-        document.getElementById("edit-username").addEventListener("click", function () {
-            enableField("username");
+            var editUsernameBtn = document.getElementById("edit-username");
+            var editNameBtn = document.getElementById("edit-name");
+            var editEmailBtn = document.getElementById("edit-email");
+            var editNewPasswordBtn = document.getElementById("edit-new-password");
+            var editCountryBtn = document.getElementById("edit-country");
+
+            var usernameInput = document.getElementById("username");
+            var nameInput = document.getElementById("Name");
+            var emailInput = document.getElementById("email");
+            var newPasswordInput = document.getElementById("newPassword");
+            var countryInput = document.getElementById("country");
+
+            editUsernameBtn.addEventListener("click", function () {
+                toggleFieldAndHideButton(editUsernameBtn, usernameInput);
+            });
+
+            editNameBtn.addEventListener("click", function () {
+                toggleFieldAndHideButton(editNameBtn, nameInput);
+            });
+
+            editEmailBtn.addEventListener("click", function () {
+                toggleFieldAndHideButton(editEmailBtn, emailInput);
+            });
+
+            editNewPasswordBtn.addEventListener("click", function () {
+                toggleFieldAndHideButton(editNewPasswordBtn, newPasswordInput);
+            });
+
+            editCountryBtn.addEventListener("click", function () {
+                toggleFieldAndHideButton(editCountryBtn, countryInput);
+            });
         });
+    </script>
 
-        document.getElementById("edit-name").addEventListener("click", function () {
-            enableField("Name");
-        });
-
-        document.getElementById("edit-email").addEventListener("click", function () {
-            enableField("email");
-        });
-
-        document.getElementById("edit-new-password").addEventListener("click", function () {
-            enableField("newPassword");
-        });
-
-        document.getElementById("edit-country").addEventListener("click", function () {
-            enableField("country");
-        });
-
-        // Ajoutez un événement pour le bouton "Save changes"
-        document.getElementById("save-changes").addEventListener("click", function () {
-            // Soumettez le formulaire une fois que l'utilisateur a effectué les modifications
-            document.getElementById("account-settings-form").submit();
-        });
-    });
-</script>
-
-</div>
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript">
-    </script>
+
 </body>
+
 
 </html>

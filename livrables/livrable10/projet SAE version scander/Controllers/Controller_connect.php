@@ -59,6 +59,28 @@ Class Controller_Connect extends Controller{
         }
 
     }
+
+    public function action_updateSettings(){
+            // Récupérez les données du formulaire
+            $username = isset($_POST["username"]) ? $_POST["username"] : null;
+            $name = isset($_POST["Name"]) ? $_POST["Name"] : null;
+            $email = isset($_POST["email"]) ? $_POST["email"] : null;
+            $newPassword = isset($_POST["newPassword"]) ? $_POST["newPassword"] : null;
+            $country = isset($_POST["country"]) ? $_POST["country"] : null;
+
+            // Appelez la méthode du modèle pour mettre à jour les paramètres
+            $model = Model::getModel();
+            $result = $model->updateSettings(trim(e($username)), trim(e($name)), trim(e($email)), trim(e($newPassword)), trim(e($country)));
+            if(!$result != false){
+               $_SESSION['username'] = trim(e($username));
+               $this->action_render_user($username);
+            }
+            else{
+                $tab = ["tab" =>"Error"];
+                $this->render("error", $tab);
+            }
+            
+    }
     
     public function action_signup(){
         if(isset($_POST['userName']) && isset($_POST['passWord'])){
