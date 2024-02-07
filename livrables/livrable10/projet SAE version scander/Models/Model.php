@@ -92,10 +92,10 @@ class Model
     public function getInformationsMovie($id) {
         $requete = $this->bd->prepare("SELECT
         COALESCE(tb.primaryTitle, 'Inconnu') AS primaryTitle,
-    COALESCE(tb.startYear::TEXT, 'Inconnu') AS startYear,
-    COALESCE(tb.runtimeMinutes::TEXT, 'Inconnu') AS runtimeMinutes,
-    COALESCE(tb.genres, 'Inconnu') AS genres,
-    COALESCE(tr.averagerating::TEXT, 'Inconnu') AS averagerating
+        COALESCE(tb.startYear::TEXT, 'Inconnu') AS startYear,
+        COALESCE(tb.runtimeMinutes::TEXT, 'Inconnu') AS runtimeMinutes,
+        COALESCE(tb.genres, 'Inconnu') AS genres,
+        COALESCE(tr.averagerating::TEXT, 'Inconnu') AS averagerating
         
        
     FROM
@@ -155,9 +155,10 @@ class Model
                 WHERE 1=1 ";
     
         if ($titre !== null) {
-            $sql .= " AND tb.primaryTitle = :titre";
+            //$sql .= " AND tb.primaryTitle = :titre";
+            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.9";
         }
-        //AND similarity(tb.primaryTitle, :titre) > 0.5
+       
         if ($types !== null) {
             $sql .= " AND tb.titletype = :types";
         }
@@ -219,7 +220,7 @@ class Model
     
 
         if ($titre !== null) {
-            //$titre = '%' . $titre . '%';
+            $titre = '%' . $titre . '%';
             $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
         }
 

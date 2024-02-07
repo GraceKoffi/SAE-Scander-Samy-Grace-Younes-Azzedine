@@ -19,7 +19,8 @@ class rapoFilm:
     dic_fin: dict = field(default_factory=lambda: {})
     chemin_debut: list = field(default_factory=lambda: [])
     chemin_fin: list = field(default_factory=lambda: [])
-    con: psycopg2.extensions.connection = field(init=False)  
+    con: psycopg2.extensions.connection = field(init=False)
+    branchTraite: dict = field(default_factory=lambda: {})  
 
     def __post_init__(self):
         """
@@ -94,7 +95,13 @@ class rapoFilm:
                     result["commun"]=commun
         return result
     
-
+    def checkBranch(self, branch: str) -> bool:
+        if branch in self.branchTraite and self.i - self.branchTraite[branch] >=2:
+            return False
+        else :
+            self.branchTraite[branch] = self.i
+            return True
+    
     def threadPathBegin(self, n : int, nodeValeur: list) -> None:
         """
         Création du chemin à partir du début jusqu'au point de connection.
@@ -234,7 +241,16 @@ class rapoFilm:
         for element in self.chemin_fin:
             if self.chemin_fin.count(element) > 1:
                 self.chemin_fin.remove(element)
-        return self.chemin_debut, self.chemin_fin
+        
+        tab = []
+        tab.append(self.nconstDebut)
+        for e in self.chemin_debut:
+            tab.append(e)
+        for e in self.chemin_fin:
+            tab.append(e)
+        tab.append(self.nconstFin)
+        return tab
+        #return self.chemin_debut, self.chemin_fin
 
 
     def threadDebut(self) -> None:
@@ -251,8 +267,8 @@ class rapoFilm:
         dic = {"type": "debut"}
         #Initialisation
         tab_noeud_traite = []
-        tab_branch_traite = []
-        sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst_debut)s;"
+        tab_branch_traite = set()
+        sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_debut)s AND (tp.category = 'actor' OR tp.category = 'actress');"
         value = {"tconst_debut": self.tconstDebut}
         cur.execute(sql, value)
         tabs_nconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -260,13 +276,14 @@ class rapoFilm:
             tab_nconst_branche = []
             for noeud in tabs_nconst_noeud:
                 tab_noeud_traite.append(noeud)
-                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": noeud}
                 cur.execute(sql, value)
                 for e in cur.fetchall() :
-                    if e[0] != self.tconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    if e[0] != self.tconstDebut and self.checkBranch(e[0]):
                         tab_nconst_branche.append(e[0])
-                        tab_branch_traite.append(e[0])
+                        tab_branch_traite.add(e[0])
                 dic[noeud] = tab_nconst_branche
                 tab_nconst_branche = []
                 #{"type": "debut", noeud1 : ['Acteur1'], noeud2 : ['Acteur']}
@@ -287,7 +304,7 @@ class rapoFilm:
             #recup noeud (tconst) pour l'étape i+1
             tabs_nconst_noeud = []
             for tconst in tab_branch_traite :
-                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s"
+                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": tconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
@@ -308,9 +325,9 @@ class rapoFilm:
         cur = self.con.cursor()
         #initialisation
         tab_noeud_traite = []
-        tab_branch_traite = []
+        tab_branch_traite = set()
         dic = {"type": "fin"}
-        sql = "SELECT nconst FROM title_principals WHERE nconst = %(tconst_fin)s;"
+        sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_fin)s AND (tp.category = 'actor' OR tp.category = 'actress');"
         value = {"tconst_fin": self.tconstFin}
         cur.execute(sql, value)
         tabs_nconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -320,14 +337,15 @@ class rapoFilm:
                 
                 tab_noeud_traite.append(noeud)
                 
-                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": noeud}
                 cur.execute(sql, value)
                 
                 for e in cur.fetchall():
-                    if e[0] != self.tconstFin and tab_branch_traite.count(e[0]) < 2:
+                    #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    if e[0] != self.tconstFin and self.checkBranch(e[0]):
                         tab_nconst_branch.append(e[0])
-                        tab_branch_traite.append(e[0])
+                        tab_branch_traite.add(e[0])
                 dic[noeud] = tab_nconst_branch
                 tab_nconst_branch = []
             
@@ -348,7 +366,7 @@ class rapoFilm:
             
             tabs_tconst_noeud = []
             for tconst in tab_branch_traite :
-                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s"
+                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": tconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():

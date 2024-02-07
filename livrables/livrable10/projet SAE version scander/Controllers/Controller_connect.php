@@ -72,8 +72,20 @@ Class Controller_Connect extends Controller{
             $model = Model::getModel();
             $result = $model->updateSettings(trim(e($username)), trim(e($name)), trim(e($email)), trim(e($newPassword)), trim(e($country)));
             if(!$result != false){
-               $_SESSION['username'] = trim(e($username));
-               $this->action_render_user($username);
+               
+                if($newPassword != null){
+                    $_SESSION['password'] = trim(e($_POST['passWord']));
+                }
+                
+                if($username != null){
+                   $_SESSION['username'] = trim(e($username));
+                   $this->action_render_user($username);
+                }
+                else{
+                    $this->action_render_user($_SESSION['username']);   
+                }
+               
+               
             }
             else{
                 $tab = ["tab" =>"Error"];

@@ -72,7 +72,7 @@ i = 0
 def clee_commun(dic_1, dic_2, i):
     return list(set(dic_1[len(dic_1)-1]) & set(dic_2[len(dic_2)-1]))
 
-def acteur_commun(dic1, dic2, i):
+def acteur_commun(dic1, dic2):
     result = {}
     dic_debut = {}
     dic_fin = {}

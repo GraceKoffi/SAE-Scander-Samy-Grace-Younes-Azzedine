@@ -125,6 +125,36 @@
             </ul>
         </div>
     </nav>
+    <?php
+    // Récupérer la variable 'retour' de l'URL
+    if(isset($_GET['retour'])){
+        switch ($retour) {
+            case 1:
+                $message = "Succès";
+                $alertClass = "alert-success";
+                break;
+            case 0:
+                $message = "Aucune modification";
+                $alertClass = "alert-secondary";
+                break;
+            case -1:
+                $message = "KO";
+                $alertClass = "alert-danger";
+                break;
+            default:
+                $message = "";
+                $alertClass = "";
+        }
+    
+        // Si un message a été défini, afficher l'alerte
+        if ($message != "") {
+            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                    $message
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                  </div>";
+        }
+    }
+    ?>
 
     <div class="jumbotron text-center">
         <h1 class="display-4">Salut, <?php echo $_SESSION['username'];?> !</h1>
@@ -224,6 +254,14 @@
 </a>
 
 </div>
+<script>
+    // Faire disparaître l'alerte après 3 secondes
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 3000);
+</script>
 <?php require "Views/view_footer.php"; ?>
 </body>
 </html>

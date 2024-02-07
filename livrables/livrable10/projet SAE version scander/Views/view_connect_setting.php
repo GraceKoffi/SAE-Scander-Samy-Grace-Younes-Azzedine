@@ -247,7 +247,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                         </div>
                         <div class="text-right mt-3">
                             <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>&nbsp;
-                            <a href="?controller=connect" class="btn btn-default" id="cancel-changes">Cancel</a>
+                            <a href="?controller=connect&retour=0" class="btn btn-default" id="cancel-changes">Cancel</a>
                         </div>
                     </form>
                 </div>

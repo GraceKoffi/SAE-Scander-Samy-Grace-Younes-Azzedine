@@ -19,7 +19,8 @@ class rapoActeur:
     dic_fin: dict = field(default_factory=lambda: {})
     chemin_debut: list = field(default_factory=lambda: [])
     chemin_fin: list = field(default_factory=lambda: [])
-    con: psycopg2.extensions.connection = field(init=False)  
+    con: psycopg2.extensions.connection = field(init=False) 
+    branchTraite: dict = field(default_factory=lambda: {}) 
 
     def __post_init__(self):
         """
@@ -42,7 +43,7 @@ class rapoActeur:
         """
         con = psycopg2.connect(
             host="localhost",
-            database="sae",
+            database="test",
             user="postgres",
             password="root"
         )
@@ -93,6 +94,14 @@ class rapoActeur:
                     result["commun"]=commun
         return result
     
+    def checkBranch(self, branch: str) -> bool:
+        if branch in self.branchTraite and self.i - self.branchTraite[branch] >=2:
+            return False
+        else :
+            self.branchTraite[branch] = self.i
+            return True
+            
+
 
     def threadPathBegin(self, n : int, nodeValeur: list) -> None:
         """
@@ -120,7 +129,7 @@ class rapoActeur:
                 for valeur in nodeValeur:
                     if(valeur in self.dic_debut[n][key]):
                         tab.append(key)
-                        #chemin_debut.append(key)
+                        #self.chemin_debut.append(key)
                         self.chemin_debut.append(valeur)
             nodeValeur = []
             for e in tab:
@@ -158,7 +167,7 @@ class rapoActeur:
                     if(valeur in self.dic_fin[j][key]):
                         tab.append(key)
                         self.chemin_fin.append(valeur)
-                        #chemin_fin.append(key)
+                        #self.chemin_fin.append(key)
             nodeValeur = []
             for e in tab:
                 for v in self.dic_fin[j][e] :
@@ -204,6 +213,7 @@ class rapoActeur:
             self.chemin_fin.append(key_fin[0])
             self.chemin_debut.append(key_debut[0])
             self.chemin_debut.append(result['commun'][0])
+            self.chemin_debut.append(self.nconstDebut)
         #S'attaque sur le dic d'en dessous, attention mets la relation X à participé à Y
         
         threadPathBegin = threading.Thread(target=self.threadPathBegin, daemon=True, args=[j, valeurs])
@@ -233,7 +243,15 @@ class rapoActeur:
         for element in self.chemin_fin:
             if self.chemin_fin.count(element) > 1:
                 self.chemin_fin.remove(element)
-        return self.chemin_debut, self.chemin_fin
+        tab = []
+        tab.append(self.nconstDebut)
+        for e in self.chemin_debut:
+            tab.append(e)
+        for e in self.chemin_fin:
+            tab.append(e)
+        tab.append(self.nconstFin)
+        return tab
+        #return self.chemin_debut, self.chemin_fin
 
 
     def threadDebut(self) -> None:
@@ -250,8 +268,9 @@ class rapoActeur:
         dic = {"type": "debut"}
         #Initialisation
         tab_noeud_traite = []
-        tab_branch_traite = []
-        sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_debut)s;"
+        tab_branch_traite = set()
+        #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_debut)s;"
+        sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_debut)s AND tb.titleType = 'movie';"
         value = {"nconst_debut": self.nconstDebut}
         cur.execute(sql, value)
         tabs_tconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -259,17 +278,19 @@ class rapoActeur:
             tab_nconst_branche = []
             for noeud in tabs_tconst_noeud:
                 tab_noeud_traite.append(noeud)
-                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                #sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": noeud}
                 cur.execute(sql, value)
                 for e in cur.fetchall() :
-                    if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    if e[0] != self.nconstDebut and self.checkBranch(e[0]):
                         tab_nconst_branche.append(e[0])
-                        tab_branch_traite.append(e[0])
+                        tab_branch_traite.add(e[0])
+
                 dic[noeud] = tab_nconst_branche
                 tab_nconst_branche = []
                 #{"type": "debut", noeud1 : ['Acteur1'], noeud2 : ['Acteur']}
-        
             #envoie du résultat 
             with self.condition:
                 #envoie de la réponce au thread traitement
@@ -286,7 +307,8 @@ class rapoActeur:
             #recup noeud (tconst) pour l'étape i+1
             tabs_tconst_noeud = []
             for nconst in tab_branch_traite :
-                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": nconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
@@ -309,9 +331,10 @@ class rapoActeur:
         cur = self.con.cursor()
         #initialisation
         tab_noeud_traite = []
-        tab_branch_traite = []
+        tab_branch_traite = set()
         dic = {"type": "fin"}
-        sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_fin)s;"
+        #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_fin)s;"
+        sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_fin)s AND tb.titleType = 'movie';"
         value = {"nconst_fin": self.nconstFin}
         cur.execute(sql, value)
         tabs_tconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -321,14 +344,16 @@ class rapoActeur:
                 
                 tab_noeud_traite.append(noeud)
                 
-                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                #sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": noeud}
                 cur.execute(sql, value)
                 
                 for e in cur.fetchall():
-                    if e[0] != self.nconstFin and tab_branch_traite.count(e[0]) < 2:
+                    #if e[0] != self.nconstDebut and tab_branch_traite.count(e[0]) < 2:
+                    if e[0] != self.nconstDebut and self.checkBranch(e[0]):
                         tab_nconst_branch.append(e[0])
-                        tab_branch_traite.append(e[0])
+                        tab_branch_traite.add(e[0])
                 dic[noeud] = tab_nconst_branch
                 tab_nconst_branch = []
             
@@ -349,7 +374,8 @@ class rapoActeur:
             
             tabs_tconst_noeud = []
             for nconst in tab_branch_traite :
-                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": nconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
@@ -383,7 +409,6 @@ class rapoActeur:
 
                 del resultat2["type"]
                 self.dic_debut[self.i] = resultat2
-            
             with self.condition:
                 clee = self.communNode()
                 result = self.communBranch()
@@ -435,12 +460,13 @@ class rapoActeur:
         # Attente de la fin du thread de traitement
         thread_de_validation.join()
         tac = time.time()
-
         if self.cheminF :
             dic_f = {"Message" : "OK",
                      "data" : {
                          "path" : self.cheminF,
-                         "time" : round(tac-tic, 3)
+                         "time" : round(tac-tic, 3),
+                         "nconst1" : self.nconstDebut,
+                         "nconst2" : self.nconstFin
                         }
                      }
         else :
