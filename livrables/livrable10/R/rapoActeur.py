@@ -179,7 +179,7 @@ class rapoActeur:
 
 
 
-    def path(self, result={}, key=[]) -> tuple:
+    def path(self, result={}, key=[]) -> list:
         """
         Retourne le chemin s'il existe une connection entre les deux nconst.
 
