@@ -211,6 +211,45 @@ body{
         <a class="translate" href="?controller=recherche">Rechercher</a>
         <a class="translate" href="?controller=trouver">Trouver</a>
         <a class="translate" href="?controller=rapprochement">Rapprochement</a>
+        <?php
+    // Récupérer la variable 'retour' de l'URL
+    if(isset($_GET['retour'])){
+        $retour = trim(e($_GET['retour']));
+        switch ($retour) {
+            case 0:
+                $message = "Cet utilisateur n'existe pas";
+                $alertClass = "alert-danger";
+                break;
+            case -1:
+                $message = "Aucun Champ saisie";
+                $alertClass = "alert-danger";
+                break;
+            case -2:
+                $message = "Le mot de passe saisie ne correspond pas";
+                $alertClass = "alert-danger";
+                break;
+            case -3:
+                $message = "Une erreur est survenue dans l'enregistrement";
+                $alertClass = "alert-danger";
+                break;
+            case -4:
+                $message = "Une erreur est survenue dans la connection à votre compte";
+                $alertClass = "alert-danger";
+                break;
+            default:
+                $message = "";
+                $alertClass = "";
+        }
+    
+        // Si un message a été défini, afficher l'alerte
+        if ($message != "") {
+            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                    $message
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                  </div>";
+        }
+    }
+    ?>
 
     </nav>
 </header>  
@@ -240,7 +279,7 @@ body{
             <div class="invalid-feedback">Veuillez créer un mot de passe.</div>
             <input type="password" id="signupPassword" placeholder="Create a password" name="passWord" class="form-control" required>
             <div class="invalid-feedback">Veuillez confirmer votre mot de passe.</div>
-            <input type="password" id="confirmPassword" placeholder="Confirm your password" class="form-control" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" class="form-control" name="secondPassword" required>
             <input type="submit" class="btn btn-primary submit-btn" value="Signup">
         </form>
         <div class="signup">
@@ -255,6 +294,14 @@ body{
 
 <script>
 // JavaScript pour valider le formulaire
+   // Supposons que l'ID de votre alerte est 'myAlert'
+var alertElement = document.getElementById('myAlert');
+
+// Faire disparaître l'alerte après 3 secondes
+window.setTimeout(function() {
+    alertElement.setAttribute('hidden', true);
+}, 2000);
+
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     var inputs = this.getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
@@ -267,25 +314,25 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     }
 });
 
-document.getElementById('signupForm').addEventListener('submit', function(event) {
-    var inputs = this.getElementsByTagName('input');
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].value == '') {
-            inputs[i].classList.add('is-invalid');
-            event.preventDefault();
-        } else {
-            inputs[i].classList.remove('is-invalid');
-        }
-    }
-    var password = document.getElementById('signupPassword').value;
-    var confirmPassword = document.getElementById('confirmPassword').value;
-    if (password != confirmPassword) {
-        document.getElementById('confirmPassword').classList.add('is-invalid');
-        event.preventDefault();
-    } else {
-        document.getElementById('confirmPassword').classList.remove('is-invalid');
-    }
-});
+// document.getElementById('signupForm').addEventListener('submit', function(event) {
+//     var inputs = this.getElementsByTagName('input');
+//     for (var i = 0; i < inputs.length; i++) {
+//         if (inputs[i].value == '') {
+//             inputs[i].classList.add('is-invalid');
+//             event.preventDefault();
+//         } else {
+//             inputs[i].classList.remove('is-invalid');
+//         }
+//     }
+//     var password = document.getElementById('signupPassword').value;
+//     var confirmPassword = document.getElementById('confirmPassword').value;
+//     if (password != confirmPassword) {
+//         document.getElementById('confirmPassword').classList.add('is-invalid');
+//         event.preventDefault();
+//     } else {
+//         document.getElementById('confirmPassword').classList.remove('is-invalid');
+//     }
+// });
 
 </script>
 

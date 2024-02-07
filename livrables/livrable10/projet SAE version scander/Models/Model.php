@@ -522,26 +522,20 @@ class Model
     }
 
     public function loginUser($data) {
-        if ($this->userExist($data["username"])["exists"] == false) {
+    
+        $pwdMatchSql = "SELECT password FROM UserData WHERE username = :username";
+        $pwdMatchQuery = $this->bd->prepare($pwdMatchSql);
+        $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
+        $pwdMatchQuery->execute();
+        $pwd_match = $pwdMatchQuery->fetch(PDO::FETCH_ASSOC);
+        $this->updateConnectionTime($this->getUserId($data['username'])["userid"]);
+        if (password_verify($data["password"], $pwd_match["password"])) {
+            return $this->getUserData($data["username"]);
+        } else {
             return [
                 "status" => "KO",
-                "message" => "This user does not exist"
+                "message" => "Password doesn't match"
             ];
-        } else {
-            $pwdMatchSql = "SELECT password FROM UserData WHERE username = :username";
-            $pwdMatchQuery = $this->bd->prepare($pwdMatchSql);
-            $pwdMatchQuery->bindParam(':username', $data['username'], PDO::PARAM_STR);
-            $pwdMatchQuery->execute();
-            $pwd_match = $pwdMatchQuery->fetch(PDO::FETCH_ASSOC);
-            $this->updateConnectionTime($this->getUserId($data['username'])["userid"]);
-            if (password_verify($data["password"], $pwd_match["password"])) {
-                return $this->getUserData($data["username"]);
-            } else {
-                return [
-                    "status" => "KO",
-                    "message" => "Password doesn't match"
-                ];
-            }
         }
     }
 
@@ -607,33 +601,33 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function updateSettings($username, $name, $email, $newPassword, $country)
+    public function updateSettings($ancien_username, $username, $name, $email, $newPassword, $country)
     {
     $updateFields = [];
     $updateParams = [];
 
-    if (!$username == null) {
+    if ($username != null) {
         $updateFields[] = 'username = :username';
         $updateParams[':username'] = $username;
     }
 
-    if (!$name == null) {
+    if ($name != null) {
         $updateFields[] = 'name = :name';
         $updateParams[':name'] = $name;
     }
 
-    if (!$email == null) {
+    if ($email != null) {
         $updateFields[] = 'email = :email';
         $updateParams[':email'] = $email;
     }
 
-    if (!$newPassword == null) {
+    if ($newPassword != null) {
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
         $updateFields[] = 'password = :password';
         $updateParams[':password'] = $hashedPassword;
     }
 
-    if (!$country == null) {
+    if ($country != null) {
         $updateFields[] = 'country = :country';
         $updateParams[':country'] = $country;
     }
@@ -641,7 +635,7 @@ class Model
     if (!empty($updateFields)) {
         $sql = 'UPDATE UserData SET ' . implode(', ', $updateFields) . ' WHERE userId = :userId';
         $query = $this->bd->prepare($sql);
-        $updateParams[':userId'] = $this->getUserId($_SESSION['username'])['userid'];
+        $updateParams[':userId'] = $this->getUserId($ancien_username)['userid'];
 
         return $query->execute($updateParams);
     }

@@ -128,9 +128,10 @@
     <?php
     // Récupérer la variable 'retour' de l'URL
     if(isset($_GET['retour'])){
+        $retour = trim(e($_GET['retour']));
         switch ($retour) {
             case 1:
-                $message = "Succès";
+                $message = "Modification pris en compte";
                 $alertClass = "alert-success";
                 break;
             case 0:
@@ -138,7 +139,7 @@
                 $alertClass = "alert-secondary";
                 break;
             case -1:
-                $message = "KO";
+                $message = "Une erreur est survenu";
                 $alertClass = "alert-danger";
                 break;
             default:
@@ -255,12 +256,14 @@
 
 </div>
 <script>
-    // Faire disparaître l'alerte après 3 secondes
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove(); 
-        });
-    }, 3000);
+   // Supposons que l'ID de votre alerte est 'myAlert'
+var alertElement = document.getElementById('myAlert');
+
+// Faire disparaître l'alerte après 3 secondes
+window.setTimeout(function() {
+    alertElement.setAttribute('hidden', true);
+}, 2000);
+
 </script>
 <?php require "Views/view_footer.php"; ?>
 </body>

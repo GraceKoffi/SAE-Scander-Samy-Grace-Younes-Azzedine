@@ -38,13 +38,19 @@ Class Controller_Connect extends Controller{
     public function action_login(){
         if(isset($_POST['userName']) && isset($_POST['passWord'])){
             $m = Model::getModel();
+            if($m->userExist(trim(e($_POST['userName'])))["exists"] == false){
+                $_GET['retour'] = 0;
+                $this->action_form();
+            }
             $result = $m->loginUser([
                 "username" => trim(e($_POST['userName'])), 
                 "password" => trim(e($_POST['passWord']))
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
-                $tab =["tab" => $result['message']];
-                $this->render("error", $tab);
+                $_GET['retour'] = -4;
+                $this->action_form();
+                // $tab =["tab" => $result['message']];
+                // $this->render("error", $tab);
             }
             else{
                 $_SESSION['username'] = trim(e($_POST['userName']));
@@ -54,8 +60,10 @@ Class Controller_Connect extends Controller{
             }
         }
         else{
-            $tab = ["tab" =>"Champ Manquant"];
-            $this->render("error", $tab);
+            $_GET['retour'] = -1;
+            $this->action_form();
+            // $tab = ["tab" =>"Champ Manquant"];
+            // $this->render("error", $tab);
         }
 
     }
@@ -67,43 +75,51 @@ Class Controller_Connect extends Controller{
             $email = isset($_POST["email"]) ? $_POST["email"] : null;
             $newPassword = isset($_POST["newPassword"]) ? $_POST["newPassword"] : null;
             $country = isset($_POST["country"]) ? $_POST["country"] : null;
-
+            $ancien_user = $_SESSION['username'];
             // Appelez la méthode du modèle pour mettre à jour les paramètres
             $model = Model::getModel();
-            $result = $model->updateSettings(trim(e($username)), trim(e($name)), trim(e($email)), trim(e($newPassword)), trim(e($country)));
-            if(!$result != false){
-               
+            $result = $model->updateSettings($ancien_user, trim(e($username)), trim(e($name)), trim(e($email)), trim(e($newPassword)), trim(e($country)));
+            if($result != false){
+                $_GET['retour'] = 1;
                 if($newPassword != null){
-                    $_SESSION['password'] = trim(e($_POST['passWord']));
+                    $_SESSION['password'] = trim(e($_POST['newPassword']));
                 }
                 
                 if($username != null){
-                   $_SESSION['username'] = trim(e($username));
-                   $this->action_render_user($username);
+                    $_SESSION['username'] = trim(e($username));
+                    $this->action_render_user($_SESSION['username']);
                 }
                 else{
-                    $this->action_render_user($_SESSION['username']);   
+                    $this->action_render_user($ancien_user);
                 }
                
                
             }
             else{
-                $tab = ["tab" =>"Error"];
-                $this->render("error", $tab);
+                $_GET['retour'] = -1;
+                $this->action_render_user($_SESSION['username']);
+                // $tab = ["tab" =>"Error"];
+                // $this->render("error", $tab);
             }
             
     }
     
     public function action_signup(){
-        if(isset($_POST['userName']) && isset($_POST['passWord'])){
+        if(isset($_POST['userName']) && isset($_POST['passWord']) && isset($_POST['secondPassword'])){
+            if($_POST['passWord'] != $_POST['secondPassword']){
+                $_GET['retour'] = -2;
+                $this->action_form();
+            }
             $m = Model::getModel();
             $result = $m->addUser([
                 "username" => trim(e($_POST['userName'])), 
                 "password" => trim(e($_POST['passWord']))
             ]);
             if(isset($result['status']) && $result['status'] == "KO"){
-                $tab =["tab" => $result['message']];
-                $this->render("error", $tab);
+                $_GET['retour'] = -3;
+                $this->action_form();
+                // $tab =["tab" => $result['message']];
+                // $this->render("error", $tab);
             }
             else{
                 $_SESSION['username'] = trim(e($_POST['userName']));
@@ -113,8 +129,10 @@ Class Controller_Connect extends Controller{
             }
         }
         else{
-            $tab = ["tab" =>"Champ Manquant"];
-            $this->render("error", $tab);
+            $_GET['retour'] = -1;
+            $this->action_form();
+            // $tab = ["tab" =>"Champ Manquant"];
+            // $this->render("error", $tab);
         }
     }
     
