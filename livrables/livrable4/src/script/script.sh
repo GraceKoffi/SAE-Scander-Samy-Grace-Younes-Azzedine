@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Paramètres du script
 gz_file="$1"
 table_name="$2"
