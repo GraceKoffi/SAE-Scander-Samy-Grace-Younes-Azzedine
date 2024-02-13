@@ -1,4 +1,5 @@
 <?php require "Views/view_navbar.php"; ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 body {
     background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
@@ -35,13 +36,31 @@ body {
     font-size: 17px;/*taille de la police*/
 }
 
+.film {
+    /* Styles de base pour tous les films */
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.film.favori {
+    /* Styles spécifiques pour les films favoris */
+    background-color: yellow; /* Couleur de fond jaune */
+    color: black; /* Texte en noir */
+}
+
 
 
 </style>
 
-<?php 
+<?php
+$id_imdb = '';
+if(isset($_GET['id'])){
+    $id_imdb = $_GET['id'];
+} 
+else if(isset($_GET['filmId'])){
+    $id_imdb = $_GET['filmId'];
+}
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$id_imdb = $_GET['id'];
 $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
 $response = file_get_contents($url);
@@ -117,6 +136,25 @@ foreach ($results as $result) {
 </h3>
 <p><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
 
+<?php
+if (isset($_SESSION['username'])) {
+     // Récupérez la valeur de filmId depuis l'URL
+    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+    $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
+    $titre = ($favori === 'true') ? 'Retirer ce film des favoris' : 'Ajouter ce film aux favoris';
+    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
+    echo "
+    <div class='film' data-favori='$favori'>
+        <h2 id='titreFilm'>$titre</h2>
+        <a href='?controller=home&action=favorie_movie&filmId=$id_imdb'>
+            <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
+        </a>
+    </div>
+    ";
+}
+?>
+
+
                     </div>
                 </div>
             </div>
@@ -163,5 +201,41 @@ foreach ($results as $result) {
 
 <?php var_dump($info);?>
 <script><?=require "Js/informations.js"; ?></script>
+
+<script>
+       /*
+       $(document).ready(function() {
+            // Écouteur d'événement pour le clic sur le bouton
+            $("#favoriButton").click(function() {
+                // Récupérez l'état actuel du film (favori ou non)
+                const estFavori = $(".film").data("favori");
+
+                // Effectuez l'appel Ajax ici
+                $.ajax({
+                    type: "GET", // Ou "GET" selon vos besoins
+                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
+                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
+                    success: function(response) {
+                        // Mettez à jour l'interface utilisateur en fonction de la réponse
+                        if (estFavori) {
+                            $(".film").data("favori", false);
+                            $("#favoriButton").text("+");
+                            $("#titreFilm").text("Ajouter au favori");
+                            $(".film").removeClass("favori"); // Retirez la classe "favori"
+                        } else {
+                            $(".film").data("favori", true);
+                            $("#favoriButton").text("-");
+                            $("#titreFilm").text("Favori");
+                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
+                        }
+                    },
+                    error: function() {
+                        alert("Erreur lors de la mise à jour des favoris.");
+                    }
+                });
+            });
+        });
+        */
+    </script>
 
         <?php require "Views/view_footer.php"; ?>

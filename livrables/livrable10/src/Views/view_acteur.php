@@ -34,7 +34,13 @@ body {
 
 <?php 
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$id_acteur = $_GET['id'];
+$id_acteur = '';
+if(isset($_GET['id'])){
+    $id_acteur = $_GET['id'];
+} 
+else if(isset($_GET['acteurId'])){
+    $id_acteur = $_GET['acteurId'];
+}
 $url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
         
 
@@ -83,6 +89,22 @@ $sexe="Femme";
             </div>
     </div>
 </div>
+<?php
+if (isset($_SESSION['username'])) {
+     // Récupérez la valeur de filmId depuis l'URL
+    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+    $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
+    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
+    echo "
+    <div class='film' data-favori='$favori'>
+        <h2 id='titreFilm'>Mon Film Préféré</h2>
+        <a href='?controller=home&action=favorie_acteur&acteurId=$id_imdb'>
+            <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
+        </a>
+    </div>
+    ";
+}
+?>
 
 <div class="container mt-4">
     <div class="row">

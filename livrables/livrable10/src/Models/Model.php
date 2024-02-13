@@ -86,7 +86,74 @@ class Model
 
     }
 
+    public function favorieExistActeur($userId, $acteurId){
+        $sql = "SELECT 
+                acteurId FROM FavorieActeur
+                WHERE userId = :userId
+                AND acteurId = :acteurId
+                ;";
 
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
+        $query->bindValue(":acteurId", $acteurId);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function favorieExistFilm($userId, $filmId){
+        $sql = "SELECT 
+                filmId FROM FavorieFilm
+                WHERE userId = :userId
+                AND filmId = :filmId
+                ;";
+
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
+        $query->bindValue(":filmId", $filmId);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    public function AddFavorieActeur($userId, $acteurId){
+        $sql = "INSERT INTO FavorieActeur (userId, acteurId)
+                VALUES (:userId, :acteurId);
+                ";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue("userId", $userId);
+        $query->bindValue("acteurId", $acteurId);
+        $query->execute();            
+    }
+
+    public function RemoveFavorieActeur($userId, $acteurId){
+        $sql = "DELETE FROM FavorieActeur
+                WHERE userId = :userId
+                AND acteurId = :acteurId;
+                ";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId);
+        $query->bindvalue(":acteurId", $acteurId);
+        $query->execute();
+    }
+
+    public function AddFavorieFilm($userId, $filmId){
+        $sql = "INSERT INTO FavorieFilm (userId, filmId)
+                VALUES (:userId, :filmId)
+                ;";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId);
+        $query->bindValue(":filmId", $filmId);
+        $query->execute();
+    }
+
+    public function RemoveFavorieFilm($userId, $filmId){
+        $sql = "DELETE FROM FavorieFilm
+                WHERE userId = :userId
+                AND filmId = :filmId;
+                ";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId);
+        $query->bindValue(":filmId", $filmId);
+        $query->execute();
+    }
 
 
     public function getInformationsMovie($id) {
@@ -429,7 +496,6 @@ class Model
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
-
     public function emailExist($username) {
         $sql = "SELECT email
         FROM UserData
@@ -552,12 +618,31 @@ class Model
         $results->bindParam(':userId', $userId, PDO::PARAM_INT);
         $results->execute();
         $TotalParType = $results->fetch(PDO::FETCH_ASSOC);
-        
+
+        $sql = "SELECT COUNT(*) AS favorieFilmCount
+                FROM FavorieFilm
+                WHERE userId = :userId;
+                ";
+        $valeur = $this->bd->prepare($sql);
+        $valeur->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $valeur->execute();
+        $TotalFavoriFilm = $valeur->fetch(PDO::FETCH_ASSOC);
+    
+        $sql = "SELECT COUNT(*) AS favorieActeurCount
+                FROM FavorieActeur
+                WHERE userId = :userId;
+                ";
+        $valeur2 = $this->bd->prepare($sql);
+        $valeur2->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $valeur2->execute();
+        $TotalFavoriActeur = $valeur2->fetch(PDO::FETCH_ASSOC);
         
         return [
             "Total" => $totalSearch,
             "RecherTime" => $RechercheTime,
-            "TotalParType" => $TotalParType
+            "TotalParType" => $TotalParType,
+            "TotalFavorieFilm" => $TotalFavoriFilm,
+            "TotalFavorieActeur" => $TotalFavoriActeur
         ];
     }
 
