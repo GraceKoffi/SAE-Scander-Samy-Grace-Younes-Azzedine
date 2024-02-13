@@ -43,19 +43,52 @@ Class Controller_home extends Controller{
     
     public function action_information_movie(){
         $m = Model::getModel();
-        $tab = [ 'info' => $m->getInformationsMovie($_GET["id"]),
-                  'realisateur'=>$m->getInformationsDirector($_GET["id"]),
-                  'acteur'=>$m->getInformationsActeurParticipant($_GET["id"]),
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+        }
+        else if(isset($_GET['filmId'])){
+            $id = $_GET['filmId'];
+        }
+        if(isset($_SESSION['username'])){
+            $userId = $m->getUserId($_SESSION['username'])["userid"];
+            var_dump($m->favorieExistFilm($userId, trim(e($id))));
+            
+            if(empty($m->favorieExistFilm($userId, trim(e($id))))){
+                $_SESSION['favori'] = 'false';
+            }
+            else{
+                $_SESSION['favori'] = 'true';
+            }
+        }
+        $tab = [ 'info' => $m->getInformationsMovie(trim(e($id))),
+                  'realisateur'=>$m->getInformationsDirector(trim(e($id))),
+                  'acteur'=>$m->getInformationsActeurParticipant(trim(e($id))),
             
             ];
-        $this->render("informations", $tab);
+            $this->render("informations", $tab);
+        
 
 
     }
     public function action_information_acteur(){
         $m = Model::getModel();
-        $tab = [ 'titre'=>$m->getInformationsFilmParticipant($_GET["id"]),
-                  'info'=>$m->getInformationsActeur($_GET["id"]),
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+        }
+        else if(isset($_GET['acteurId'])){
+            $id = $_GET['acteurId'];
+        }
+        if(isset($_SESSION['username'])){
+            $userId = $m->getUserId($_SESSION['username'])["userid"];
+            if(empty($m->favorieExistFilm($userId, trim(e($id))))){
+                $_SESSION['favori'] = 'false';
+            }
+            else{
+                $_SESSION['favori'] = 'true';
+            }
+        }
+        $tab = [ 'titre'=>$m->getInformationsFilmParticipant(trim(e($id))),
+                  'info'=>$m->getInformationsActeur(trim(e($id))),
                   
             
             ];
@@ -73,6 +106,35 @@ Class Controller_home extends Controller{
         $this->render("contact", $tab);
 
 
+    }
+    public function action_favorie_movie(){
+        $m = Model::getModel();
+        if(isset($_GET['filmId'])){
+            $userId = $m->getUserId($_SESSION['username'])["userid"];
+            if(empty($m->favorieExistFilm($userId, trim(e($_GET['filmId']))))){
+                $m->AddFavorieFilm($userId, trim(e($_GET['filmId'])));
+                
+            }
+            else{
+                $m->RemoveFavorieFilm($userId, trim(e($_GET['filmId'])));
+            }
+            $this->action_information_movie();
+        }
+    }
+
+    public function action_favorie_acteur(){
+        $m = Model::getModel();
+        if(isset($_GET['acteurId'])){
+            $userId = $this->getUserId($_SESSION['username'])["userid"];
+            if(empty($m->favorieExistActeur($userId, trim(e($_GET['acteurId']))))){
+                $m->AddFavorieActeur($userId, trim(e($_GET['acteurId'])));
+
+            }
+            else{
+                $m->RemoveFavorieActeur($userId, trim(e($_GET['acteurId'])));
+            }
+            $this->action_information_acteur();
+        }
     }
 
     
