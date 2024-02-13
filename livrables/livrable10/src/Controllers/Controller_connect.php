@@ -1,6 +1,6 @@
 <?php
 
-Class Controller_Connect extends Controller{
+Class Controller_connect extends Controller{
     public function action_form(){
         $this->render("connect", []);
     }

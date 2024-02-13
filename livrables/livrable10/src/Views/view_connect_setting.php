@@ -186,7 +186,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                     <div class="form-group">
                                         <label class="form-label">E-mail</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control mb-1" value="<?php echo $tab["email"]; ?>" id="email" name="email" disabled>
+                                            <input type="email" class="form-control mb-1" value="<?php echo $tab["email"]; ?>" id="email" name="email" disabled>
                                             <div class="input-group-append">
                                                 <button type="button" class="btn btn-outline-secondary" id="edit-email">Edit</button>
                                             </div>

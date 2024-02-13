@@ -262,7 +262,7 @@ body{
             <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
             <input type="password" placeholder="Enter your password" name="passWord" class="form-control" required>
-            <a href="#">Forgot password?</a>
+            <a href="?controller=resetPassWord">Forgot password?</a>
             <input type="submit" class="btn btn-primary submit-btn" value="Login">
         </form>
         <div class="signup">

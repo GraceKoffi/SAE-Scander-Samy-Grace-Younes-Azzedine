@@ -44,7 +44,7 @@ class rapoActeur:
         """
         con = psycopg2.connect(
             host="localhost",
-            database="test",
+            database="sae",
             user="postgres",
             password="root"
         )

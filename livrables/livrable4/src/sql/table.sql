@@ -89,3 +89,10 @@ CREATE TABLE RechercheData (
     FOREIGN KEY (userId) REFERENCES UserData(userId)
 );
 
+DROP TABLE IF EXISTS ResetPassWord CASCADE;
+CREATE TABLE ResetPassWord (
+    resetId SERIAL PRIMARY KEY,
+    userId INT,
+    resetToken TEXT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);
