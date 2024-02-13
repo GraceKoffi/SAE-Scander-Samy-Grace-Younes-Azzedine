@@ -44,11 +44,6 @@ $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $id_imdb = $_GET['id'];
 $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
-// $ch = curl_init($url);
-// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-// $response = curl_exec($ch);
-// curl_close($ch);
-
 $response = file_get_contents($url);
 $data = json_decode($response);
 $couverture = null;
@@ -169,7 +164,7 @@ foreach ($results as $result) {
     </div>
 </div>
 
-
+<?php var_dump($info);?>
 <script><?=require "Js/informations.js"; ?></script>
 
         <?php require "Views/view_footer.php"; ?>

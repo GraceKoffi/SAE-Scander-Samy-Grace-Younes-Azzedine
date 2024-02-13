@@ -145,18 +145,63 @@ class Model
         return $requete->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function suggestion($mot) {
+        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS name, 'acteur' AS type, birthYear AS date, primaryProfession AS role
+        FROM name_basics
+        WHERE primaryName ILIKE :mot
+        LIMIT 2)
+        
+        UNION ALL
+        
+        (SELECT tconst AS id, primaryTitle AS name, 'film' AS type, startYear AS date, titleType AS role
+        FROM title_basics
+        WHERE primaryTitle ILIKE :mot
+        LIMIT 3)
+        
+       
+        LIMIT 5;
+         ");
+   
+
+        $mot = trim($mot);
+        $mot= "%".$mot."%";
+        $requete->bindParam(':mot', $mot, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function voirtousresultat($mot) {
+        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS name, 'acteur' AS type, birthYear AS date, primaryProfession AS role
+        FROM name_basics
+        WHERE primaryName ILIKE :mot )
+        
+        UNION ALL
+        
+        (SELECT tconst AS id, primaryTitle AS name, 'film' AS type, startYear AS date, titleType AS role
+        FROM title_basics
+        WHERE primaryTitle ILIKE :mot );
+        
+        
+         ");
+   
+
+         $mot = trim($mot);//retirer les espace au debut et à la fin 
+        $mot= "%".$mot."%";
+        $requete->bindParam(':mot', $mot, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
   
-    public function rechercheFilm($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax,$pageFilm,$perPageFilm,$orderby) {
-        $sql = "SELECT COUNT(*) OVER() AS total, tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres, tr.averageRating, tr.numVotes
+    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres) {
+        $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres
                 FROM title_basics tb
-                LEFT JOIN title_ratings tr ON tb.tconst = tr.tconst
                 WHERE 1=1 ";
     
         if ($titre !== null) {
-            $sql .= " AND tb.primaryTitle = :titre";
-            //$sql .= " AND similarity(tb.primaryTitle, :titre) > 0.5";
+            //$sql .= " AND tb.primaryTitle = :titre";
+            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.3";
         }
        
         if ($types !== null) {
@@ -183,44 +228,12 @@ class Model
             $sql .= " AND tb.genres ~* :genres";
         }
         
-    
-        if ($noteMin !== null) {
-            $sql .= " AND tr.averageRating>= :noteMin";
-        }
-    
-        if ($noteMax !== null) {
-            $sql .= " AND tr.averageRating <= :noteMax";
-        }
-    
-        if ($votesMin !== null) {
-            $sql .= " AND tr.numVotes >= :votesMin";
-        }
-    
-        if ($votesMax !== null) {
-            $sql .= " AND tr.numVotes <= :votesMax";
-        }
-       
-        //$sql .= " ORDER BY $orderby";
-        $sql .= " LIMIT :perPageFilm OFFSET :offset;";
-
-
-
-       
 
         $requete = $this->bd->prepare($sql);
 
-      $total = ($pageFilm - 1) * $perPageFilm;
-
-        // Ajoutez les paramètres pour la pagination
-        $requete->bindParam(':perPageFilm', $perPageFilm, PDO::PARAM_INT);
-        $requete->bindParam(':offset', $total, PDO::PARAM_INT);
-        //$requete->bindParam(':orderby', $orderby, PDO::PARAM_STR);
-    
-     
-    
 
         if ($titre !== null) {
-            //$titre = '%' . $titre . '%';
+            $titre = '%' . $titre . '%';
             $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
         }
 
@@ -248,34 +261,13 @@ class Model
         if ($genres !== null) {
             $requete->bindParam(':genres', $genres, PDO::PARAM_STR);
         }
-    
-    
-        if ($noteMin !== null) {
-            $requete->bindParam(':noteMin', $noteMin, PDO::PARAM_INT);
-        }
-    
-        if ($noteMax !== null) {
-            $requete->bindParam(':noteMax', $noteMax, PDO::PARAM_INT);
-        }
-    
-        if ($votesMin !== null) {
-            $requete->bindParam(':votesMin', $votesMin, PDO::PARAM_INT);
-        }
-    
-        if ($votesMax !== null) {
-            $requete->bindParam(':votesMax', $votesMax, PDO::PARAM_INT);
-        }
 
     
         $requete->execute();
-        $resultats = $requete->fetchAll(PDO::FETCH_ASSOC);
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
 
-        return [
-            'totalResultatFilm' => $resultats[0]['total'],
-            'recherchefilms' => $resultats
-        ];
-    }
     
+    }
     
         
     

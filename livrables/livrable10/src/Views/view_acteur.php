@@ -34,27 +34,22 @@ body {
 
 <?php 
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
-//$id_acteur = $_GET['id'];
-$id_api=$_GET['id_api'];
-$url = "https://api.themoviedb.org/3/person/{$id_api}?language=fr&api_key={$api_key}";
+$id_acteur = $_GET['id'];
+$url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
+        
 
-// $ch = curl_init($url);
-// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-// $response = curl_exec($ch);
-// curl_close($ch);
 
 $response = file_get_contents($url);
-
 $data = json_decode($response);
 $portrait= null;
 $sexe=null;
 $biographie=null;
 
-if (isset($data->profile_path) && $data->profile_path !== null) {
-    $portrait = $data->profile_path;
+if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
+    $portrait = $data->person_results[0]->profile_path;
 }
-if (isset($data->gender) && $data->gender !== null) {
-   if ($data->gender==2){
+if (isset($data->person_results[0]->gender) && $data->person_results[0]->gender !== null) {
+   if ($data->person_results[0]->gender==2){
 
     $sexe="Homme";
    }
@@ -63,15 +58,12 @@ $sexe="Femme";
 
    }
 }
-if (isset($data->biography) && $data->biography !== null) {
-    $biographie = $data->biography;
-}
-?>
-    
+
+  ?>  
     
     
 
-    <div class="container-fluid position-relative px-0">
+    <div class="container-fluid position-relative px-0 mt-5">
     <div class="row">
        <div class="info-container">
                 <div class="row">
@@ -83,7 +75,7 @@ if (isset($data->biography) && $data->biography !== null) {
                     <h3><?= $info['birthyear']; ?></h3>
                     <h3><?= $info['deathyear']; ?></h3>
                     <h3><?= $info['primaryprofession']; ?></h3>
-                    <p><?= $biographie; ?></p>   
+                      
              <p><?= $sexe; ?></p>  
                        
                     </div>
@@ -91,7 +83,7 @@ if (isset($data->biography) && $data->biography !== null) {
             </div>
     </div>
 </div>
-<?php var_dump($titre); ?>
+
 <div class="container mt-4">
     <div class="row">
         <?php foreach($titre as $v) : ?>
@@ -99,10 +91,7 @@ if (isset($data->biography) && $data->biography !== null) {
                 $id_film = $v['tconst'];
                 $url = "https://api.themoviedb.org/3/find/{$id_film}?api_key={$api_key}&external_source=imdb_id";
 
-                // $ch = curl_init($url);
-                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                // $response = curl_exec($ch);
-                // curl_close($ch);
+            
                 $response = file_get_contents($url);
                 $data = json_decode($response);
                 $portrait_film = null;

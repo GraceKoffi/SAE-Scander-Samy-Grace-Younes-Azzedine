@@ -1,5 +1,5 @@
 
-                <table id="example" class="table table-striped nowrap" style="width:100%">
+<table id="example" class="table table-striped nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -117,3 +117,150 @@ $end = min($page + $range, $totalPages);
 
 tt2039417 probleme affichage / aussi tt0194207
 <img src="https://image.tmdb.org/t/p/w200<?= $portrait ?>" alt="<?= e($v['primarytitle']) ?>">
+
+
+
+
+
+
+
+<?php
+$api_key = "9e1d1a23472226616cfee404c0fd33c1";
+$url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
+
+// Utilisation de cURL pour récupérer les films actuellement en salle
+
+   // $ch = curl_init($url);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// $response = curl_exec($ch);
+// curl_close($ch);
+$movie_data = file_get_contents($url);
+
+$movies = json_decode($movie_data, true)['results'];
+
+$tab_poster = [];
+
+// Parcourir la liste des films
+foreach ($movies as $movie) {
+    $backdrop_path = $movie['backdrop_path'];
+    $imageposter=$movie['poster_path']; 
+    $titrecaroussel=$movie['title'];
+    $tabimage[]=$imageposter;
+    $tab_poster[] = $backdrop_path;
+    $titrecarou[]=$titrecaroussel;
+}
+?>
+
+<h1 class="mt-5"> Film Populaire </h1>
+<div class="row mt-5">
+
+
+<div class="col-md-7 mt-5">
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="3500">
+<div class="carousel-inner">
+    <?php for ($i = 0; $i < count($tabimage); $i++) : ?>
+        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+            <img class="d-block w-100" src="https://image.tmdb.org/t/p/w1280<?= $tab_poster[$i] ?>" alt="Slide <?= $i + 1 ?>">
+            <div class="carousel-caption d-none d-md-block">
+                <!-- Image superposée -->
+                <img src="https://image.tmdb.org/t/p/w500<?= $tabimage[$i] ?>" class="img-fluid" style="width: 150px; height: auto; position: absolute; bottom: 20px; left: 20px;">
+                <!-- Texte -->
+                <h5 style="position: absolute; bottom: 20px; left: 180px; color: white; font-size:40px;"><?= $titrecarou[$i] ?></h5>
+            </div>
+        </div>
+    <?php endfor; ?>
+</div>
+
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+    </div>
+    </div>
+
+<?php
+
+$genres = [
+    'Action' => 28,
+    'Thriller' => 53,
+    'Jeunesse' => 16,
+    'Horreur' => 27,
+    'Comédie' => 35,
+    'Crime' => 80,
+    'Science-Fiction' => 878
+];
+
+foreach ($genres as $genre_name => $genre_id) {
+    $movies = get_movies($genre_id, $api_key);
+
+    echo '<div class="container mt-4 films-section">';
+    echo '<h5>' . $genre_name . '</h5>';
+    echo '<div class="scrolling-container">';
+    echo '<div class="scrolling-wrapper">';
+
+    foreach ($movies as $movie) {
+        $tmdb_id = $movie['id'];
+        $imdb_id = get_imdb_id($tmdb_id, $api_key);  // Fonction pour obtenir l'ID IMDB
+        $poster_path = $movie['poster_path'];
+
+        echo '<a href="?controller=home&action=information_movie&id=' . $imdb_id . '"  class="card composent-card" style="width: 200px;">';
+        echo '<img src="https://image.tmdb.org/t/p/w500' . $poster_path . '" alt="Poster" class="card-img-top">';
+        echo '<div class="card-body">';
+        echo '<img src="./images/star.png" alt="Star" class="star">';
+        echo '<span class="note">' . $movie['vote_average'] . '</span>';
+        echo '<h6 class="card-subtitle mb-2 text-muted">  sodksodks skdskdsl</h6>';
+       
+    
+        echo '<h5 class="card-title">' . $movie['title'] . '</h5>';
+        echo '</div>';
+        echo '</a>';
+    }
+
+    echo '</div>';
+    echo '<button class="scroll-btn left"><</button>';
+    echo '<button class="scroll-btn right">></button>';
+    echo '</div>';
+    echo '</div>';
+
+    
+}
+
+
+
+function get_movies($genre_id, $api_key) {//recup une liste au hasard en 1 50 de film avec le genre concernet 
+ 
+    $allMovies = [];
+    $minPage = 1;
+    $maxPage = 50;
+    $page = rand($minPage, $maxPage);
+
+    $url = "https://api.themoviedb.org/3/discover/movie?api_key={$api_key}&include_adult=false&with_genres={$genre_id}&page={$page}";
+
+    // $ch = curl_init($url);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
+    $response = file_get_contents($url);
+    $movies = json_decode($response, true)['results'];
+    return $allMovies = array_merge($allMovies, $movies);
+}
+
+
+function get_imdb_id($tmdb_id, $api_key) {//recup idImdb avec id tmdb
+    $url = "https://api.themoviedb.org/3/movie/{$tmdb_id}?api_key={$api_key}";
+
+    // $ch = curl_init($url);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
+    $response = file_get_contents($url);
+    $movie = json_decode($response, true);
+    return $movie['imdb_id'];
+}
+
+?>
