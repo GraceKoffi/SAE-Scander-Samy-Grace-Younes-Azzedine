@@ -96,3 +96,20 @@ CREATE TABLE ResetPassWord (
     resetToken TEXT,
     FOREIGN KEY (userId) REFERENCES UserData(userId)
 );
+
+DROP TABLE IF EXISTS FavorieFilm CASCADE;
+CREATE TABLE FavorieFilm (
+    favorieFilmId SERIAL PRIMARY KEY,
+    userId INT,
+    filmId TEXT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);
+
+DROP TABLE IF EXISTS FavorieActeur CASCADE;
+CREATE TABLE FavorieActeur (
+    favorieActeurId SERIAL PRIMARY KEY,
+    userId INT,
+    acteurId TEXT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);
+

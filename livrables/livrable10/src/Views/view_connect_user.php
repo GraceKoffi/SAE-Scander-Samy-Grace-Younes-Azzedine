@@ -106,6 +106,49 @@
             align-items: center;
             height: 50vh; /* Ajustez la hauteur selon vos besoins */
         }
+        .favorites-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .favorites-div {
+            width: 45%;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+        .view-all-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .favori-message {
+            text-align: center;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
   
   </style>
 </head>
@@ -161,6 +204,7 @@
         <h1 class="display-4">Salut, <?php echo $_SESSION['username'];?> !</h1>
         <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
         <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
+       
     </div>
     
 <a href="?controller=connect&action=render_rechercheData&type=Recherche">
@@ -255,6 +299,25 @@
 </a>
 
 </div>
+<div class="favorites-container">
+        <div class="favorites-div" id="filmFavorites">
+            <h2>Favorite Films</h2>
+            <p class="favori-message">Vous avez <?php echo $tab['TotalFavorieFilm']['favoriefilmcount']; ?> favoris.</p>
+            <ul id="filmList">
+                <!-- List of favorite films -->
+            </ul>
+            <a href="view-all-films.php" class="view-all-link">Voir tous les films favoris</a>
+        </div>
+
+        <div class="favorites-div" id="actorFavorites">
+            <h2>Favorite Actors</h2>
+            <p class="favori-message">Vous avez <?php echo $tab['TotalFavorieActeur']['favorieacteurcount']; ?> favoris.</p>
+            <ul id="actorList">
+                <!-- List of favorite actors -->
+            </ul>
+            <a href="view-all-actors.php" class="view-all-link">Voir tous les acteurs favoris</a>
+        </div>
+    </div>
 <script>
    // Supposons que l'ID de votre alerte est 'myAlert'
 var alertElement = document.getElementById('myAlert');
