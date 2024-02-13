@@ -100,7 +100,7 @@ class Model
        
     FROM
         title_basics tb
-        JOIN title_ratings tr ON tb.tconst = tr.tconst
+        LEFT JOIN title_ratings tr ON tb.tconst = tr.tconst
         
        
     WHERE
