@@ -268,7 +268,7 @@ class Model
     
         if ($titre !== null) {
             //$sql .= " AND tb.primaryTitle = :titre";
-            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.3";
+            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.2";
         }
        
         if ($types !== null) {

@@ -107,11 +107,8 @@ foreach ($results as $result) {
 
 
 
-
 ?>
  
-
-
  <div class="container-fluid position-relative px-0">
     <div class="row">
         <div class="col-md-12">
