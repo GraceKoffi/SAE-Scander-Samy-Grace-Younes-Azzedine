@@ -17,4 +17,5 @@ sections.forEach(function (section) {
 });
 
 
+$('.carousel').carousel();
 
