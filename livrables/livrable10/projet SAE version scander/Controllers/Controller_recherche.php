@@ -23,8 +23,7 @@ class Controller_recherche extends Controller {
         
             
             $tab = [
-                "recherchetitre" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres), 
-               
+                "recherchetitre" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres),     
             ];
             
             if(isset($_SESSION['username'])){
