@@ -16,6 +16,7 @@ class Controller_resetFinal extends Controller{
             ];
             $result = $m->updatePassword($data);
             print_r($result);
+            $m->removeToken($result["userId"][0], trim(e($_GET['token'])));
             if($result['status'] == "OK"){
                 $tab = ["tab" => "message ok"];
                 $this->render("isreset", $tab);

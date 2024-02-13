@@ -400,6 +400,28 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getName($username){
+        $sql = "SELECT name 
+                FROM UserData
+                WHERE username = :username
+                AND name IS NOT NULL;
+                ";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":username", $username);
+        return $query->fetch(PDO::FETCH_NUM);
+    }
+
+    public function removeToken($userId, $token){
+        $sql = "DELETE FROM ResetPassWord
+                WHERE userId = :userId
+                AND resetToken = :token;
+                ";
+        $query = $this->bd->prepare($sql);
+        $query->bindValue(":userId", $userId);
+        $query->bindValue(":token", $token);
+        $query->execute();
+    }
+
     public function userExist($username) {
         $sql = "SELECT EXISTS(SELECT 1 FROM UserData WHERE username = :username) as exists";
         $query = $this->bd->prepare($sql);
