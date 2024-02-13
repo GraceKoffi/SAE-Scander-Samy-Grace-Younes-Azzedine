@@ -1,4 +1,4 @@
 <?php 
 $dsn = "pgsql:host=localhost;dbname=sae";
-$login = "";
-$mdp = "";
+$login = "postgres";
+$mdp = "root";

@@ -100,7 +100,7 @@ class Model
        
     FROM
         title_basics tb
-        JOIN title_ratings tr ON tb.tconst = tr.tconst
+        LEFT JOIN title_ratings tr ON tb.tconst = tr.tconst
         
        
     WHERE
@@ -201,7 +201,7 @@ class Model
     
         if ($titre !== null) {
             //$sql .= " AND tb.primaryTitle = :titre";
-            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.3";
+            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.2";
         }
        
         if ($types !== null) {
