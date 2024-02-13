@@ -1,69 +1,27 @@
 <?php require "Views/view_navbar.php"; ?>
-<style>
-    .filter-input {
-    margin-bottom: 20px;
-    padding: 5px;
-}
-.pagination {
-        display: flex;
-        justify-content: center;
-        list-style-type: none;
-    }
-    .pagination .page-item {
-        margin: 0 5px;
-    }
-    .pagination .page-link {
-        display: block;
-        padding: 5px 10px;
-        color: #007bff;
-        text-decoration: none;
-    }
-    .pagination .page-item.active .page-link {
-        color: #fff;
-        background-color: #007bff;
-    }
-    .movie-list-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 15px;
-        background-color: #292b2c; /* Couleur de fond */
-        border-radius: 8px; /* Coins arrondis */
-    }
 
-    .movie-list-item img {
-        width: 70px;
-        height: 100px;
-        margin-right: 20px;
-        border-radius: 4px; /* Coins arrondis pour l'image */
-    }
 
-    .movie-list-item h4, .movie-list-item p {
-        margin: 0;
-        color: white;
-    }
 
-</style>
-
-<div class="container">
-        <h1>Recherche de films et d'acteurs</h1>
-        <form action="?controller=recherche&action=rechercher" method="post">
-            <div class="form-group">
-                <label for="search">Recherche</label>
-                <input type="text" class="form-control" id="search" name="search" placeholder="Entrez le nom d'un film ou d'un acteur">
-            </div>
-            <div class="form-group">
-                <label for="type">Type de recherche</label>
-                <select class="form-control" id="type" name="type">
-                    <option value="film">Film</option>
-                    <option value="acteur">Acteur</option>
-                </select>
-            </div>
-            <button type="button" class="btn btn-primary" id="filter">Filtres</button>
-            <!-- Ajout des champs de recherche pour les films -->
-<div id="filter-box-film" style="display: none;">
-
-<select class="form-select mt-3 filter-input" name="types">
+<div class="container mt-5">
+    <h1>Recherche Avancée</h1>
+    <div class="card">
+        <div class="card-body">
+            <form action="?controller=recherche&action=rechercher" method="post">
+                <div class="form-group mb-3">
+                    <label for="search">Recherche*</label>
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Entrez le nom d'un film ou d'un acteur">
+                    <div id="search-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
+             
+                </div>
+                <div class="form-group mb-3">
+                    <label for="typeselection">Type de recherche</label>
+                    <select class="form-select" id="typeselection" name="type">
+                        <option value="titre">Titre</option>
+                        <option value="personne">Personne</option>
+                    </select>
+                </div>
+                <div id="filter-box-titre" style="display: none;">
+                <select class="form-select mt-3 filter-input" name="types">
     <option value="">Sélectionner le type de film</option>
     <option value="tvShort">tvShort</option>
     <option value="tvMovie">tvMovie</option>
@@ -79,11 +37,14 @@
 </select>
 
 
-    
-    <input type="text" class="form-control mt-3 filter-input" name="dateSortieMin" placeholder="Année minimale">
-    <input type="text" class="form-control mt-3 filter-input" name="dateSortieMax" placeholder="Année maximale">
+<input type="text" class="form-control mt-3 filter-input" id="dateSortieMin" name="dateSortieMin" placeholder="Année minimale">
+<div id="dateSortieMin-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1000 - max 2025) </div>
+<input type="text" class="form-control mt-3 filter-input" id="dateSortieMax" name="dateSortieMax" placeholder="Année maximale">
+<div id="dateSortieMax-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1000 - max 2025)</div>
+<div id="dateSortieRange-error" style="display: none; color: red;">L'année minimale doit être inférieure à l'année maximale et ne pas dépasser 2025.</div>
 
     
+
     <input type="text" class="form-control mt-3 filter-input" name="dureeMin" placeholder="Durée minimale (en minute)">
     <input type="text" class="form-control mt-3 filter-input" name="dureeMax" placeholder="Durée maximale (en minute)">
 
@@ -132,10 +93,11 @@
 
 
 
-
-
-<div id="filter-box-acteur" style="display: none;">
-<input type="text" class="form-control mt-5 filter-input" name="dateNaissance" placeholder="Date de naissance">
+                    <!-- Ajoutez d'autres champs de filtre ici selon vos besoins -->
+                </div>
+                <div id="filter-box-personne" style="display: none;">
+                    <!-- Ajoutez les champs de filtre pour 'personne' ici -->
+                    <input type="text" class="form-control mt-5 filter-input" name="dateNaissance" placeholder="Date de naissance">
 <input type="text" class="form-control mt-3 filter-input" name="dateDeces" placeholder="Date de décès">
 <select id="choices-multiple-remove-button" name="metier[]" placeholder="Choisir 3 professions MAX" multiple>
     <option value="actor">Actor</option>
@@ -184,247 +146,166 @@
 </select>
 
 </div>
-
-            <button type="submit" class="btn btn-success">Rechercher</button>
-        </form>
-
-
-
-
-
-
-
-
-        <div id="results">
-           
-            <!-- Les résultats de la recherche apparaîtront ici -->
-                   
-            <?php if(!empty($recherchefilms)) : ?>
-
-                <form method="post" action="?controller=recherche&action=trieFilm">
-    <label for="tri_colonne">Trier par :</label>
-    <select name="tri_colonne">
-        <option value="primaryTitle">Titre</option>
-        <option value="startyear">Année de sortie</option>
-        <option value="runtimeminutes">Durée</option>
-        <option value="averageRating">Note</option>
-        <option value="numVotes">Nombre de vote</option>
-
-    </select>
-
-    <label for="tri_ordre">Ordre :</label>
-    <select name="tri_ordre">
-        <option value="ASC">Croissant</option>
-        <option value="DESC">Décroissant</option>
-    </select>
-
-    <input type="submit" value="Trier">
-</form>
-
-                    <?php foreach($recherchefilms as $v) : ?>
-                        <?php 
-/*
-$api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$id_imdb = $v['tconst'];
-$url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
-
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
-
-
-$data = json_decode($response);
-
-$portrait= null;
-
-
-
-
-// Créez un tableau avec tous les résultats que vous voulez vérifier
-$results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
-
-foreach ($results as $result) {
-    if (isset($result->poster_path) && $result->poster_path!== null) {
-        $portrait = $result->poster_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-    if (isset($result->still_path) && $result->still_path!== null) {
-        $portrait = $result->still_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-}
-
-*/
-?>
-
-
-
-<div class="container">
-    <div class="row">
-            <div class="col-md-6">
-                <a href="?controller=home&action=information_movie&id=<?= e($v['tconst']) ?>" class="text-decoration-none">
-                    <div class="movie-list-item">
-                        <div>
-                            <h4><?= e($v['primarytitle']) ?></h4>
-                            <p><?= e($v['startyear']) ?> - <?= e($v['runtimeminutes']) ?> minutes</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                </div>
+                <button type="submit" class="btn btn-success mt-3">Rechercher</button>
+            </form>
+        </div>
     </div>
 </div>
 
 
-                    <?php endforeach ?> 
-               
-
-
-                
-                <?php
-                $totalPagesFilm = ceil($totalResultatFilm / $perPageFilm);
-$range = 5;
-$start = max($pageFilm - $range, 1);
-$end = min($pageFilm + $range, $totalPagesFilm);
 
 
 
-?>
-
-<ul class="pagination" style="center">
-    <?php
-    // Génération des liens de pagination
-    for ($i = $start; $i <= $end; $i++) :
-    ?>
-        <li class="page-item <?php echo ($pageFilm == $i) ? 'active' : ''; ?>">
-            <a class="page-link" href="?controller=recherche&action=paginationFilm&pageFilm=<?php echo $i; ?>"><?php echo $i; ?></a>
-        </li>
-    <?php endfor; ?>
-
-    <?php if ($end < $totalPagesFilm) : ?>
-        <li class="page-item">
-            <a class="page-link" href="#">...</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?controller=recherche&action=paginationFilm&pageFilm=<?php echo $totalPagesFilm; ?>"><?php echo $totalPagesFilm; ?></a>
-        </li>
-    <?php endif; ?>
-</ul>
-
-                
 
 
-                <?php elseif(!empty($recherchepersonne)) : ?>
-                    
-                <table class="table table-striped" style="margin-top: 30px;">
-                    <tr> <th scope="col">id</th><th scope="col">Prénom Nom</th> <th scope="col">Naissance(année)</th><th scope="col">Decès(année)</th> <th scope="col">Métier</th> 
-
-                    <?php foreach ($recherchepersonne as $v) : ?>
-                        <tr>
-                        <td> <a href="?controller=home&action=information_acteur&id=<?= e($v['nconst']) ?>"><?= e($v['nconst']) ?></a></td>
-                            <td> <?= e($v['primaryname']) ?></td>
-                            <td> <?= e($v['birthyear']) ?> </td>
-                            <td> <?= e($v['deathyear']) ?> </td>
-                            <td> <?= e($v['primaryprofession']) ?> </td>
-                            
-                        </tr>
-                    <?php endforeach ?> 
-                </table> 
-
-                <?php
-                $totalPagesActeur= ceil($totalResultatActeur / $perPageActeur);
-$range = 5;
-$start = max($pageActeur - $range, 1);
-$end = min($pageActeur + $range, $totalPagesActeur);
-
-?>
-
-<ul class="pagination" style="center">
-    <?php
-    // Génération des liens de pagination
-    for ($i = $start; $i <= $end; $i++) :
-    ?>
-        <li class="page-item <?php echo ($pageActeur == $i) ? 'active' : ''; ?>">
-            <a class="page-link" href="?controller=recherche&action=paginationActeur&pageActeur=<?php echo $i; ?>"><?php echo $i; ?></a>
-        </li>
-    <?php endfor; ?>
-
-    <?php if ($end < $totalPagesActeur) : ?>
-        <li class="page-item">
-            <a class="page-link" href="#">...</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?controller=recherche&action=paginationActeur&pageActeur=<?php echo $totalPagesActeur; ?>"><?php echo $totalPagesActeur; ?></a>
-        </li>
-    <?php endif; ?>
-</ul>
-                
-            <?php endif; ?>
-       </div>
-    </div>
-
-
-
+        <div class="container">
     
+    <table id="monTableau" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Durée (en minute)</th>
+                <th>Genres</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Assurez-vous que $recherchetitre est initialisé comme un tableau
+            $recherchetitre = (isset($recherchetitre) && is_array($recherchetitre)) ? $recherchetitre : [];
+            ?>
+
+            <?php if (!empty($recherchetitre)): ?>
+                <?php foreach ($recherchetitre as $v): ?>
+                    <tr>
+                        <td><a href="?controller=home&action=information_movie&id=<?= e($v['tconst']) ?>"><?= e($v['primarytitle']) ?></a></td>
+                        <td><?= e($v['titletype']) ?></td>
+                        <td><?= e($v['startyear']) ?></td>
+                        <td><?= e($v['runtimeminutes']) ?></td>
+                        <td><?= e($v['genres']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan='5'>Aucun résultat trouvé.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+
     <script>
-   $(document).ready(function() {
-    function updateFilters() {
-        var type = $('#type').val();
-        if (type == 'film') {
-            $('#filter-box-film').show(); // Afficher la div du filtre de film
-            $('#filter-box-acteur').hide(); // Masquer la div du filtre d'acteur
-             $('.filter-input').val('');
-            $('.filter-input[type="checkbox"]').prop('checked', false);
-        } else if (type == 'acteur') {
-            $('#filter-box-acteur').show(); // Afficher la div du filtre d'acteur
-            $('#filter-box-film').hide(); // Masquer la div du filtre de film
-            $('.filter-input').val('');
-            $('.filter-input[type="checkbox"]').prop('checked', false);
+  $(document).ready(function() {
+    $('form').on('submit', function(e) {
+        var searchValue = $('#search').val().trim();
+        
+        if(searchValue === '') {
+            e.preventDefault(); // Empêche la soumission du formulaire
+            $('#search-error').slideDown(); // Affiche le message d'erreur avec un effet
+        }
+    });
+
+    // Cachez le message d'erreur et réinitialisez l'état lorsque l'utilisateur commence à taper
+    $('#search').on('input', function() {
+        $('#search-error').slideUp(); // Cache le message d'erreur avec un effet
+    });
+});
+
+
+
+    // Fonction pour afficher/masquer les filtres en fonction de la sélection actuelle
+    function afficherFiltresSelonSelection() {
+        var typeselection = $('#typeselection').val(); // Obtenez la valeur actuellement sélectionnée
+
+        // Cachez tous les filtres pour commencer
+        $('#filter-box-titre, #filter-box-personne').hide();
+
+        // Affichez les filtres en fonction de la sélection
+        if (typeselection === 'titre') {
+            $('#filter-box-titre').show();
+        } else if (typeselection === 'personne') {
+            $('#filter-box-personne').show();
         }
     }
 
-    $('#filter').click(function() {
-        if ($('#filter-box-film').is(':visible') || $('#filter-box-acteur').is(':visible')) {
-            $('#filter-box-film').hide();
-            $('#filter-box-acteur').hide();
-            $('.filter-input').val('');
-            $('.filter-input[type="checkbox"]').prop('checked', false);
-        } else {
-            updateFilters();
-        }
+    // Exécutez la fonction immédiatement pour gérer l'état initial
+    afficherFiltresSelonSelection();
+
+    // Écoutez également les changements pour ajuster dynamiquement les filtres
+    $('#typeselection').change(function() {
+        afficherFiltresSelonSelection();
     });
 
-    $('#type').change(function() {
-        if ($('#filter-box-film').is(':visible') || $('#filter-box-acteur').is(':visible')) {
-            updateFilters();
+ 
+    $(document).ready(function() {
+    // Initialisation de DataTables
+    $('#monTableau').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
         }
-    });
+    });   
 });
 
 
 
-
-var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-    removeItemButton: true,
-    maxItemCount: 3,
-    searchResultLimit: 4,
-    renderChoiceLimit: 1000 
-});
-
-     
-     
 $(document).ready(function() {
-    var table = $('#example').DataTable({
-        searchPanes: true
+    $('form').on('submit', function(e) {
+        var isValid = true;
+        var searchValue = $('#search').val().trim();
+        if(searchValue === '') {
+            e.preventDefault();
+            $('#search-error').slideDown();
+            isValid = false;
+        }
+
+        var dateSortieMinValue = $('#dateSortieMin').val().trim();
+        var dateSortieMaxValue = $('#dateSortieMax').val().trim();
+        var dateSortieMinValid = dateSortieMinValue === '' || (/^[12]\d{3}$/.test(dateSortieMinValue) && parseInt(dateSortieMinValue) <= 2025);
+        var dateSortieMaxValid = dateSortieMaxValue === '' || (/^[12]\d{3}$/.test(dateSortieMaxValue) && parseInt(dateSortieMaxValue) <= 2025);
+
+        if(!dateSortieMinValid) {
+            e.preventDefault();
+            $('#dateSortieMin-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dateSortieMin-error').hide();
+        }
+
+        if(!dateSortieMaxValid) {
+            e.preventDefault();
+            $('#dateSortieMax-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dateSortieMax-error').hide();
+        }
+
+        // Nouvelle vérification : dateSortieMin doit être inférieure à dateSortieMax
+        if(dateSortieMinValid && dateSortieMaxValid && dateSortieMinValue !== '' && dateSortieMaxValue !== '' && parseInt(dateSortieMinValue) >= parseInt(dateSortieMaxValue)) {
+            e.preventDefault();
+            $('#dateSortieRange-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dateSortieRange-error').hide();
+        }
+
+        $('#dateSortieMin, #dateSortieMax').on('input', function() {
+            $('#dateSortieMin-error, #dateSortieMax-error, #dateSortieRange-error').slideUp();
+        });
+
+        return isValid;
     });
-    table.searchPanes.container().prependTo(table.table().container());
-    table.searchPanes.resizePanes();
-})
+
+    $('#search').on('input', function() {
+        $('#search-error').slideUp();
+    });
+});
+</script>
 
 
 
 
-    </script>
+
 
 
 
