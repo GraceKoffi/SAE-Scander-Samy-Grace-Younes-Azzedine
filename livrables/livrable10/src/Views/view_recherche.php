@@ -46,7 +46,10 @@
     
 
     <input type="text" class="form-control mt-3 filter-input" name="dureeMin" placeholder="Durée minimale (en minute)">
+    <div id="dureeMax-error" style="display: none; color: red;">Veuillez entrer une durée valide (min 0 - max 100000)</div>
     <input type="text" class="form-control mt-3 filter-input" name="dureeMax" placeholder="Durée maximale (en minute)">
+    <div id="dureeMin-error" style="display: none; color: red;">Veuillez entrer une durée valide (min 0 - max 100000)</div>
+    <div id="dureeRange-error" style="display: none; color: red;">L'année minimale doit être inférieure à l'année maximale et ne pas dépasser 2025.</div>
 
 
 
@@ -197,31 +200,16 @@
 
     <script>
   $(document).ready(function() {
-    $('form').on('submit', function(e) {
-        var searchValue = $('#search').val().trim();
-        
-        if(searchValue === '') {
-            e.preventDefault(); // Empêche la soumission du formulaire
-            $('#search-error').slideDown(); // Affiche le message d'erreur avec un effet
+    // Initialisation de DataTables
+    $('#monTableau').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
         }
     });
 
-    // Cachez le message d'erreur et réinitialisez l'état lorsque l'utilisateur commence à taper
-    $('#search').on('input', function() {
-        $('#search-error').slideUp(); // Cache le message d'erreur avec un effet
-    });
-});
-
-
-
-    // Fonction pour afficher/masquer les filtres en fonction de la sélection actuelle
     function afficherFiltresSelonSelection() {
-        var typeselection = $('#typeselection').val(); // Obtenez la valeur actuellement sélectionnée
-
-        // Cachez tous les filtres pour commencer
+        var typeselection = $('#typeselection').val();
         $('#filter-box-titre, #filter-box-personne').hide();
-
-        // Affichez les filtres en fonction de la sélection
         if (typeselection === 'titre') {
             $('#filter-box-titre').show();
         } else if (typeselection === 'personne') {
@@ -229,31 +217,14 @@
         }
     }
 
-    // Exécutez la fonction immédiatement pour gérer l'état initial
     afficherFiltresSelonSelection();
+    
+    $('#typeselection').change(afficherFiltresSelonSelection);
 
-    // Écoutez également les changements pour ajuster dynamiquement les filtres
-    $('#typeselection').change(function() {
-        afficherFiltresSelonSelection();
-    });
-
- 
-    $(document).ready(function() {
-    // Initialisation de DataTables
-    $('#monTableau').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
-        }
-    });   
-});
-
-
-
-$(document).ready(function() {
     $('form').on('submit', function(e) {
         var isValid = true;
         var searchValue = $('#search').val().trim();
-        if(searchValue === '') {
+        if (searchValue === '') {
             e.preventDefault();
             $('#search-error').slideDown();
             isValid = false;
@@ -261,45 +232,68 @@ $(document).ready(function() {
 
         var dateSortieMinValue = $('#dateSortieMin').val().trim();
         var dateSortieMaxValue = $('#dateSortieMax').val().trim();
-        var dateSortieMinValid = dateSortieMinValue === '' || (/^[12]\d{3}$/.test(dateSortieMinValue) && parseInt(dateSortieMinValue) <= 2025);
-        var dateSortieMaxValid = dateSortieMaxValue === '' || (/^[12]\d{3}$/.test(dateSortieMaxValue) && parseInt(dateSortieMaxValue) <= 2025);
+        var dureeMinValue = $('#dureeMin').val().trim();
+        var dureeMaxValue = $('#dureeMax').val().trim();
 
-        if(!dateSortieMinValid) {
+        // Validation des dates
+        if(dateSortieMinValue && !/^[12]\d{3}$/.test(dateSortieMinValue) || parseInt(dateSortieMinValue) > 2025) {
             e.preventDefault();
             $('#dateSortieMin-error').slideDown();
             isValid = false;
         } else {
-            $('#dateSortieMin-error').hide();
+            $('#dateSortieMin-error').slideUp();
         }
 
-        if(!dateSortieMaxValid) {
+        if(dateSortieMaxValue && !/^[12]\d{3}$/.test(dateSortieMaxValue) || parseInt(dateSortieMaxValue) > 2025) {
             e.preventDefault();
             $('#dateSortieMax-error').slideDown();
             isValid = false;
         } else {
-            $('#dateSortieMax-error').hide();
+            $('#dateSortieMax-error').slideUp();
         }
 
-        // Nouvelle vérification : dateSortieMin doit être inférieure à dateSortieMax
-        if(dateSortieMinValid && dateSortieMaxValid && dateSortieMinValue !== '' && dateSortieMaxValue !== '' && parseInt(dateSortieMinValue) >= parseInt(dateSortieMaxValue)) {
+        if(dateSortieMinValue && dateSortieMaxValue && parseInt(dateSortieMinValue) > parseInt(dateSortieMaxValue)) {
             e.preventDefault();
             $('#dateSortieRange-error').slideDown();
             isValid = false;
         } else {
-            $('#dateSortieRange-error').hide();
+            $('#dateSortieRange-error').slideUp();
         }
 
-        $('#dateSortieMin, #dateSortieMax').on('input', function() {
-            $('#dateSortieMin-error, #dateSortieMax-error, #dateSortieRange-error').slideUp();
+        // Validation des durées
+        if(dureeMinValue && (!/^\d+$/.test(dureeMinValue) || parseInt(dureeMinValue) < 0 || parseInt(dureeMinValue) > 100000)) {
+            e.preventDefault();
+            $('#dureeMin-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dureeMin-error').slideUp();
+        }
+
+        if(dureeMaxValue && (!/^\d+$/.test(dureeMaxValue) || parseInt(dureeMaxValue) < 0 || parseInt(dureeMaxValue) > 100000)) {
+            e.preventDefault();
+            $('#dureeMax-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dureeMax-error').slideUp();
+        }
+
+        if(dureeMinValue && dureeMaxValue && parseInt(dureeMinValue) > parseInt(dureeMaxValue)) {
+            e.preventDefault();
+            $('#dureeRange-error').slideDown();
+            isValid = false;
+        } else {
+            $('#dureeRange-error').slideUp();
+        }
+
+        // Cachez le message d'erreur lors de la modification des valeurs
+        $('#search, #dateSortieMin, #dateSortieMax, #dureeMin, #dureeMax').on('input', function() {
+            $('#search-error, #dateSortieMin-error, #dateSortieMax-error, #dureeMin-error, #dureeMax-error, #dateSortieRange-error, #dureeRange-error').slideUp();
         });
 
         return isValid;
     });
-
-    $('#search').on('input', function() {
-        $('#search-error').slideUp();
-    });
 });
+
 </script>
 
 

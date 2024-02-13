@@ -1,4 +1,4 @@
 <?php 
-$dsn = "pgsql:host=localhost;dbname=sae";
+$dsn = "pgsql:host=localhost;dbname=SAE_test";
 $login = "";
 $mdp = "";
