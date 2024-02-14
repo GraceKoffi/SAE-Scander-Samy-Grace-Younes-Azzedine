@@ -15,7 +15,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="typeselection">Type de recherche</label>
-                    <select class="form-select" id="typeselection" name="type">
+                    <select class="form-select" id="typeselection" name="typeselection">
                         <option value="titre">Titre</option>
                         <option value="personne">Personne</option>
                     </select>
@@ -195,25 +195,31 @@
             <?php endif; ?>
         </tbody>
     </table>
-</div>
+            </div>
 
 
-    <script>
-  $(document).ready(function() {
+
+            <script>
+$(document).ready(function() {
     // Initialisation de DataTables
     $('#monTableau').DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
         }
     });
+});
 
+
+
+    // Affichage des filtres selon la sélection
     function afficherFiltresSelonSelection() {
-        var typeselection = $('#typeselection').val();
-        $('#filter-box-titre, #filter-box-personne').hide();
-        if (typeselection === 'titre') {
+        var typeSelection = $('#typeselection').val();
+        if (typeSelection === 'titre') {
             $('#filter-box-titre').show();
-        } else if (typeselection === 'personne') {
+            $('#filter-box-personne').hide();
+        } else if (typeSelection === 'personne') {
             $('#filter-box-personne').show();
+            $('#filter-box-titre').hide();
         }
     }
 
@@ -221,83 +227,36 @@
     
     $('#typeselection').change(afficherFiltresSelonSelection);
 
-    $('form').on('submit', function(e) {
-        var isValid = true;
-        var searchValue = $('#search').val().trim();
-        if (searchValue === '') {
-            e.preventDefault();
-            $('#search-error').slideDown();
-            isValid = false;
-        }
-
+    // Validation du champ de recherche
+    $('form').submit(function(e) {
         var dateSortieMinValue = $('#dateSortieMin').val().trim();
-        var dateSortieMaxValue = $('#dateSortieMax').val().trim();
-        var dureeMinValue = $('#dureeMin').val().trim();
-        var dureeMaxValue = $('#dureeMax').val().trim();
-
-        // Validation des dates
-        if(dateSortieMinValue && !/^[12]\d{3}$/.test(dateSortieMinValue) || parseInt(dateSortieMinValue) > 2025) {
-            e.preventDefault();
-            $('#dateSortieMin-error').slideDown();
-            isValid = false;
-        } else {
-            $('#dateSortieMin-error').slideUp();
+        var searchInput = $('#search').val();
+      console.log(dateSortieMinValue);
+        
+      if (!searchInput.trim()) { // Si le champ de recherche est vide
+            e.preventDefault(); // Empêcher la soumission du formulaire
+            $('#search-error').show();
         }
 
-        if(dateSortieMaxValue && !/^[12]\d{3}$/.test(dateSortieMaxValue) || parseInt(dateSortieMaxValue) > 2025) {
+        console.log("1");
+        if (!dateSortieMinValue.match(/^[12]\d{3}$/) || parseInt(dateSortieMinValue) > 2025) {
             e.preventDefault();
-            $('#dateSortieMax-error').slideDown();
-            isValid = false;
+            $('#dateSortieMin-error').show();
+            console.log("2");
         } else {
-            $('#dateSortieMax-error').slideUp();
-        }
+            $('#dateSortieMin-error').hide();
+        } 
 
-        if(dateSortieMinValue && dateSortieMaxValue && parseInt(dateSortieMinValue) > parseInt(dateSortieMaxValue)) {
-            e.preventDefault();
-            $('#dateSortieRange-error').slideDown();
-            isValid = false;
-        } else {
-            $('#dateSortieRange-error').slideUp();
-        }
-
-        // Validation des durées
-        if(dureeMinValue && (!/^\d+$/.test(dureeMinValue) || parseInt(dureeMinValue) < 0 || parseInt(dureeMinValue) > 100000)) {
-            e.preventDefault();
-            $('#dureeMin-error').slideDown();
-            isValid = false;
-        } else {
-            $('#dureeMin-error').slideUp();
-        }
-
-        if(dureeMaxValue && (!/^\d+$/.test(dureeMaxValue) || parseInt(dureeMaxValue) < 0 || parseInt(dureeMaxValue) > 100000)) {
-            e.preventDefault();
-            $('#dureeMax-error').slideDown();
-            isValid = false;
-        } else {
-            $('#dureeMax-error').slideUp();
-        }
-
-        if(dureeMinValue && dureeMaxValue && parseInt(dureeMinValue) > parseInt(dureeMaxValue)) {
-            e.preventDefault();
-            $('#dureeRange-error').slideDown();
-            isValid = false;
-        } else {
-            $('#dureeRange-error').slideUp();
-        }
-
-        // Cachez le message d'erreur lors de la modification des valeurs
-        $('#search, #dateSortieMin, #dateSortieMax, #dureeMin, #dureeMax').on('input', function() {
-            $('#search-error, #dateSortieMin-error, #dateSortieMax-error, #dureeMin-error, #dureeMax-error, #dateSortieRange-error, #dureeRange-error').slideUp();
-        });
-
-        return isValid;
     });
-});
+
+    // Masquer le message d'erreur lors de la saisie
+    $('#search').keyup(function() {
+        if ($('#search').val().trim()) {
+            $('#search-error').hide(); // Cacher le message d'erreur si le champ n'est pas vide
+        }
+    });
 
 </script>
-
-
-
 
 
 

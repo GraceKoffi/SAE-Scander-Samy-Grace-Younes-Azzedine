@@ -86,74 +86,7 @@ class Model
 
     }
 
-    public function favorieExistActeur($userId, $acteurId){
-        $sql = "SELECT 
-                acteurId FROM FavorieActeur
-                WHERE userId = :userId
-                AND acteurId = :acteurId
-                ;";
 
-        $query = $this->bd->prepare($sql);
-        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
-        $query->bindValue(":acteurId", $acteurId);
-        $query->execute();
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function favorieExistFilm($userId, $filmId){
-        $sql = "SELECT 
-                filmId FROM FavorieFilm
-                WHERE userId = :userId
-                AND filmId = :filmId
-                ;";
-
-        $query = $this->bd->prepare($sql);
-        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
-        $query->bindValue(":filmId", $filmId);
-        $query->execute();
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-    public function AddFavorieActeur($userId, $acteurId){
-        $sql = "INSERT INTO FavorieActeur (userId, acteurId)
-                VALUES (:userId, :acteurId);
-                ";
-        $query = $this->bd->prepare($sql);
-        $query->bindValue("userId", $userId);
-        $query->bindValue("acteurId", $acteurId);
-        $query->execute();            
-    }
-
-    public function RemoveFavorieActeur($userId, $acteurId){
-        $sql = "DELETE FROM FavorieActeur
-                WHERE userId = :userId
-                AND acteurId = :acteurId;
-                ";
-        $query = $this->bd->prepare($sql);
-        $query->bindValue(":userId", $userId);
-        $query->bindvalue(":acteurId", $acteurId);
-        $query->execute();
-    }
-
-    public function AddFavorieFilm($userId, $filmId){
-        $sql = "INSERT INTO FavorieFilm (userId, filmId)
-                VALUES (:userId, :filmId)
-                ;";
-        $query = $this->bd->prepare($sql);
-        $query->bindValue(":userId", $userId);
-        $query->bindValue(":filmId", $filmId);
-        $query->execute();
-    }
-
-    public function RemoveFavorieFilm($userId, $filmId){
-        $sql = "DELETE FROM FavorieFilm
-                WHERE userId = :userId
-                AND filmId = :filmId;
-                ";
-        $query = $this->bd->prepare($sql);
-        $query->bindValue(":userId", $userId);
-        $query->bindValue(":filmId", $filmId);
-        $query->execute();
-    }
 
 
     public function getInformationsMovie($id) {
