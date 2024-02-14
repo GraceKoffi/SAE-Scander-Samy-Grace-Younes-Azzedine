@@ -86,7 +86,7 @@ class Model
 
     }
 
-
+    
 
 
     public function getInformationsMovie($id) {
