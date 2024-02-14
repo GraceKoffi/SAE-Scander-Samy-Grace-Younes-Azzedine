@@ -85,6 +85,7 @@ class Model
         return $requete->fetchAll(PDO::FETCH_ASSOC);
 
     }
+    
 
     public function favorieExistActeur($userId, $acteurId){
         $sql = "SELECT 
