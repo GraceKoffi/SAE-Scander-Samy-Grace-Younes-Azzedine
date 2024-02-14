@@ -87,6 +87,7 @@ class Model
     }
     
 
+
     public function favorieExistActeur($userId, $acteurId){
         $sql = "SELECT 
                 acteurId FROM FavorieActeur
