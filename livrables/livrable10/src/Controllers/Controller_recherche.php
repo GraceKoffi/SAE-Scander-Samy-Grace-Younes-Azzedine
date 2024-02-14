@@ -11,7 +11,7 @@ class Controller_recherche extends Controller {
     public function action_rechercher() {
         $m = Model::getModel();
 
-        if ($_POST['type'] == 'titre') {
+        if ($_POST['typeselection'] == 'titre') {
             $titre = isset($_POST['search']) && $_POST['search'] !== '' ? $_POST['search'] : null;
             $types = isset($_POST['types']) && $_POST['types'] !== '' ? $_POST['types'] : null;
             $dateSortieMin = isset($_POST['dateSortieMin']) && $_POST['dateSortieMin'] !== '' ? $_POST['dateSortieMin'] : null;
@@ -43,7 +43,7 @@ class Controller_recherche extends Controller {
             
 
 
-        } elseif ($_POST['type'] == 'personne') {
+        } elseif ($_POST['typeselection'] == 'personne') {
             $nom = isset($_POST['search']) && $_POST['search'] !== '' ? $_POST['search'] : null;
             $dateNaissance = isset($_POST['dateNaissance']) && $_POST['dateNaissance'] !== '' ? $_POST['dateNaissance'] : null;
             $dateDeces = isset($_POST['dateDeces']) && $_POST['dateDeces'] !== '' ? $_POST['dateDeces'] : null;
