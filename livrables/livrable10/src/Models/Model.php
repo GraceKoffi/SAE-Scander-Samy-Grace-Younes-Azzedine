@@ -834,5 +834,16 @@ class Model
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function filmpopulaire(){
+        $api_key = "9e1d1a23472226616cfee404c0fd33c1";
+        $url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
+        
+        // Utilisation de cURL pour récupérer les films actuellement en salle
+        $movie_data = file_get_contents($url);
+        $movies = json_decode($movie_data, true)['results'];
+       return $movies;
+    }
+    
     
 }

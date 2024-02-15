@@ -12,12 +12,12 @@ class Controller_recherche extends Controller {
         $m = Model::getModel();
 
         if ($_POST['typeselection'] == 'titre') {
-            $titre = isset($_POST['search']) && $_POST['search'] !== '' ? $_POST['search'] : null;
-            $types = isset($_POST['types']) && $_POST['types'] !== '' ? $_POST['types'] : null;
-            $dateSortieMin = isset($_POST['dateSortieMin']) && $_POST['dateSortieMin'] !== '' ? $_POST['dateSortieMin'] : null;
-            $dateSortieMax = isset($_POST['dateSortieMax']) && $_POST['dateSortieMax'] !== '' ? $_POST['dateSortieMax'] : null;
-            $dureeMin = isset($_POST['dureeMin']) && $_POST['dureeMin'] !== '' ? $_POST['dureeMin'] : null;
-            $dureeMax = isset($_POST['dureeMax']) && $_POST['dureeMax'] !== '' ? $_POST['dureeMax'] : null;
+            $titre = isset($_POST['search']) && trim($_POST['search']) !== '' ? $_POST['search'] : null;
+            $types = isset($_POST['types']) && trim($_POST['types']) !== '' ? $_POST['types'] : null;
+            $dateSortieMin = isset($_POST['dateSortieMin']) && trim($_POST['dateSortieMin']) !== '' ? $_POST['dateSortieMin'] : null;
+            $dateSortieMax = isset($_POST['dateSortieMax']) && trim($_POST['dateSortieMax']) !== '' ? $_POST['dateSortieMax'] : null;
+            $dureeMin = isset($_POST['dureeMin']) && trim($_POST['dureeMin']) !== '' ? $_POST['dureeMin'] : null;
+            $dureeMax = isset($_POST['dureeMax']) && trim($_POST['dureeMax']) !== '' ? $_POST['dureeMax'] : null;
             $genresArray = isset($_POST['genres']) ? $_POST['genres'] : null;
             $genres = $this->buildGenresRegex($genresArray);
         
