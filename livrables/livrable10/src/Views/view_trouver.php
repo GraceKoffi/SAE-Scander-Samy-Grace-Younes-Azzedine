@@ -1,435 +1,318 @@
-<?php
-if(isset($_SESSION['username'])){
-    $var = $_SESSION['username'];
-}
-else{
-    $var = 'Login';
-}
-?>
-<script src="https://unpkg.com/scrollreveal@4.0.7/dist/scrollreveal.min.js"></script>
-
-<style>
-      body {
-            margin: 0;
-            padding: 0;
-            font-family: Helvetica, sans-serif;
-            background-color: black;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Comparaison</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
+    <script src="https://unpkg.com/scrollreveal@4.0.7/dist/scrollreveal.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: yellow !important;
+            color: white !important;
+        }
+        * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
         }
 
-        header {
-            background: linear-gradient(#b992db);
-            color: #fff;
-            padding: 20px;
-            text-align: center;
+
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    height: 400px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+}
+
+.card {
+    width: 100px;
+    border-radius: .75rem;
+    background-size: cover;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 2rem;
+    margin: 0 10px;
+    display: flex;
+    align-items: flex-end;
+    transition: .6s cubic-bezier(.28,-0.03,0,.99);
+    box-shadow: 0px 10px 30px -5px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+.card > .row {
+    color: white;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+
+.card > .row > .description {
+    display: flex;
+    color: yellow;
+    justify-content: flex-start; /* Change center to flex-start */
+    flex-direction: column;
+    overflow: hidden;
+    height: 100px;
+    width: 600px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition-delay: .3s;
+    transition: all .3s ease;
+}
+.card .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; /* Ajoutez cette ligne pour que la carte occupe toute la hauteur */
+}
+
+.card .description {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .description a.button {
+    align-self: flex-start;
+}
+.description p {
+    color: yellow;
+    padding-top: 5px;
+}
+
+.description a {
+    color: black;
+    padding-top: 5px;
+}
+
+.description h4 {
+    text-transform: uppercase;
+}
+
+input {
+    display: none;
+}
+
+input:checked + label {
+    width: 800px;
+}
+
+input:checked + label .description {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.card[for="c1"] {
+    background-image: url('Images/hHQpMa.jpg');
+}
+.card[for="c2"] {
+    background-image: url('Images/movie-wallpapers-29.jpg');
+}
+.card[for="c3"] {
+    background-image: url('Images/R.jpeg');
+}
+.card[for="c4"] {
+    background-image: url('Images/cinema.png');
+}
+
+    
+        .wrapper1{
+            width: 100%;
+            margin: 0 auto;
         }
 
-        .logo {
-            width: 100px;
-            height: 100px;
-            background-image: url('Images/findercine1.jpg');
+        .banner-area {
+            background: black;
             background-size: cover;
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            position: relative;
-        }
-
-        nav a:before {
-            content: "";
+            background-position: center center;
+            top: 0; /* Modification ici */
+            height: 100vh;
+            width: 100%;
             position: absolute;
+        }
+
+        .banner-area::after{
+            content: '';
+            position: absolute;
+            top: 0;
+            left 0;
+            display: block;
+            /* width: 100%; */
+            /* height: 100vh; */
+            background: black;
+            opacity: .7;
+            z-index: -1;
+        }
+
+
+        .banner-area h2{
+            padding-top: 8%;
+            font-size: 80px;
+            color: yellow;
+        }
+
+        .banner-area button{
+            color: yellow;
+        }
+
+        .content-area{
             width: 100%;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #fff;
-            visibility: hidden;
-            transform: scaleX(0);
-            transition: all 0.3s ease-in-out;
-        }
-
-        nav a:hover:before {
-            visibility: visible;
-            transform: scaleX(1);
-        }
-
-        .header-text-container {
-            text-align: center;
-            color: white;
-            margin-top: 50px;
-        }
-
-        .header-text-container h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .header-text-container p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-
-        .image-container {
-            text-align: center;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .image-wrapper {
-            margin: 10px;
-            text-align: center;
-            flex-basis: calc(33.33% - 20px);
-            transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out, blur 0.5s ease-in-out;
-            overflow: hidden;
-        }
-
-        .large-image {
-            width: 100%;
-            height: auto;
-            transition: transform 0.5s ease-in-out;
-        }
-
-
-        #filmCount {
-            text-align: center;
-            color: white;
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
-
-
-        .form-container {
+            height: 80vh;
             position: relative;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            width: 70%;
-            text-align: center;
-            border-radius: 10px;
+            background: white;
+            top: 500px;
         }
 
-        .form-input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
+        .content-area h2{
+            font-size: 40px;
+            margin: 0;
+            padding-top: 30px;
+            letter-spacing: 4px;
+            color: black;
         }
 
-        .form-input::placeholder {
-            color: white;
-        }
-
-        .form-title {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .select-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .form-submit {
-            background-color: #b992db;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .form-submit:hover {
-            background-color: #906bb2;
-        }
-
-       .footer {
-            margin-top: auto;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-        }
-
-        .footer-section {
-            flex: 1;
-            text-align: center;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
+        .content-area p{
+            padding: 2% 0;
+            line-height: 30px;
+            text-align: justify;
         }
 
 
-        
+        .button {
+    background-color: yellow;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px auto; /* Pour centrer le bouton horizontalement */
+    cursor: pointer;
+    width: 80%; /* Ajustez la largeur selon vos besoins */
+    border-radius: 20px;
+}
+.button.btn-c1 {
+    width: 25%; /* Ajustez la largeur selon vos besoins pour le bouton c1 */
+}
+.buttonAcceuil{
+    background-color: yellow;
+    border: none;
+    border-radius: 20px;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
 
-        .footer-links li {
-            transition: transform 0.4s;
-            padding-top: 40px;
-            padding-right: 55px;
+.label{
+    color: black;
+}
 
-        }
-        footer a {
-            color: #ffffff !important; 
-            text-decoration: none !important; 
-        }
-
-
-        .footer-links li:hover {
-            color: #ffffff !important; 
-            font-weight: bold; 
-            transform: scale(1.3);
-        }
-        
-        .feature-section {
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 50px 0;
-        text-align: center;
-    }
-
-    .feature-section h2 {
-        color: #fff;
-        font-size: 2em;
-        margin-bottom: 30px;
-    }
-
-    .image-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: stretch;
-        flex-wrap: wrap;
-    }
-
-    .image-wrapper {
-        margin: 20px;
-        text-align: center;
-        flex-basis: calc(30% - 40px); 
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
-    }
-
-     .image-wrapper:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    } 
-
-    .large-image {
-        width: 100%;
-        height: auto;
-        border-bottom: 2px solid #eee;
-    }
-
-    .image-wrapper h3 {
-        font-size: 1.5em;
-        margin: 20px 0 10px;
-        color: #333;
-    }
-
-    .image-wrapper p {
-        font-size: 1em;
-        color: #777;
-        margin-bottom: 20px;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #b992db;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-        transform: scale(1.05);
-        background-color: #906bb2;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .feature-section h3{
-        color : #fff;
-    }
-
-    .feature-section p {
-        color : #fff;
-    }
-
-    
+.form{
+    margin-top: 80px;
+}
     </style>
-<body style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)), url('Images/54qqo354uyy11.jpg'); background-size: cover; background-attachment: fixed;">
-
-<header>
-    <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
-    <nav class="scroll-reveal">
-        <a class="translate" href="?controller=home">Accueil</a>
-        <a class="translate" href="?controller=recherche">Rechercher</a>
-        <a class="translate" href="?controller=trouver">Trouver</a>
-        <a class="translate" href="?controller=rapprochement">Rapprochement</a>
-        <a class="translate" href="?controller=connect"><?php echo $var?></a>
-    </nav>
-</header>
-
-<div class="header-text-container scroll-reveal">
-    <h1>Trouver</h1>
-    <p>
-        <span>Bienvenue sur notre page "Trouver" ! Explorez le monde captivant des films et des personnalités du cinéma <br>
-        en découvrant les connexions qui les unissent. Cette fonctionnalité unique vous permet de <br>
-        sélectionner deux films ou deux personnes, puis de découvrir les acteurs ou les films qu'ils ont en commun
-        </span>
-    </p>
-    <p id="filmCount" class="scroll-reveal">Avec plus de <span id="counter">0</span> films !</p>
-</div>
-
-<div class="image-container">
-    <div class="image-wrapper scroll-reveal">
-        <img class="large-image" src="Images/cars-3-8k-disney-movie_1536401767.jpg.webp" alt="Image 1">
-    </div>
-    <div class="image-wrapper scroll-reveal">
-        <img class="large-image" src="Images/Spider-Man-Across-the-Spider-Verse-Movie-2023-4K-Wallpaper-jpg.webp" alt="Image 2">
-    </div>
-</div>
-
-<div class="form-container scroll-reveal">
-    <h2 class="form-title">Lancez-vous</h2>
-    <form action="?controller=trouver&action=trouver" method="post" style="text-align: center;">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <input type="text" placeholder="Champ 1" class="form-input" id="champ1" name="champ1">
-            <input type="text" placeholder="Champ 2" class="form-input" id="champ2" name="champ2">
-        </div>
-        <div class="select-container">
-            <select class="form-input" name="type">
-                <option value="Film">Film</option>
-                <option value="Acteur">Acteur</option>
-            </select>
-        </div>
-        <br>
-        <input type="submit" value="Envoyer" class="form-submit">
-    </form>
-</div>
-
-
-
-
-
-
-<section class="feature-section scroll-reveal">
-    <h2>Découvrez nos fonctionnalités</h2>
+</head>
+<body>
+    <?php
+    require "Views/view_navbar.php";
+    ?>
+<div class="banner-area text-center">
+    <h2>Lien</h2>
+    <p>Découvrer les liens entre vos acteurs et vos films préférer</p>
+    <a href="#form" class="buttonAcceuil">Découvrir</a>
     
-    <div class="image-container">
-        <!-- Fonctionnalité "Rechercher" -->
-        <div class="image-wrapper scroll-reveal">
-            <img class="large-image" src="Images/HD-wallpaper-the-flash-2023-movie-poster.jpg" alt="Rechercher">
-            <h3>Rechercher</h3>
-            <p>Explorez notre vaste base de données pour trouver des films, des acteurs et bien plus encore.</p>
-            <a href="?controller=recherche" class="btn">En savoir plus</a>
-        </div>
+</div>
 
-        <!-- Fonctionnalité "Rapprochement" -->
-        <div class="image-wrapper scroll-reveal">
-            <img class="large-image" src="Images/54qqo354uyy11.jpg" alt="Rapprochement">
-            <h3>Rapprochement</h3>
-            <p>Découvrez les liens entre deux films ou deux personnalités du cinéma grâce à notre fonctionnalité de rapprochement.</p>
-            <a href="?controller=rapprochement" class="btn">En savoir plus</a>
-        </div>
-    </div>
-</section>
-
-
-
-<footer class="scroll-reveal footer">
-    <div class="footer-content">
-        <div class="footer-section about">
-            <h2 class="translate" data-en="About Us" data-fr="À propos">À propos</h2>
-            <p>Projet Universitaire</p>
-        </div>
-        <div class="footer-section links">
-            <ul class="list-inline footer-links">
-                <li class="list-inline-item"><a href="#"><img src="./Images/facebook.png" alt="Facebook"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="./Images/twitter.png" alt="Twitter"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="./Images/instagram.png" alt="Instagram"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="./Images/linkedin.png" alt="LinkedIn"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="./Images/youtube.png" alt="YouTube"></a></li>
-            </ul>
-        </div>
-        <div class="footer-section contact">
-            <h2 class="translate" data-en="Contact Us" data-fr="Contactez-nous">Contactez-nous</h2>
-            <div class="contact-info">
-                <p><i class="fas fa-map-marker-alt"></i> 1 Rue de la Légion d'Honneur, 75007 Paris, France</p>
-                <p><i class="fas fa-envelope"></i> info@sae2024.com</p>
-                <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
+    <div class="content-area">
+        <div class="wrapper1 text-center">
+            <h2 id="form">Trouver</h2>
+        
+            <form class="form" method="post" action="?controller=trouver&action=trouver">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="label" for="searchFilm">Champ 1</label>
+                    <input type="text" class="form-control" id="searchFilm" name="champ1" placeholder="Entrez le nom d'un film ou acteur" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="label" for="searchFilm">Champ 2</label>
+                    <input type="text" class="form-control" id="searchActor" name="champ2" placeholder="Entrez le nom d'un film ou acteur" required>
+                </div>
             </div>
+
+            <div class="form-group">
+                <label for="searchType">Type de recherche :</label>
+                <select class="form-control" id="searchType" name="type">
+                    <option value="film">Film</option>
+                    <option value="acteur">Acteur</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button">Rechercher</button>
+        </form>
+
         </div>
     </div>
-    <div class="footer-bottom">
-        &copy; 2024 Findercine. Tous droits réservés.
+
+    
+
+
+    <div class="wrapper">
+        <div class="container">
+            <input type="radio" name="slide" id="c1" checked>
+            <label for="c1" class="card">
+                <div class="row">
+                    <div class="description">
+                        <h4>Recherche</h4>
+                        <p>Rechercher vos acteurs et vos film préférer</p>
+                        <a href="?controller=recherche" class="button btn-c1">Découvrir</a>
+                    </div>
+                </div>
+            </label>
+            <input type="radio" name="slide" id="c2" >
+            <label for="c2" class="card">
+                <div class="row">
+                    <div class="description">
+                        <h4>Chemin le plus court</h4>
+                        <p>Découvrer le chemin le plus court entre vos acteur ou vos film </br>préférer</p>
+                        <a href="?controller=rapprochement" class="button btn-c1">Découvrir</a>
+                    </div>
+                </div>
+            </label>
+            <input type="radio" name="slide" id="c3" >
+            <label for="c3" class="card">
+                <div class="row">
+                    <div class="description">
+                        <h4>Compte</h4>
+                        <p>Connecter vous pour accéder à des fonctionnalité excptionnel</p>
+                        <a href="?controller=connect" class="button btn-c1">Découvrir</a>
+                    </div>
+                </div>
+            </label>
+        </div>
     </div>
-</footer>
 
-<script>
-    ScrollReveal().reveal('.scroll-reveal', {
-        delay: 200,
-        distance: '100px',
-        duration: 800,
-        origin: 'bottom',
-        reset: true,
-        viewFactor: 0.6
-    });
+<?php require "Views/view_footer.php";?>
+</body>
+</html>
 
-    const targetCount = 20000; 
-    const counterElement = document.getElementById('counter');
 
-    function animateCounting(start, end, duration) {
-        const startTime = new Date().getTime();
-        const interval = setInterval(() => {
-            const currentTime = new Date().getTime();
-            const progress = Math.min((currentTime - startTime) / duration, 1);
-            const count = Math.floor(start + progress * (end - start));
-            counterElement.innerText = count;
-
-            if (progress === 1) {
-                clearInterval(interval);
-            }
-        }, 16); 
-    }
-
-    animateCounting(0, targetCount, 2000);
-</script>
 
 </body>
+</html>

@@ -22,7 +22,7 @@
 body{
   min-height: 100vh;
   width: 100%;
-  background: #009579;
+  background-color: black;
 }
 .container{
   position: absolute;
@@ -121,97 +121,18 @@ body{
     color: black; 
     border: 2px solid #4CAF50;
 }
-
-
-      header {
-            background: linear-gradient(#b992db);
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            z-index: 1;
-            padding-bottom: 20px;
-
-        }
-
-        #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            background-image: url('Images/findercine1.jpg');
-            background-size: cover;
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            z-index: 1;
-        }
-
-        nav a {
-            color: black;
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            position: relative;
-        }
-
-        nav a:before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: black;
-            visibility: hidden;
-            transform: scaleX(0);
-            transition: all 0.3s ease-in-out;
-        }
-
-        nav a:hover:before {
-            visibility: visible;
-            transform: scaleX(1);
-        }
-
-        .header-text-container {
-            text-align: center;
-            color: white;
-            margin-top: 50px;
-            z-index: 1;
-        }
-
-        .header-text-container h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .header-text-container p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-
-        h1{
-          padding-bottom: 20px;
-        }
-
+  
 </style>
-<header>
-    <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
+<body>   
+<!-- <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
     <nav class="scroll-reveal">
         <a class="translate" href="?controller=home">Accueil</a>
         <a class="translate" href="?controller=recherche">Rechercher</a>
         <a class="translate" href="?controller=trouver">Trouver</a>
-        <a class="translate" href="?controller=rapprochement">Rapprochement</a>
+        <a class="translate" href="?controller=rapprochement">Rapprochement</a> -->
+
         <?php
+    require "Views/view_navbar.php";
     // Récupérer la variable 'retour' de l'URL
     if(isset($_GET['retour'])){
         $retour = trim(e($_GET['retour']));
@@ -249,42 +170,39 @@ body{
                   </div>";
         }
     }
-    ?>
-
-    </nav>
-</header>  
+    ?> 
 <div class="container">
     <input type="checkbox" id="check">
     <div class="login form">
-        <h1>Login</h1>
+        <h1>Connection</h1>
         <form id="loginForm" action="?controller=connect&action=login" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
-            <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
+            <input type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
-            <input type="password" placeholder="Enter your password" name="passWord" class="form-control" required>
-            <a href="?controller=resetPassWord">Forgot password?</a>
-            <input type="submit" class="btn btn-primary submit-btn" value="Login">
+            <input type="password" placeholder="Entrer votre mot de passe" name="passWord" class="form-control" required>
+            <a href="?controller=resetPassWord">Mot de passe oublier ?</a>
+            <input type="submit" class="btn btn-primary submit-btn" value="Connection">
         </form>
         <div class="signup">
-            <span class="signup">Don't have an account?
-             <label for="check">Signup</label>
+            <span class="signup">Pas de compte ?
+             <label for="check">Creer un compte</label>
             </span>
         </div>
     </div>
     <div class="registration form">
-        <h1>Signup</h1>
+        <h1>Creer un compte</h1>
         <form id="signupForm" action="?controller=connect&action=signup" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
-            <input type="text" placeholder="Enter your username" name="userName" class="form-control" required>
+            <input type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez créer un mot de passe.</div>
-            <input type="password" id="signupPassword" placeholder="Create a password" name="passWord" class="form-control" required>
+            <input type="password" id="signupPassword" placeholder="Créer un mot de passe" name="passWord" class="form-control" required>
             <div class="invalid-feedback">Veuillez confirmer votre mot de passe.</div>
-            <input type="password" id="confirmPassword" placeholder="Confirm your password" class="form-control" name="secondPassword" required>
-            <input type="submit" class="btn btn-primary submit-btn" value="Signup">
+            <input type="password" id="confirmPassword" placeholder="Confirmer votre mot de passe" class="form-control" name="secondPassword" required>
+            <input type="submit" class="btn btn-primary submit-btn" value="Creer un compte">
         </form>
         <div class="signup">
-            <span class="signup">Already have an account?
-             <label for="check">Login</label>
+            <span class="signup">Vous avez un compte
+             <label for="check">Connection</label>
             </span>
         </div>
     </div>
@@ -335,8 +253,6 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 // });
 
 </script>
-
-
 
 </body>
 </html>

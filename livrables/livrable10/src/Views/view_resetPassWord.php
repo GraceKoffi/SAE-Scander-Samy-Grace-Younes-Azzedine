@@ -8,8 +8,14 @@
     <!-- Inclure Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<style>
+    .bouton{
+        margin-top: 20px;
+    }
+</style>
 <body>
 <?php
+require "Views/view_navbar.php";
 if(isset($_GET['retour'])){
         $retour = trim(e($_GET['retour']));
         switch ($retour) {
@@ -77,10 +83,10 @@ if(isset($tab)){
             <form action='?controller=resetPassWord&action=resetEtape1' method='post'>
                 <div class='form-group'>
                     <h2>Veuillez saisir un utilisateur</h2>
-                    <label for='username'>Username</label>
+                    <label for='username'>Nom d'utilisateur</label>
                         <input type='text' class='form-control' id='username' name='username' required>
-                        <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
-                        <a href='?' class='btn btn-default' id='cancel-changes'>Annuler</a>
+                        <input type='submit' class='bouton btn btn-primary submit-btn' value='Passer prochaine etape'>
+                        <a href='?' class='bouton btn btn-default' id='cancel-changes'>Annuler</a>
                 </div>
             </form>
             ";
@@ -97,7 +103,7 @@ if(isset($tab)){
                                         <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
                                         <button type='submit' class='btn' id='save-changes'>
                                             <a href='?controller=resetPassWord&action=resetEtape1' 
-                                            class='btn btn-default' id='cancel-changes'>Revenir en arriére</a>
+                                            class='bouton btn btn-default' id='cancel-changes'>Revenir en arriére</a>
                                         </button>
                                         </div>
                                     </form>
@@ -111,9 +117,9 @@ if(isset($tab)){
                                     <input type='email' class='form-control' id='email' name='email' value='$email' required disabled>
                                     <button type='button' class'btn btn-outline-secondary' id='edit-email'>Edit</button>
                                     <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
-                                        <button type='submit' class='btn' id='save-changes'>
+                                        <button type='submit' class='bouton btn' id='save-changes'>
                                          <a href='?controller=resetPassWord&action=resetEtape1' 
-                                    class='btn btn-default' id='cancel-changes'>Revenir en arriére</a>
+                                    class='bouton btn btn-default' id='cancel-changes'>Revenir en arriére</a>
                                 </button>
                             </div>
                         </form>

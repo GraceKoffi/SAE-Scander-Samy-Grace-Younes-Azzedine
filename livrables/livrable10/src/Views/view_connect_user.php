@@ -149,11 +149,14 @@
             font-size: 18px;
             margin-bottom: 15px;
         }
-  
+        
+        .paragraphe{
+            margin-top: 80px;
+        }
   </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
@@ -167,8 +170,9 @@
                 <li class="nav-item"><a class="nav-link" href="?controller=connect&action=logout">Logout</a></li>
             </ul>
         </div>
-    </nav>
+    </nav> -->
     <?php
+    require "Views/view_navbar.php";
     // Récupérer la variable 'retour' de l'URL
     if(isset($_GET['retour'])){
         $retour = trim(e($_GET['retour']));
@@ -200,7 +204,7 @@
     }
     ?>
 
-    <div class="jumbotron text-center">
+    <div class="jumbotron paragraphe text-center">
         <h1 class="display-4">Salut, <?php echo $_SESSION['username'];?> !</h1>
         <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
         <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
@@ -218,7 +222,7 @@
                 }
                 else{
                     $rechercheTime = $tab["RecherTime"]["recherche"];
-                    $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+                    $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
                 }
                 ?>
                 <span class="date"><?php echo $formattedDateTime; ?></span>    
@@ -248,7 +252,7 @@
         }
         else{
             $rechercheTime = $tab["RecherTime"]["trouver"];
-            $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+            $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
         }
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>
@@ -278,7 +282,7 @@
         }
         else{
             $rechercheTime = $tab["RecherTime"]["rapprochement"];
-            $formattedDateTime = date("d/m/Y H:i", strtotime($rechercheTime));
+            $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
         }
         ?>
         <span class="date"><?php echo $formattedDateTime; ?></span>

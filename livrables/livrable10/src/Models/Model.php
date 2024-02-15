@@ -615,7 +615,7 @@ class Model
         COUNT(CASE WHEN typeRecherche = 'Rapprochement' THEN 1 END) AS CountRapprochement,
         COUNT(CASE WHEN typeRecherche = 'Recherche' THEN 1 END) AS CountRecherche
         FROM
-            RechercheDataE
+            RechercheData
         WHERE
             userId = :userId;
         ";
