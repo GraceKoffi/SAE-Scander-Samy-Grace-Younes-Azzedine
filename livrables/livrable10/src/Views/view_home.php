@@ -95,31 +95,53 @@ body {
 }
 
 
+
+.carousel-caption {
+    position: absolute;
+    bottom: 20px; /* Ajustez selon la marge souhaitée du bas */
+    left: 20px; /* Ajustez selon la marge souhaitée du bord gauche */
+    text-align: left;
+    color: white; /* Pour la couleur du titre */
+}
+
+.poster {
+    width: 210px; /* Taille du poster */
+    position: absolute; /* Positionnement absolu */
+    bottom: 20px; /* Ajustez pour aligner avec le bas du carousel */
+    left: 80px; /* Ajustez pour aligner avec le bord gauche du carousel */
+}
+
+.caption-title {
+    position: absolute; /* Positionnement absolu */
+    bottom: 80px; /* Ajustez pour aligner avec le bas du carousel */
+    left: 320px; /* Ajustez en fonction de la largeur du poster plus la marge désirée */
+    font-size : 300px;
+}
+
 </style>
+<div class="m-4">
+<h1 style="margin-top:100px">FinderCine</h1>
+<p> 
+Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous les cinéphiles ! Tout comme IMDB, FinderCine vous propose un univers complet dédié au cinéma et à la télévision, où vous pouvez explorer une base de données exhaustive de films, séries TV, acteurs, réalisateurs, et bien plus encore. Que vous cherchiez à découvrir les dernières sorties, à vous plonger dans les critiques des œuvres ou à trouver des recommandations personnalisées selon vos goûts, FinderCine est l'outil parfait pour satisfaire votre passion pour le septième art. Avec une interface conviviale et des fonctionnalités innovantes, nous vous offrons une expérience immersive et enrichissante, vous permettant de rester au courant des tendances actuelles, de participer à des discussions animées avec une communauté de passionnés, et de suivre vos créateurs favoris. Rejoignez-nous sur FinderCine et commencez dès aujourd'hui votre voyage cinématographique !</p>
+</div>
 
 <?php
-$api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
-
-// Utilisation de cURL pour récupérer les films actuellement en salle
-$movie_data = file_get_contents($url);
-
-$movies = json_decode($movie_data, true)['results'];
-
-$tab_poster = [];
-
-// Parcourir la liste des films
-foreach ($movies as $movie) {
-    $backdrop_path = $movie['backdrop_path'];
-    $tab_poster[] = $backdrop_path;
-}
+var_dump($caroussel[0]);
 ?>
-
+<div class="col-8">
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="3500">
     <div class="carousel-inner">
-        <?php foreach ($tab_poster as $index => $poster) : ?>
+        <?php foreach ($caroussel as $index => $movie) : ?>
             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                <img class="d-block w-100" style="width: auto; height: auto;" src="https://image.tmdb.org/t/p/w1280<?= $poster ?>" alt="Slide <?= $index + 1 ?>">
+                <img class="d-block w-100" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
+                <div class="carousel-caption d-none d-md-block">
+                    <div class="caption-poster">
+                        <img src="https://image.tmdb.org/t/p/w500<?= $movie['poster_path'] ?>" alt="<?= $movie['title'] ?> Poster" class="poster">
+                    </div>
+                    <div class="caption-title">
+                        <h5><?= $movie['title'] ?></h5>
+                    </div>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
@@ -132,7 +154,11 @@ foreach ($movies as $movie) {
         <span class="sr-only">Next</span>
     </a>
 </div>
+        </div>
 
+
+
+        
 
 <?php
 
