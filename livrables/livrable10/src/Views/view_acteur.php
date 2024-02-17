@@ -103,6 +103,32 @@ body {
 
 
 <?php 
+if(isset($_GET['retour'])){
+    $retour = trim(e($_GET['retour']));
+    switch ($retour) {
+        case 1:
+            $message = "Commentaire ajouté avec succés";
+            $alertClass = "alert-success";
+            break;
+        case -1:
+            $message = "Une erreur est survenu";
+            $alertClass = "alert-danger";
+            break;
+        default:
+            $message = "";
+            $alertClass = "";
+    }
+
+
+    // Si un message a été défini, afficher l'alerte
+    if ($message != "") {
+        echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                $message
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+              </div>";
+    }
+    
+}
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $id_acteur = '';
 if(isset($_GET['id'])){

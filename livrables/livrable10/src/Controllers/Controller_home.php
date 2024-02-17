@@ -130,15 +130,17 @@ Class Controller_home extends Controller{
                 ];
                 try{
                     $m->addCommentaryMovie($data);
-                    $_SESSION['id'] = $id;
+                    $_GET['retour'] = '1';
                     $this->action_information_movie();
                 }
                 catch(PDOException $e){
-                    $this->render("error", ["tab" => "Une erreur est survenu"]);
+                    $_GET['retour'] = '-1';
+                    $this->action_information_movie();
                 }
         }
         else{
-            $this->render("error", ["tab" => "Une erreur est survenu"]);
+            $_GET['retour'] = '-1';
+            $this->action_information_movie();
         }
     }
 
@@ -164,15 +166,18 @@ Class Controller_home extends Controller{
                 ];
                 try{
                     $m->addCommentaryActor($data);
-                    $_SESSION['id'] = $id;
+                    $_GET['retour'] = '1';
+                    
                     $this->action_information_acteur();
                 }
                 catch(PDOException $e){
-                    $this->render("error", ["tab" => "Une erreur est survenu"]);
+                    $_GET['retour'] = '-1';
+                    $this->action_information_acteur();
                 }
         }
         else{
-            $this->render("error", ["tab" => "Une erreur est survenu"]);
+            $_GET['retour'] = '-1';
+            $this->action_information_acteur();
         }
     }
 
