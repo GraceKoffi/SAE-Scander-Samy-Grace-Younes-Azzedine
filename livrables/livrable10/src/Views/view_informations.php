@@ -127,15 +127,39 @@ body {
 </style>
 
 <?php
+if(isset($_GET['retour'])){
+    $retour = trim(e($_GET['retour']));
+    switch ($retour) {
+        case 1:
+            $message = "Commentaire ajouté avec succés";
+            $alertClass = "alert-success";
+            break;
+        case -1:
+            $message = "Une erreur est survenu";
+            $alertClass = "alert-danger";
+            break;
+        default:
+            $message = "";
+            $alertClass = "";
+    }
+
+
+    // Si un message a été défini, afficher l'alerte
+    if ($message != "") {
+        echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                $message
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+              </div>";
+    }
+    
+}
+
 $id_imdb = '';
 if(isset($_GET['id'])){
     $id_imdb = $_GET['id'];
 } 
 else if(isset($_GET['filmId'])){
     $id_imdb = $_GET['filmId'];
-}
-else{
-    $id_imdb = $_SESSION['id'];
 }
 echo $id_imdb;
 var_dump($id_imdb);
@@ -411,6 +435,12 @@ if (isset($_SESSION['username'])) {
             });
         });
         */
+        var alertElement = document.getElementById('myAlert');
+
+// Faire disparaître l'alerte après 3 secondes
+        window.setTimeout(function() {
+            alertElement.setAttribute('hidden', true);
+        }, 2000);
      var submitBtn = document.getElementById('submitBtn');
     var alertNotLoggedIn = document.getElementById('alertNotLoggedIn');
 
