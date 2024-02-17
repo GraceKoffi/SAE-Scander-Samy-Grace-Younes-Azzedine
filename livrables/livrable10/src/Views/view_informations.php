@@ -1,5 +1,10 @@
 <?php require "Views/view_navbar.php"; ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <style>
 body {
     background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
@@ -48,7 +53,76 @@ body {
     color: black; /* Texte en noir */
 }
 
+.custom-modal {
+            color: black;
+        }
 
+        /* Style personnalisé pour le texte du formulaire */
+        .custom-form-label {
+            color: black;
+        }
+
+        /* Style personnalisé pour le bouton d'envoi */
+        .custom-submit-btn {
+            background-color: white;
+            color: black;
+        }
+        .comment-bubble {
+            background-color: yellow;
+            color: black;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        /* Style personnalisé pour le nom de l'auteur */
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Style personnalisé pour la note du commentaire */
+        .comment-note {
+            margin-bottom: 5px;
+        }
+
+        .check{
+            color: black;
+        }
+        .titre{
+            color: black;
+        }
+        /* Style pour le fil des notes */
+        .rating-range {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            margin-top: 10px;
+        }
+
+        .note{
+            color: black;
+        }
+        
+        .form{
+            text-align: center;
+        }
+
+        .comment-rating {
+        font-size: 14px;
+        font-weight: bold;
+        color: #007bff; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
+        margin-top: 5px; /* Espace entre le titre et la note */
+        }
+
+/* CSS pour le message "Aucun commentaire" */
+        .no-comments {
+            font-size: 16px;
+            font-weight: bold;
+            color: #888; /* Couleur du texte pour le cas où il n'y a pas de commentaires */
+            text-align: center;
+            margin-top: 20px; /* Espace entre le message et le reste du contenu */
+        }
 
 </style>
 
@@ -60,6 +134,11 @@ if(isset($_GET['id'])){
 else if(isset($_GET['filmId'])){
     $id_imdb = $_GET['filmId'];
 }
+else{
+    $id_imdb = $_SESSION['id'];
+}
+echo $id_imdb;
+var_dump($id_imdb);
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
@@ -153,8 +232,104 @@ if (isset($_SESSION['username'])) {
     ";
 }
 ?>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+<!-- La modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+            <!-- En-tête de la modal -->
+            <div class="modal-header">
+                <h5 class="modal-title titre">Commentaires</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
+            <!-- Corps de la modal -->
+            <div class="modal-body">
+                <!-- Affichage des commentaires -->
+                <!-- Exemple de données commentaires -->
+                <?php
+                if (!empty($commentaires)) {
+                    $m = Model::getModel();
+                    foreach ($commentaires as $commentaire) {
+                        if($commentaire['anonyme']){
+                            $author = $m->getUsername($commentaire['userid'])['username'];
+                        }
+                        else{
+                            $author = 'Anonyme';
+                        }
+                        
+                        $title = $commentaire['titrecom'];
+                        $content = $commentaire['commentary'];
+                        $rating = $commentaire['rating'];
+                ?>
+                        <div class="comment-bubble">
+                            <div class="comment-author"><?php echo $author; ?></div>
+                            <div class="comment-title"><?php echo $title; ?></div>
+                            <div class="comment-rating">Note : <?php echo $rating; ?></div>
+                            <?php echo $content; ?>
+                        </div>
+                <?php
+                    }
+                } else {
+                ?>
+                    <div class="no-comments">Aucun commentaire</div>
+                <?php
+                }
+                ?>
+            </div>
 
+            <!-- Pied de la modal -->
+            <div class="modal-footer form">
+                <!-- Formulaire pour ajouter un commentaire -->
+                <form id="commentForm" action="?controller=home&action=ajoutComMovie&id=<?php echo $id_imdb;?>" method="post">
+                    <div class="form-group">
+                        <label class="custom-form-label">Anonyme :</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousYes" value="0" checked required>
+                            <label class="form-check-label check" for="anonymousYes">Oui</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousNo" value="1" required>
+                            <label class="form-check-label check" for="anonymousNo">Non</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentTitle" class="custom-form-label">Titre du commentaire :</label>
+                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentNote" class="custom-form-label">Note :</label>
+                        <!-- Fil des notes -->
+                        <div class="rating-range note">
+                            <span>0</span>
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
+                            <span>4</span>
+                            <span>5</span>
+                        </div>
+                        <!-- Note (1-5) -->
+                        <input type="range" class="form-control-range" id="commentNote" name="commentNote" min="0" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentInput" class="custom-form-label">Ajouter un commentaire :</label>
+                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required></textarea>
+                    </div>
+                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
+                        Vous devez être connecté pour envoyer un commentaire.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary custom-submit-btn" id="submitBtn">Envoyer</button>
+            </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+     
                     </div>
                 </div>
             </div>
@@ -236,6 +411,19 @@ if (isset($_SESSION['username'])) {
             });
         });
         */
+     var submitBtn = document.getElementById('submitBtn');
+    var alertNotLoggedIn = document.getElementById('alertNotLoggedIn');
+
+    submitBtn.addEventListener('click', function() {
+        // Vérifier si la variable de session existe
+       
+        <?php if (!isset($_SESSION['username'])) : ?>
+            // Afficher l'alerte si l'utilisateur n'est pas connecté
+            alertNotLoggedIn.style.display = 'block';
+            // Empêcher l'envoi du formulaire
+            event.preventDefault();
+        <?php endif; ?>
+    });
     </script>
 
         <?php require "Views/view_footer.php"; ?>
