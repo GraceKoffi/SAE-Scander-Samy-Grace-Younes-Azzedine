@@ -51,9 +51,12 @@ Class Controller_home extends Controller{
         else if(isset($_GET['filmId'])){
             $id = $_GET['filmId'];
         }
+        else{
+            $id = $_SESSION['id'];
+        }
+        $tab = $m->getCommentaryMovie(trim(e($id)));
         if(isset($_SESSION['username'])){
             $userId = $m->getUserId($_SESSION['username'])["userid"];
-            var_dump($m->favorieExistFilm($userId, trim(e($id))));
             
             if(empty($m->favorieExistFilm($userId, trim(e($id))))){
                 $_SESSION['favori'] = 'false';
@@ -65,8 +68,10 @@ Class Controller_home extends Controller{
         $tab = [ 'info' => $m->getInformationsMovie(trim(e($id))),
                   'realisateur'=>$m->getInformationsDirector(trim(e($id))),
                   'acteur'=>$m->getInformationsActeurParticipant(trim(e($id))),
+                  'commentaires'=>$tab
             
             ];
+            
             $this->render("informations", $tab);
         
 
@@ -80,6 +85,10 @@ Class Controller_home extends Controller{
         else if(isset($_GET['acteurId'])){
             $id = $_GET['acteurId'];
         }
+        else{
+            $id = $_SESSION['id'];
+        }
+        $tab = $m->getCommentaryActor(trim(e($id)));
         if(isset($_SESSION['username'])){
             $userId = $m->getUserId($_SESSION['username'])["userid"];
             if(empty($m->favorieExistFilm($userId, trim(e($id))))){
@@ -91,13 +100,82 @@ Class Controller_home extends Controller{
         }
         $tab = [ 'titre'=>$m->getInformationsFilmParticipant(trim(e($id))),
                   'info'=>$m->getInformationsActeur(trim(e($id))),
-                  
-            
+                  'commentaires'=>$tab
             ];
         $this->render("acteur", $tab);
 
 
     }
+
+    public function action_ajoutComMovie(){
+        $id = '';
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+        }
+        else if(isset($_GET['filmId'])){
+            $id = $_GET['filmId'];
+        }
+        
+        if(isset($_POST['anonymous']) && isset($_POST['commentTitle']) && 
+            isset($_POST['commentNote']) && isset($_POST['commentInput']) && isset($_SESSION['username'])){
+            
+                $m = Model::getModel();
+                $data = [
+                    "userId" => $m->getUserId($_SESSION['username'])["userid"],
+                    "movieId" => trim(e($id)),
+                    "TitreCom" => $_POST['commentTitle'],
+                    "commentary" => $_POST['commentInput'],
+                    "anonyme" => $_POST['anonymous'],
+                    "rating" => $_POST['commentNote']
+                ];
+                try{
+                    $m->addCommentaryMovie($data);
+                    $_SESSION['id'] = $id;
+                    $this->action_information_movie();
+                }
+                catch(PDOException $e){
+                    $this->render("error", ["tab" => "Une erreur est survenu"]);
+                }
+        }
+        else{
+            $this->render("error", ["tab" => "Une erreur est survenu"]);
+        }
+    }
+
+    public function action_ajoutComActeur(){
+        $id = '';
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+        }
+        else if(isset($_GET['acteurId'])){
+            $id = $_GET['acteurId'];
+        }
+        
+        if(isset($_POST['anonymous']) && isset($_POST['commentTitle'])&& 
+            isset($_POST['commentNote']) && isset($_POST['commentInput']) && isset($_SESSION['username'])){
+                $m = Model::getModel();
+                $data = [
+                    "userId" => $m->getUserId($_SESSION['username'])["userid"],
+                    "ActorID" => trim(e($id)),
+                    "TitreCom" => $_POST['commentTitle'],
+                    "commentary" => $_POST['commentInput'],
+                    "anonyme" => $_POST['anonymous'],
+                    "rating" => $_POST['commentNote']
+                ];
+                try{
+                    $m->addCommentaryActor($data);
+                    $_SESSION['id'] = $id;
+                    $this->action_information_acteur();
+                }
+                catch(PDOException $e){
+                    $this->render("error", ["tab" => "Une erreur est survenu"]);
+                }
+        }
+        else{
+            $this->render("error", ["tab" => "Une erreur est survenu"]);
+        }
+    }
+
 
     public function action_contact(){
         $m = Model::getModel();

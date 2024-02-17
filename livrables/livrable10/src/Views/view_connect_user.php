@@ -208,6 +208,7 @@
         <h1 class="display-4">Salut, <?php echo $_SESSION['username'];?> !</h1>
         <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
         <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
+        <a href="?controller=connect&action=logout"><button class="btn btn-primary">Logout</button></a>
        
     </div>
     

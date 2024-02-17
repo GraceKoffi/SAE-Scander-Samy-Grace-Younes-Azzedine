@@ -113,3 +113,26 @@ CREATE TABLE FavorieActeur (
     FOREIGN KEY (userId) REFERENCES UserData(userId)
 );
 
+DROP TABLE IF EXISTS CommentaryMovie CASCADE;
+CREATE TABLE CommentaryMovie (
+    CommentaryMovieID SERIAL PRIMARY KEY,
+    userId INT,
+    MovieId TEXT,
+    TitreCom TEXT,
+    Commentary TEXT,
+    Anonyme BOOLEAN,
+    Rating INT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);
+
+DROP TABLE IF EXISTS CommentaryActor CASCADE;
+CREATE TABLE CommentaryActor (
+    CommentaryActorID SERIAL PRIMARY KEY,
+    userId INT,
+    ActorID TEXT,
+    TitreCom TEXT,
+    Commentary TEXT,
+    Anonyme BOOLEAN,
+    Rating INT,
+    FOREIGN KEY (userId) REFERENCES UserData(userId)
+);

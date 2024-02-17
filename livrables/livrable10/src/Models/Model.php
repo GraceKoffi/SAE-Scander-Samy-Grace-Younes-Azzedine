@@ -438,6 +438,63 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    public function getCommentaryMovie($MovieId){
+        $sql = "SELECT * FROM CommentaryMovie WHERE MovieId = :MovieId ORDER BY CommentaryMovieID DESC;";
+        $query = $this->bd->prepare($sql);
+        $MovieId = trim(e($MovieId));
+        $query->bindParam(":MovieId", $MovieId, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getCommentaryActor($ActorID){
+        $sql = "SELECT * FROM CommentaryActor WHERE ActorID = :ActorID ORDER BY CommentaryActorID DESC;";
+        $query = $this->bd->prepare($sql);
+        $ActorID = trim(e($ActorID));
+        $query->bindParam(":ActorID", $ActorID, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addCommentaryMovie($data){
+        $sql = "INSERT INTO CommentaryMovie (userId, MovieId, TitreCom, Commentary, Anonyme, Rating) 
+                VALUES (:userId, :movieId, :TitreCom, :commentary, :anonyme, :rating)";
+        $query = $this->bd->prepare($sql);
+        $userId = trim(e($data["userId"]));
+        $movieId = trim(e($data["movieId"]));
+        $titreCom =  trim(e($data["TitreCom"]));
+        $commentary = trim(e($data["commentary"]));
+        $anonyme = trim(e($data["anonyme"]));
+        $rating = trim(e($data["rating"]));
+
+        $query->bindParam(":userId", $userId, PDO::PARAM_STR);
+        $query->bindParam(":movieId", $movieId, PDO::PARAM_INT);
+        $query->bindParam(":TitreCom", $titreCom, PDO::PARAM_STR);
+        $query->bindParam(":commentary", $commentary, PDO::PARAM_STR);
+        $query->bindParam(":anonyme", $anonyme, PDO::PARAM_BOOL);
+        $query->bindParam(":rating", $rating, PDO::PARAM_INT);
+        $query->execute();
+    }
+
+    public function addCommentaryActor($data){
+        $sql = "INSERT INTO CommentaryActor (userId, ActorID, TitreCom, Commentary, Anonyme, Rating) 
+                VALUES (:userId, :ActorID, :commentary, :anonyme, :rating)";
+        $query = $this->bd->prepare($sql);
+        $userId = trim(e($data["userId"]));
+        $ActorId = trim(e($data["ActorID"]));
+        $titreCom =  trim(e($data["TitreCom"]));
+        $commentary = trim(e($data["commentary"]));
+        $anonyme = trim(e($data["anonyme"]));
+        $rating = trim(e($data["rating"]));
+
+        $query->bindParam(":userId", $userId, PDO::PARAM_STR);
+        $query->bindParam(":ActorID", $ActorId, PDO::PARAM_INT);
+        $query->bindParam(":TitreCom", $titreCom, PDO::PARAM_STR);
+        $query->bindParam(":commentary", $commentary, PDO::PARAM_STR);
+        $query->bindParam(":anonyme", $anonyme, PDO::PARAM_BOOL);
+        $query->bindParam(":rating", $rating, PDO::PARAM_INT);
+        $query->execute();
+    }
 
     public function getNcont($primaryName){
         $sql = "SELECT nconst
@@ -464,6 +521,14 @@ class Model
         return $query->fetch(PDO::FETCH_NUM);
     }
     
+    public function getUserName($userId){
+        $sql = "SELECT username FROM UserData WHERE userId = :userId";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":userId", $userId, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getUserId($username) {
         $sql = "SELECT userId FROM UserData WHERE username = :username";
         $query = $this->bd->prepare($sql);
