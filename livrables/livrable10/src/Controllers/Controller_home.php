@@ -24,7 +24,7 @@ Class Controller_home extends Controller{
         if (isset($_POST["search-input"])){
 
             $tab = [ 'resultat' => $m->voirtousresultat($_POST["search-input"]),
-                            
+                    'recherche'=> $_POST["search-input"],    
                         
                         ];
                     $this->render("voirtousresultat", $tab);
@@ -33,7 +33,7 @@ Class Controller_home extends Controller{
         else{
 
             $tab = [ 'resultat' => $m->voirtousresultat($_GET["mot"]),
-                            
+                       'recherche'=> $_GET["mot"],    
                         
                       ];
                     $this->render("voirtousresultat", $tab);
