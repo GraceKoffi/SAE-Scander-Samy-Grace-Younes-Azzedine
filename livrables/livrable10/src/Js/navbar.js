@@ -85,7 +85,7 @@ $(document).ready(function() {
                     var suggestionsList = '<ul class="list-group">';
                     
                     suggestions.forEach(function(suggestion, index) {
-                        var name = suggestion.name || 'Inconnu';
+                        var recherche = suggestion.recherche || 'Inconnu';
                         var role = suggestion.role || 'Inconnu';
                         var date = suggestion.date || 'Inconnu';
 
@@ -96,9 +96,9 @@ $(document).ready(function() {
                         suggestionsList += `
                             <li class="list-group-item">
                             <a href="${link}"  class="list-group-item list-group-item-action">
-                            <img id="suggestion-img-${index}" alt="${name}" class="suggestion-image" src="">
+                            <img id="suggestion-img-${index}" alt="${recherche}" class="suggestion-image" src="">
                                 <div class="suggestion-details">
-                                    <h3 class="suggestion-name">${name}</h3>
+                                    <h3 class="suggestion-name">${recherche}</h3>
                                     <p class="suggestion-role">${role}</p>
                                     <p class="suggestion-date">${date}</p>
                                 </div>
@@ -113,14 +113,14 @@ $(document).ready(function() {
                     $('#search-suggestions').html(suggestionsList);
                     $('#search-suggestions').show();
                     suggestions.forEach(function(suggestion, index) {
-                        if (suggestion.type === 'acteur') {
+                        if (suggestion.type === 'Personne') {
                             getImageNameBasic(suggestion.id).then(imageSrc => {
                                 $(`#suggestion-img-${index}`).attr('src', imageSrc);
                             }).catch(error => {
                                 console.error('An error occurred:', error);
                                 $(`#suggestion-img-${index}`).attr('src', './Images/depannage.jpg');
                             });
-                        } else if (suggestion.type === 'film') {
+                        } else if (suggestion.type === 'Titre') {
                             getImageTitleBasics(suggestion.id).then(imageSrc => {
                                 $(`#suggestion-img-${index}`).attr('src', imageSrc);
                             }).catch(error => {

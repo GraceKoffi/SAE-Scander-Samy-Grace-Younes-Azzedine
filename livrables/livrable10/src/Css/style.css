@@ -185,5 +185,95 @@ footer a {
     font-weight: bold; /* Police en gras */
     transform: scale(1.3);/*grossissement*/
 }
+body{
+
+    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
+    color : White;
+    font-family: 'Calibri', sans-serif;
 
 
+}
+h1{
+
+    color:#FFCC00;
+}
+#pagination-container button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFCC00;
+    cursor: pointer;
+    color:white;
+  }
+  
+  #pagination-container button.active {
+    background-color: #2C2C2B;
+    color: #FFCC00;
+    border: none;
+  }
+  
+  #pagination-container button:hover {
+    filter: brightness(55%); /* Assombrit le bouton de 15% */
+  }
+  
+.cardrecherche{
+
+  background-color: #2C2C2B; /* Gris foncé */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); /* Effet d'ombre 3D */
+  display: flex;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  text-decoration: none; /* Enlève le soulignement des liens */
+}
+.cardrecherche:hover {
+    transform: scale(1.05); /* Zoom de 5% */
+    transition: transform 0.3s ease; /* Animation fluide sur 0.3 secondes */
+    border: 1px solid #FFCC00;
+  }
+  .cardrecherche img {
+    width: 150px;
+    object-fit: cover; /* Assure que l'image couvre l'espace dédié */
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+  }
+  
+  .card-bodyrecherche {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1; /* Permet à card-body de prendre l'espace restant */
+  }
+  
+  .card-titlerecherche {
+    margin-bottom: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-daterecherche {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .card-rolerecherche {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  .card-genrerecherche {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .card-noterecherche {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  

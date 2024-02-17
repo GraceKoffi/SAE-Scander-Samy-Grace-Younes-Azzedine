@@ -13,17 +13,22 @@ class Controller_recherche extends Controller {
 
         if ($_POST['typeselection'] == 'titre') {
             $titre = isset($_POST['search']) && trim($_POST['search']) !== '' ? $_POST['search'] : null;
-            $types = isset($_POST['types']) && trim($_POST['types']) !== '' ? $_POST['types'] : null;
+            $types = isset($_POST['types']) ? $_POST['types'] : null;
             $dateSortieMin = isset($_POST['dateSortieMin']) && trim($_POST['dateSortieMin']) !== '' ? $_POST['dateSortieMin'] : null;
             $dateSortieMax = isset($_POST['dateSortieMax']) && trim($_POST['dateSortieMax']) !== '' ? $_POST['dateSortieMax'] : null;
             $dureeMin = isset($_POST['dureeMin']) && trim($_POST['dureeMin']) !== '' ? $_POST['dureeMin'] : null;
             $dureeMax = isset($_POST['dureeMax']) && trim($_POST['dureeMax']) !== '' ? $_POST['dureeMax'] : null;
             $genresArray = isset($_POST['genres']) ? $_POST['genres'] : null;
             $genres = $this->buildGenresRegex($genresArray);
-        
+            $noteMin = isset($_POST['noteMin']) && $_POST['noteMin'] !== '' ? $_POST['noteMin'] : null;
+            $noteMax = isset($_POST['noteMax']) && $_POST['noteMax'] !== '' ? $_POST['noteMax'] : null;
+            $votesMin = isset($_POST['votesMin']) && $_POST['votesMin'] !== '' ? $_POST['votesMin'] : null;
+            $votesMax = isset($_POST['votesMax']) && $_POST['votesMax'] !== '' ? $_POST['votesMax'] : null;
             
             $tab = [
-                "recherchetitre" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres),     
+                "recherchetitre" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax), 
+                "titrerecherche" => $titre,  
+                 
             ];
             
             if(isset($_SESSION['username'])){
@@ -38,21 +43,23 @@ class Controller_recherche extends Controller {
                     $this->render("error", $tab);
                 }
             }
-            $this->render("recherche", $tab);
+            $this->render("rechercheavancee_resultat", $tab);
 
             
 
 
         } elseif ($_POST['typeselection'] == 'personne') {
-            $nom = isset($_POST['search']) && $_POST['search'] !== '' ? $_POST['search'] : null;
-            $dateNaissance = isset($_POST['dateNaissance']) && $_POST['dateNaissance'] !== '' ? $_POST['dateNaissance'] : null;
-            $dateDeces = isset($_POST['dateDeces']) && $_POST['dateDeces'] !== '' ? $_POST['dateDeces'] : null;
+            $nom= isset($_POST['search']) && trim($_POST['search']) !== '' ? $_POST['search'] : null;            
+            $dateNaissanceMin = isset($_POST['dateNaissanceMin']) && trim($_POST['dateNaissanceMin']) !== '' ? $_POST['dateNaissanceMin'] : null;
+            $dateNaissanceMax = isset($_POST['dateNaissanceMax']) && trim($_POST['dateNaissanceMax']) !== '' ? $_POST['dateNaissanceMax'] : null;
+            $dateDecesMin = isset($_POST['dateDecesMin']) && trim($_POST['dateDecesMin']) !== '' ? $_POST['dateDecesMin'] : null;
+            $dateDecesMax = isset($_POST['dateDecesMax']) && trim($_POST['dateDecesMax']) !== '' ? $_POST['dateDecesMax'] : null;
             $metierArray = isset($_POST['metier']) && $_POST['metier'] !== '' ? $_POST['metier'] : null;
             $metier = $this->buildGenresRegex($metierArray);
             
-            $resultatActeur=$m->recherchepersonne($nom,$dateNaissance,$dateDeces,$metier,$pageActeur,$perPageActeur,$_SESSION['orderby']);
+            
 
-            $tab = ["recherchepersonne" => $resultatActeur['recherchepersonne'],
+            $tab = ["recherchepersonne" =>$resultatActeur=$m->recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier),
         
         
         ];

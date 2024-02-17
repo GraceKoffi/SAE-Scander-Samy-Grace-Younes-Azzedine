@@ -218,14 +218,14 @@ class Model
     }
 
     public function suggestion($mot) {
-        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS name, 'acteur' AS type, birthYear AS date, primaryProfession AS role
+        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS recherche, 'Personne' AS type, birthYear AS date, primaryProfession AS role
         FROM name_basics
         WHERE primaryName ILIKE :mot
         LIMIT 2)
         
         UNION ALL
         
-        (SELECT tconst AS id, primaryTitle AS name, 'film' AS type, startYear AS date, titleType AS role
+        (SELECT tconst AS id, primaryTitle AS recherche, 'Titre' AS type, startYear AS date, titleType AS role
         FROM title_basics
         WHERE primaryTitle ILIKE :mot
         LIMIT 3)
@@ -243,13 +243,13 @@ class Model
     }
 
     public function voirtousresultat($mot) {
-        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS name, 'acteur' AS type, birthYear AS date, primaryProfession AS role
+        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS recherche, 'Personne' AS type, birthYear AS date, primaryProfession AS role
         FROM name_basics
         WHERE primaryName ILIKE :mot )
         
         UNION ALL
         
-        (SELECT tconst AS id, primaryTitle AS name, 'film' AS type, startYear AS date, titleType AS role
+        (SELECT tconst AS id, primaryTitle AS recherche, 'Titre' AS type, startYear AS date, titleType AS role
         FROM title_basics
         WHERE primaryTitle ILIKE :mot );
         
@@ -265,19 +265,25 @@ class Model
     }
 
 
-  
-    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres) {
-        $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres
+    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax) {
+        $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres,tr.averagerating , tr.numvotes
                 FROM title_basics tb
+                LEFT JOIN title_ratings tr ON tr.tconst=tb.tconst
                 WHERE 1=1 ";
     
         if ($titre !== null) {
-            //$sql .= " AND tb.primaryTitle = :titre";
-            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.2";
+            $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.5";
         }
-       
-        if ($types !== null) {
-            $sql .= " AND tb.titletype = :types";
+    
+        if(!empty($types)){
+            $sql .= " AND (";
+            foreach ($types as $index => $type) {
+                if ($index > 0) {
+                    $sql .= " OR ";
+                }
+                $sql .= "tb.titletype = :type$index";
+            }
+            $sql .= ")";
         }
     
         if ($dateSortieMin !== null) {
@@ -295,24 +301,40 @@ class Model
         if ($dureeMax !== null) {
             $sql .= " AND tb.runtimeminutes <= :dureeMax";
         }
-       
+    
         if ($genres !== null) {
             $sql .= " AND tb.genres ~* :genres";
         }
-        
-
+        if ($noteMin !== null) {
+            $sql .= " AND tr.averageRating>= :noteMin";
+        }
+    
+        if ($noteMax !== null) {
+            $sql .= " AND tr.averageRating <= :noteMax";
+        }
+    
+        if ($votesMin !== null) {
+            $sql .= " AND tr.numVotes >= :votesMin";
+        }
+    
+        if ($votesMax !== null) {
+            $sql .= " AND tr.numVotes <= :votesMax";
+        }
+       
         $requete = $this->bd->prepare($sql);
-
-
+    
         if ($titre !== null) {
             $titre = '%' . $titre . '%';
             $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
         }
-
-        if ($types !== null) {
-                $requete->bindParam(':types', $types, PDO::PARAM_STR);
+    
+        if (!empty($types)) {
+            foreach ($types as $index => $type) {
+                $paramName = ":type$index";
+                $requete->bindParam($paramName, $types[$index], PDO::PARAM_STR);
             }
-        
+        }
+    
         if ($dateSortieMin !== null) {
             $requete->bindParam(':dateSortieMin', $dateSortieMin, PDO::PARAM_INT);
         }
@@ -329,75 +351,83 @@ class Model
             $requete->bindParam(':dureeMax', $dureeMax, PDO::PARAM_INT);
         }
     
-
         if ($genres !== null) {
             $requete->bindParam(':genres', $genres, PDO::PARAM_STR);
         }
-
+        if ($noteMin !== null) {
+            $requete->bindParam(':noteMin', $noteMin, PDO::PARAM_INT);
+        }
     
+        if ($noteMax !== null) {
+            $requete->bindParam(':noteMax', $noteMax, PDO::PARAM_INT);
+        }
+    
+        if ($votesMin !== null) {
+            $requete->bindParam(':votesMin', $votesMin, PDO::PARAM_INT);
+        }
+    
+        if ($votesMax !== null) {
+            $requete->bindParam(':votesMax', $votesMax, PDO::PARAM_INT);
+        }
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
-
-    
     }
     
-        
     
-    public function recherchepersonne($nom,$dateNaissance,$dateDeces,$metier,$pageActeur, $perPageActeur, $ordre) {
-     $sql = "SELECT  COUNT(*) OVER() AS total, nconst, primaryname, birthyear, deathyear, primaryprofession
+    public function recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier) {
+     $sql = "SELECT nconst, primaryname, birthyear, deathyear, primaryprofession
             FROM name_basics
             WHERE 1=1 ";
             
 
             if ($nom !== null) {
-                $sql .= " AND similarity (primaryname, :nom) > 0.4 ";
+                $sql .= " AND similarity (primaryname, :nom) > 0.5 ";
             }
     
-            if ($dateNaissance !== null) {
-                $sql .= " AND birthyear = :dateNaissance ";
+            if ($dateNaissanceMin !== null) {
+                $sql .= " AND birthyear >= :dateNaissanceMin ";
             }
-
-            if ($dateDeces !== null) {
-                $sql .= " AND deathyear = :dateDeces ";
+            if ($dateNaissanceMax !== null) {
+                $sql .= " AND birthyear <= :dateNaissanceMax ";
+            }
+            if ($dateDecesMin !== null) {
+                $sql .= " AND deathyearyear >= :dateDecesMin ";
+            }
+            if ($dateDecesMax !== null) {
+                $sql .= " AND deathyear <= :dateDecesMax ";
             }
             if ($metier !== null) {
                 $sql .= " AND primaryprofession ~* :metier";
+                
             }
-            $sql .= " ORDER BY " . $ordre;
-
-            $sql .= " LIMIT :perPageActeur OFFSET :offset ;";
-      
+            $sql .= ";";
 
         $requete = $this->bd->prepare($sql);
-
-      $total = ($pageActeur - 1) * $perPageActeur;
-
-        // Ajoutez les paramètres pour la pagination
-        $requete->bindParam(':perPageActeur', $perPageActeur, PDO::PARAM_INT);
-        $requete->bindParam(':offset', $total, PDO::PARAM_INT);
-           
 
             if ($nom !== null) {
                 $nom = '%' . $nom . '%';
                 $requete->bindParam(':nom', $nom, PDO::PARAM_STR);
             }
-            if ($dateNaissance !== null) {
-                $requete->bindParam(':dateNaissance', $dateNaissance, PDO::PARAM_INT);
+            if ($dateNaissanceMin !== null) {
+                $requete->bindParam(':dateNaissanceMin', $dateNaissanceMin, PDO::PARAM_INT);
             }
-            if ($dateDeces !== null) {
-                $requete->bindParam(':dateDeces', $dateDeces, PDO::PARAM_INT);
+            if ($dateNaissanceMax !== null) {
+                $requete->bindParam(':dateNaissanceMax', $dateNaissanceMax, PDO::PARAM_INT);
+            }
+            if ($dateDecesMin !== null) {
+                $requete->bindParam(':dateDecesMin', $dateDecesMin, PDO::PARAM_INT);
+            }
+            if ($dateDecesMax !== null) {
+                $requete->bindParam(':dateDecesMax', $dateDecesMax, PDO::PARAM_INT);
             }
             if ($metier !== null) {
                 $requete->bindParam(':metier', $metier, PDO::PARAM_STR);
             }
         $requete->execute();
 
-        $resultats = $requete->fetchAll(PDO::FETCH_ASSOC);
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
 
-        return [
-            'totalResultatActeur' => $resultats[0]['total'],
-            'recherchepersonne' => $resultats
-        ];
+        
     }
     
 
