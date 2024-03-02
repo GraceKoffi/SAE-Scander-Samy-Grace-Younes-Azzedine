@@ -282,21 +282,32 @@ function displayValue(value, defaultValue) {
     document.getElementById("pagination-container").style.display = "none";
     document.getElementById("count").innerText = "";
 }
-  async function getFilmPhoto(id) {
-    const apiKey = "9e1d1a23472226616cfee404c0fd33c1";
-    const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=fr`;
+async function getFilmPhoto(id) {
+  const apiKey = "9e1d1a23472226616cfee404c0fd33c1";
+  const url = `https://api.themoviedb.org/3/find/${id}?api_key=${apiKey}&language=fr&external_source=imdb_id`;
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+  try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-        // Retourne le chemin de l'image de dépannage si aucun poster n'est trouvé
-        return data.poster_path ? `https://image.tmdb.org/t/p/w400${data.poster_path}` : "./Images/depannage.jpg";
-    } catch (error) {
-        console.error("Erreur lors de la récupération des données:", error);
-        return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
-    }
+      // Liste des catégories de résultats à vérifier
+      const resultCategories = ["movie_results", "tv_results", "tv_episode_results", "tv_season_results"];
+
+      for (const category of resultCategories) {
+          if (data[category].length > 0 && data[category][0].poster_path) {
+              // Retourne le premier poster trouvé
+              return `https://image.tmdb.org/t/p/w400${data[category][0].poster_path}`;
+          }
+      }
+
+      // Si aucun poster n'est trouvé dans aucune catégorie
+      return "./Images/depannage.jpg";
+  } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+      return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
+  }
 }
+
 
 
 async function getPersonnePhoto(id) {
