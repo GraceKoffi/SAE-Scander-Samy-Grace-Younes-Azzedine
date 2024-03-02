@@ -77,11 +77,11 @@ function displayValue(value, defaultValue) {
     paginationContainer.appendChild(pageItem);
   }
   
-  function renderPagination1() {
+  function renderPagination1(tab) {
     const paginationContainer1 = document.getElementById('paginationrecherche1');
     paginationContainer1.innerHTML = ''; // Efface la pagination actuelle
   
-    let pageCount1 = Math.ceil(movies1.length / moviesPerPage);
+    let pageCount1 = Math.ceil(tab.length / moviesPerPage);
   
     // Toujours afficher le premier bouton de page
     appendPageButton1(1);
@@ -143,11 +143,11 @@ function displayValue(value, defaultValue) {
   
     paginationContainer1.appendChild(pageItem1);
   }
-  function renderPagination2() {
+  function renderPagination2(tab2) {
     const paginationContainer2 = document.getElementById('paginationrecherche2');
     paginationContainer2.innerHTML = ''; // Efface la pagination actuelle
   
-    let pageCount2 = Math.ceil(movies2.length / moviesPerPage);
+    let pageCount2 = Math.ceil(tab2.length / moviesPerPage);
   
     // Toujours afficher le premier bouton de page
     appendPageButton2(1);

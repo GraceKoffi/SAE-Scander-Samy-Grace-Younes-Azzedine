@@ -331,27 +331,27 @@ class Model
             $requete = $this->bd->prepare("SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
                 FROM name_basics
                 WHERE primaryname ILIKE :mot
-                LIMIT 5;");
+                LIMIT 4;");
         } elseif ($type == "tout") {
             $requete = $this->bd->prepare("(
                 SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
                 FROM name_basics
                 WHERE primaryname ILIKE :mot
-                LIMIT 5
+                LIMIT 4
                 
             ) UNION (
                 SELECT tconst AS id, primarytitle AS nom, startyear as annee, genres AS details
                 FROM title_basics
                 WHERE primarytitle ILIKE :mot
-                LIMIT 5
+                LIMIT 4
                
-            ) LIMIT 5;");
+            ) LIMIT 4;");
         } else {
             $requete = $this->bd->prepare("SELECT tb.tconst AS id, tb.primarytitle AS nom, tb.startyear as annee, tb.genres AS details
                 FROM title_basics tb
                 WHERE tb.primarytitle ILIKE :mot
                 AND tb.titletype = :category
-                LIMIT 5;");
+                LIMIT 4;");
             $requete->bindParam(':category', $type, PDO::PARAM_STR);
         }
         

@@ -122,8 +122,8 @@ async function displayMovies() {
         }
     }
     submitButton.disabled = errorDisplayed;
-    renderPagination1();
-    renderPagination2();
+    renderPagination1(movies1);
+    renderPagination2(movies2);
 }
 
 
