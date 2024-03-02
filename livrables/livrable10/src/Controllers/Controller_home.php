@@ -4,9 +4,9 @@ Class Controller_home extends Controller{
 
     public function action_home(){
         $m = Model::getModel();
-        if (isset($_POST["suggestion"])) {
+        if (isset($_POST["suggestion"]) && isset($_POST["category"]) ) {
            
-            $suggestions = $m->suggestion($_POST["suggestion"]);
+            $suggestions = $m->suggestion($_POST["suggestion"],$_POST["category"]);
             
             // Renvoyer les suggestions sous forme de JSON.
             echo json_encode($suggestions);
@@ -19,29 +19,19 @@ Class Controller_home extends Controller{
            $this->render("home",$tab);
     }
     
-    public function action_voirtousresultat(){
+    public function action_voirtousresultat() {
         $m = Model::getModel();
-        if (isset($_POST["search-input"])){
-
-            $tab = [ 'resultat' => $m->voirtousresultat($_POST["search-input"]),
-                    'recherche'=> $_POST["search-input"],    
-                        
-                        ];
-                    $this->render("voirtousresultat", $tab);
-
-        }
-        else{
-
-            $tab = [ 'resultat' => $m->voirtousresultat($_GET["mot"]),
-                       'recherche'=> $_GET["mot"],    
-                        
-                      ];
-                    $this->render("voirtousresultat", $tab);
-
-                    }      
-
-
+        $searchInput = $_POST["search-input"] ?? $_GET["mot"];
+        $type= $_POST["category"] ?? $_GET["category"];
+        $tab = [
+            'recherche' => $m->voirtousresultat($searchInput,$type),
+            'titre' => $searchInput,
+            'category'=>$type,
+            
+        ];
+        $this->render("voirtousresultat", $tab);
     }
+    
     
     public function action_information_movie(){
         $m = Model::getModel();

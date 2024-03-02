@@ -1,12 +1,67 @@
+/******************************************/
+/* FORMULAIRE*/
+/******************************************/
+label{
 
 
+    border-left:2px solid #FFCC00;
+    padding-left: 6px;
+   
+}
+.formulaire{
 
+    border : 1px solid #FFCC00;
+    margin : 10px;
+    border-radius: 10px 10px 10px 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    
+}
+
+.choices__list--multiple .choices__item .choices__button{
+    border-left: 1px solid white;
+
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: #FFCC00;
+    color:black;
+}
+/* Style des bulles de sélection */
+.choices__list--multiple .choices__item {
+    background-color: #FFCC00; /* Fond jaune pour les bulles sélectionnées */
+    color: black; /* Texte noir pour les bulles sélectionnées */
+    border: 1px solid #FFCC00;
+}
+
+/* Style de la liste déroulante */
+.choices__list--dropdown .choices__item--choice {
+    background-color: #0c0c0c;/* Fond noir pour les éléments de liste */
+    color: white; /* Texte blanc pour les éléments de liste */
+}
+
+/* Style de la liste déroulante au survol */
+.choices__list--dropdown .choices__item--choice:hover {
+    background-color: #FFCC00; /* Fond jaune au survol */
+    color: black; /* Texte noir au survol */
+}
+
+/* Style pour les messages d'erreur */
+div[id$="-error"] {
+    margin-top: 5px;
+    font-size: 0.9em; /* Texte un peu plus petit */
+}
+
+/******************************************/
+/* NAVBAR*/
+/******************************************/
 .navbar-brand, .navbar-nav .nav-link {
     transition: color 0.3s; /* Transition de la couleur sur 0.3 secondes */
     color: white !important; /* Texte blanc */
     font-family: 'Calibri', sans-serif; /* Police Calibri */
     
 }
+
+
 
 .navbar-nav .nav-link:hover {
     color: #fafaf8 !important; /* Couleur blanc au survol */
@@ -134,19 +189,22 @@
     flex-grow: 1; /* Permet au conteneur de détails de prendre tout l'espace restant dans .list-group-item */
 }
 
-.suggestion-name {
+.suggestion-1 {
     font-size: 1em; /* Augmente la taille de la police pour le nom, le rendant plus grand */
     margin-bottom: 2px; /* Ajoute une petite marge en dessous du nom pour l'espacer du reste du texte */
     color: white;
 }
 
-.suggestion-role {
+.suggestion-2 {
     font-style: italic; /* Rend le texte du rôle en italique */
     color: #777; /* Définit la couleur du texte du rôle en gris moyen */
     margin-bottom: 0;
 }
 
-.suggestion-date {
+.suggestion-3 {
+    color: #555; /* Définit la couleur du texte de la date en gris foncé */
+}
+.suggestion-4 {
     color: #555; /* Définit la couleur du texte de la date en gris foncé */
 }
 
@@ -158,7 +216,9 @@
 }
 
 
-/* CSS pour le pied de page */
+/******************************************/
+/* FOOTER*/
+/******************************************/
 
 footer {
     background-color: #000000; /* Fond noir */
@@ -185,6 +245,10 @@ footer a {
     font-weight: bold; /* Police en gras */
     transform: scale(1.3);/*grossissement*/
 }
+
+/******************************************/
+/* CORPS*/
+/******************************************/
 body{
 
     background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
@@ -197,6 +261,9 @@ h1{
 
     color:#FFCC00;
 }
+/******************************************/
+/* RESULTAT*/
+/******************************************/
 #pagination-container button {
     padding: 5px 10px;
     margin: 0 5px;
@@ -214,6 +281,44 @@ h1{
   }
   
   #pagination-container button:hover {
+    filter: brightness(55%); /* Assombrit le bouton de 15% */
+  }
+  #pagination-container1 button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFCC00;
+    cursor: pointer;
+    color:white;
+  }
+  
+  #pagination-container1 button.active {
+    background-color: #2C2C2B;
+    color: #FFCC00;
+    border: none;
+  }
+  
+  #pagination-container1 button:hover {
+    filter: brightness(55%); /* Assombrit le bouton de 15% */
+  }
+  #pagination-container2 button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFCC00;
+    cursor: pointer;
+    color:white;
+  }
+  
+  #pagination-container2 button.active {
+    background-color: #2C2C2B;
+    color: #FFCC00;
+    border: none;
+  }
+  
+  #pagination-container2 button:hover {
     filter: brightness(55%); /* Assombrit le bouton de 15% */
   }
   
@@ -248,30 +353,30 @@ h1{
     flex-grow: 1; /* Permet à card-body de prendre l'espace restant */
   }
   
-  .card-titlerecherche {
+  .card-1recherche {
     margin-bottom: 0.25rem;
     font-size: 1.25rem;
     font-weight: bold;
   }
   
-  .card-daterecherche {
+  .card-2recherche {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     color: #666;
   }
   
-  .card-rolerecherche {
+  .card-3recherche {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     color: #666;
   }
-  .card-genrerecherche {
+  .card-4recherche {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     color: #666;
   }
   
-  .card-noterecherche {
+  .card-5recherche {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     color: #666;

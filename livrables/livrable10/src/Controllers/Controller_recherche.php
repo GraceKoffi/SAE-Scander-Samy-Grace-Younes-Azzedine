@@ -24,10 +24,12 @@ class Controller_recherche extends Controller {
             $noteMax = isset($_POST['noteMax']) && $_POST['noteMax'] !== '' ? $_POST['noteMax'] : null;
             $votesMin = isset($_POST['votesMin']) && $_POST['votesMin'] !== '' ? $_POST['votesMin'] : null;
             $votesMax = isset($_POST['votesMax']) && $_POST['votesMax'] !== '' ? $_POST['votesMax'] : null;
-            
+            $type_rech = isset($_POST['modeRecherche']) ? $_POST['modeRecherche'] : null;
+
             $tab = [
-                "recherchetitre" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax), 
-                "titrerecherche" => $titre,  
+                "recherche" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech), 
+                "titre" => $titre, 
+                "typereponse" =>$_POST['typeselection'],
                  
             ];
             
@@ -35,7 +37,7 @@ class Controller_recherche extends Controller {
                 $data = [
                     "UserName" => $_SESSION['username'],
                     "TypeRecherche" => "Recherche",
-                    "MotsCles" => $_POST['search']
+                    "MotsCles" => $titre
                 ];
                 $result = $m->addUserRecherche($data);
                 if(!empty($result)){
@@ -56,16 +58,29 @@ class Controller_recherche extends Controller {
             $dateDecesMax = isset($_POST['dateDecesMax']) && trim($_POST['dateDecesMax']) !== '' ? $_POST['dateDecesMax'] : null;
             $metierArray = isset($_POST['metier']) && $_POST['metier'] !== '' ? $_POST['metier'] : null;
             $metier = $this->buildGenresRegex($metierArray);
-            
+            $type_rech = isset($_POST['modeRecherche']) ? $_POST['modeRecherche'] : null;
+
             
 
-            $tab = ["recherchepersonne" =>$resultatActeur=$m->recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier),
-        
+            $tab = ["recherche" =>$m->recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier,$type_rech),
+                    "titre" => $nom, 
+                    "typereponse" =>$_POST['typeselection'],
         
         ];
-        
+        if(isset($_SESSION['username'])){
+            $data = [
+                "UserName" => $_SESSION['username'],
+                "TypeRecherche" => "Recherche",
+                "MotsCles" => $titre
+            ];
+            $result = $m->addUserRecherche($data);
+            if(!empty($result)){
+                $tab = ["tab" => $result["message"]];
+                $this->render("error", $tab);
+            }
+        }
 
-            $this->render("recherche", $tab);
+            $this->render("rechercheavancee_resultat", $tab);
         }
     }
 

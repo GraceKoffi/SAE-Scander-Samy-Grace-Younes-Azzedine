@@ -216,65 +216,167 @@ class Model
         $requete->execute();
         return $requete->fetch(PDO::FETCH_ASSOC);
     }
-
-    public function suggestion($mot) {
-        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS recherche, 'Personne' AS type, birthYear AS date, primaryProfession AS role
-        FROM name_basics
-        WHERE primaryName ILIKE :mot
-        LIMIT 2)
-        
-        UNION ALL
-        
-        (SELECT tconst AS id, primaryTitle AS recherche, 'Titre' AS type, startYear AS date, titleType AS role
-        FROM title_basics
-        WHERE primaryTitle ILIKE :mot
-        LIMIT 3)
-        
+    
+    public function doublonFilm($titre,$category) {
+        $titre = trim($titre);
        
-        LIMIT 5;
-         ");
-   
-
-        $mot = trim($mot);
-        $mot= "%".$mot."%";
-        $requete->bindParam(':mot', $mot, PDO::PARAM_STR);
-        $requete->execute();
-        return $requete->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function voirtousresultat($mot) {
-        $requete = $this->bd->prepare("(SELECT nconst AS id, primaryName AS recherche, 'Personne' AS type, birthYear AS date, primaryProfession AS role
-        FROM name_basics
-        WHERE primaryName ILIKE :mot )
-        
-        UNION ALL
-        
-        (SELECT tconst AS id, primaryTitle AS recherche, 'Titre' AS type, startYear AS date, titleType AS role
+            
+            $sql = "SELECT COUNT(*)
         FROM title_basics
-        WHERE primaryTitle ILIKE :mot );
+        WHERE lower(primarytitle) = lower(:titre)";
         
         
-         ");
-   
+        if($category !== "all"){
 
-         $mot = trim($mot);//retirer les espace au debut et à la fin 
-        $mot= "%".$mot."%";
+            $sql .= " AND titletype = :category ";
+        }
+        
+        
+        $sql .= " ; ";
+        $requete = $this->bd->prepare($sql);
+        if($category !== "all"){
+
+            $requete->bindParam(':category', $category, PDO::PARAM_STR);
+        }
+       
+        $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_COLUMN);  
+    }
+
+    public function listeDoublon($titre,$category) {
+        $titre = trim($titre);
+                    
+            $sql = "SELECT *
+        FROM title_basics
+        WHERE lower(primarytitle) = lower(:titre)";
+         if($category !== "all"){
+            $sql .= " AND titletype = :category ";
+         }
+       
+        $sql .= "; ";
+        $requete = $this->bd->prepare($sql);
+        if($category !== "all"){
+
+            $requete->bindParam(':category', $category, PDO::PARAM_STR);
+        }
+        $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function doublonActeur($personne) {
+        $personne = trim($personne);
+        $requete = $this->bd->prepare("SELECT COUNT(*) 
+        FROM name_basics
+        WHERE lower(primaryname) = lower(:personne) ;");
+       
+       
+        $requete->bindParam(':personne', $personne, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_COLUMN);  
+        }
+
+    public function listeDoublonActeur($personne) {
+        $personne = trim($personne);
+        $requete = $this->bd->prepare("SELECT * 
+        FROM name_basics
+        WHERE lower(primaryname) = lower(:personne) ;");
+       
+       
+        $requete->bindParam(':personne', $personne, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function voirtousresultat($mot,$type) {
+        $mot = trim($mot);
+        $mot = "%" . $mot . "%";
+        
+        if ($type == "personne") {
+            $requete = $this->bd->prepare("SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
+                FROM name_basics
+                WHERE primaryname ILIKE :mot ; ");
+        } elseif ($type == "tout") {
+            $requete = $this->bd->prepare("(
+                SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
+                FROM name_basics
+                WHERE primaryname ILIKE :mot
+                
+                
+            ) UNION (
+                SELECT tconst AS id, primarytitle AS nom, startyear as annee, genres AS details
+                FROM title_basics
+                WHERE primarytitle ILIKE :mot
+                
+               
+            );");
+        } else {
+            $requete = $this->bd->prepare("SELECT tconst AS id, primarytitle AS nom, startyear as annee, genres AS details
+                FROM title_basics
+                WHERE primarytitle ILIKE :mot
+                AND titletype = :category
+                ;");
+            $requete->bindParam(':category', $type, PDO::PARAM_STR);
+        }
+        
         $requete->bindParam(':mot', $mot, PDO::PARAM_STR);
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function suggestion($mot, $type) {
+        $mot = trim($mot);
+        $mot = "%" . $mot . "%";
+        
+        if ($type == "personne") {
+            $requete = $this->bd->prepare("SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
+                FROM name_basics
+                WHERE primaryname ILIKE :mot
+                LIMIT 5;");
+        } elseif ($type == "tout") {
+            $requete = $this->bd->prepare("(
+                SELECT nconst AS id, primaryname AS nom, birthyear as annee, primaryprofession AS details
+                FROM name_basics
+                WHERE primaryname ILIKE :mot
+                LIMIT 5
+                
+            ) UNION (
+                SELECT tconst AS id, primarytitle AS nom, startyear as annee, genres AS details
+                FROM title_basics
+                WHERE primarytitle ILIKE :mot
+                LIMIT 5
+               
+            ) LIMIT 5;");
+        } else {
+            $requete = $this->bd->prepare("SELECT tb.tconst AS id, tb.primarytitle AS nom, tb.startyear as annee, tb.genres AS details
+                FROM title_basics tb
+                WHERE tb.primarytitle ILIKE :mot
+                AND tb.titletype = :category
+                LIMIT 5;");
+            $requete->bindParam(':category', $type, PDO::PARAM_STR);
+        }
+        
+        $requete->bindParam(':mot', $mot, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 
-    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax) {
+    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech) {
         $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres,tr.averagerating , tr.numvotes
                 FROM title_basics tb
                 LEFT JOIN title_ratings tr ON tr.tconst=tb.tconst
                 WHERE 1=1 ";
     
-        if ($titre !== null) {
+        if ($type_rech == "similarity") {
             $sql .= " AND similarity(tb.primaryTitle, :titre) > 0.5";
         }
-    
+        else if ($type_rech == "like") {
+            $sql .= " AND tb.primaryTitle ILIKE :titre";
+        }
+        else{
+            $sql .= " AND LOWER(tb.primaryTitle) = LOWER(:titre)";
+        }
+
         if(!empty($types)){
             $sql .= " AND (";
             foreach ($types as $index => $type) {
@@ -323,8 +425,13 @@ class Model
        
         $requete = $this->bd->prepare($sql);
     
-        if ($titre !== null) {
+        if ($type_rech == "similarity" || $type_rech == "like") {
+            $titre =trim($titre);
             $titre = '%' . $titre . '%';
+            $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
+        }
+        else{
+            $titre =trim($titre);
             $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
         }
     
@@ -374,16 +481,22 @@ class Model
     }
     
     
-    public function recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier) {
+    public function recherchepersonne($nom,$dateNaissanceMin,$dateNaissanceMax,$dateDecesMin,$dateDecesMax,$metier,$type_rech) {
      $sql = "SELECT nconst, primaryname, birthyear, deathyear, primaryprofession
             FROM name_basics
             WHERE 1=1 ";
             
 
-            if ($nom !== null) {
-                $sql .= " AND similarity (primaryname, :nom) > 0.5 ";
+            
+            if ($type_rech == "similarity") {
+                $sql .= " AND similarity(primaryname, :nom) > 0.5";
             }
-    
+            else if ($type_rech == "like") {
+                $sql .= " AND primaryname ILIKE :nom";
+            }
+            else{
+                $sql .= " AND LOWER(primaryname) = LOWER(:nom)";
+            }
             if ($dateNaissanceMin !== null) {
                 $sql .= " AND birthyear >= :dateNaissanceMin ";
             }
@@ -391,7 +504,7 @@ class Model
                 $sql .= " AND birthyear <= :dateNaissanceMax ";
             }
             if ($dateDecesMin !== null) {
-                $sql .= " AND deathyearyear >= :dateDecesMin ";
+                $sql .= " AND deathyear >= :dateDecesMin ";
             }
             if ($dateDecesMax !== null) {
                 $sql .= " AND deathyear <= :dateDecesMax ";
@@ -404,10 +517,15 @@ class Model
 
         $requete = $this->bd->prepare($sql);
 
-            if ($nom !== null) {
+            if ($type_rech == "similarity" || $type_rech == "like") {
+                $nom =trim($nom);
                 $nom = '%' . $nom . '%';
                 $requete->bindParam(':nom', $nom, PDO::PARAM_STR);
             }
+            else{
+                $nom =trim($nom);
+                $requete->bindParam(':nom', $nom, PDO::PARAM_STR);
+            }    
             if ($dateNaissanceMin !== null) {
                 $requete->bindParam(':dateNaissanceMin', $dateNaissanceMin, PDO::PARAM_INT);
             }
@@ -429,19 +547,41 @@ class Model
 
         
     }
-    
+    public function gettconstunique($titre){
 
+        $titre = trim($titre);
+        $requete = $this->bd->prepare("SELECT tconst 
+        FROM title_basics
+        WHERE lower(primarytitle) = lower(:titre) ; ");
+       
+       
+        $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_COLUMN);        
+    }
+    public function getnconstunique($nom){
+
+        $nom = trim($nom);
+        $requete = $this->bd->prepare("SELECT nconst 
+        FROM name_basics
+        WHERE lower(primaryname) = lower(:nom) ; ");
+       
+       
+        $requete->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_COLUMN);        
+    }
     public function FilmEnCommun($primaryName1, $primaryName2)
     {
         
 
-        $sql = "SELECT tb.primaryTitle
+        $sql = "SELECT tb.tconst, tb.primaryTitle,tb.titletype, tb.startyear, tb.genres
         FROM title_basics AS tb
         JOIN title_principals AS tp1 ON tb.tconst = tp1.tconst
         JOIN title_principals AS tp2 ON tb.tconst = tp2.tconst
         JOIN name_basics AS nb1 ON tp1.nconst = nb1.nconst
         JOIN name_basics AS nb2 ON tp2.nconst = nb2.nconst
-        WHERE nb1.primaryName = :actor1 AND nb2.primaryName = :actor2;"; //Type Acteur Facultatif
+        WHERE nb1.nconst= :actor1 AND nb2.nconst = :actor2;"; //Type Acteur Facultatif
         
         $query = $this->bd->prepare($sql);
         $query->bindParam(':actor1', $primaryName1, PDO::PARAM_STR);
@@ -450,20 +590,20 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     } 
 
-    public function ActeurEnCommun($primaryTitle1, $primaryTitle2)
+    public function ActeurEnCommun($t1, $t2)
     {
        
 
-        $sql = "SELECT DISTINCT nb1.nconst, nb1.primaryName
+        $sql = "SELECT DISTINCT nb1.nconst, nb1.primaryName, nb1.birthyear, nb1.primaryprofession
         FROM name_basics AS nb1
         JOIN title_principals AS tp1 ON nb1.nconst = tp1.nconst
         JOIN title_basics AS tb1 ON tp1.tconst = tb1.tconst
         JOIN title_principals AS tp2 ON nb1.nconst = tp2.nconst
         JOIN title_basics AS tb2 ON tp2.tconst = tb2.tconst
-        WHERE tb1.primaryTitle = :movie1 AND tb2.primaryTitle = :movie2;"; //Type Acteur Facultatif
+        WHERE tb1.tconst = :movie1 AND tb2.tconst = :movie2;"; //Type Acteur Facultatif
         $query = $this->bd->prepare($sql);
-        $query->bindParam(':movie1', $primaryTitle1, PDO::PARAM_STR);
-        $query->bindParam(':movie2', $primaryTitle2, PDO::PARAM_STR);
+        $query->bindParam(':movie1', $t1, PDO::PARAM_STR);
+        $query->bindParam(':movie2', $t2, PDO::PARAM_STR);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
 }

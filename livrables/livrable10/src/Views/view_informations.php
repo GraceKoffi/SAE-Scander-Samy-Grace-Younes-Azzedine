@@ -305,7 +305,7 @@ if (isset($_SESSION['username'])) {
             </div>
 
             <!-- Pied de la modal -->
-            <div class="modal-footer form">
+            <div class="modal-footer form mx-auto">
                 <!-- Formulaire pour ajouter un commentaire -->
                 <form id="commentForm" action="?controller=home&action=ajoutComMovie&id=<?php echo $id_imdb;?>" method="post">
                     <div class="form-group">
