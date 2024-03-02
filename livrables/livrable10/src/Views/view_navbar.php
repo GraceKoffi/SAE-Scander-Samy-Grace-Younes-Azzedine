@@ -49,9 +49,24 @@
      
     <div class="search-container" style="position: relative;">
     <form class="input-group barrederecherche" action="?controller=home&action=voirtousresultat" method="POST">
+        <select class="custom-select" name="category" id="category" style="max-width: 120px;">
+            <option value="tout">Tout</option>
+            <option value="personne">Personne</option>
+            <option value="movie">Movie</option>
+            <option value="tvSeries">TV Series</option>
+            <option value="tvEpisode">TV Episode</option>
+            <option value="video">Video</option>
+            <option value="tvSpecial">TV Special</option>
+            <option value="tvPilot">TV Pilot</option>
+            <option value="short">Short</option>
+            <option value="videoGame">Video Game</option>
+            <option value="tvMiniSeries">TV Mini-Series</option>
+            <option value="tvMovie">TV Movie</option>
+            <option value="tvShort">TV Short</option>
+        </select>
         <input type="text" class="form-control" name="search-input" id="search-input" placeholder="Recherche un film, une serie, un acteur, ..." aria-label="Search">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit" id="search-btn" style="background-color: #FFCC00; border: 1px solid #FFCC00;" >
+            <button class="btn btn-outline-secondary" type="submit" id="search-btn" style="background-color: #FFCC00; border: 1px solid #FFCC00;">
                 <i class="fas fa-search"></i>
             </button>
         </div>

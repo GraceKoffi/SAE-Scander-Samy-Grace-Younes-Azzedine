@@ -61,74 +61,78 @@ function getImageNameBasic(idImdb) {
 }
 
 
-// Déclaration de la variable globale pour suivre la dernière requête AJAX
+
+
 var Derniere_requete;
 
 $(document).ready(function() {
     $('#search-input').on('input', function() {
         var searchQuery = $(this).val();
+        var category = $('#category').val();
+
         $('#search-suggestions').empty();
 
-        // Annuler la dernière requête si elle existe
         if (Derniere_requete) {
             Derniere_requete.abort();
         }
 
-        if (searchQuery.length > 2) {
-            // Faire une nouvelle requête AJAX pour obtenir les suggestions
+        
             Derniere_requete = $.ajax({
                 url: '?controller=home&action=home', // Assurez-vous que cette URL est correcte.
                 type: 'POST',
-                data: { suggestion: searchQuery },
+                data: {
+                    suggestion: searchQuery,
+                    category: category
+                },
                 success: function(data) {
                     var suggestions = JSON.parse(data);
                     var suggestionsList = '<ul class="list-group">';
-                    
-                    suggestions.forEach(function(suggestion, index) {
-                        var recherche = suggestion.recherche || 'Inconnu';
-                        var role = suggestion.role || 'Inconnu';
-                        var date = suggestion.date || 'Inconnu';
 
-                        var link = suggestion.type === 'film' ?
-                        `?controller=home&action=information_movie&id=${suggestion.id}` :
-                        `?controller=home&action=information_acteur&id=${suggestion.id}`;
+                    suggestions.forEach(function(suggestion, index) {
+                        var titreOuNom = suggestion.nom;
+                        var annee = suggestion.annee || 'Inconnu';
+                        var details = suggestion.details || 'Inconnu';
+                        var link = category === 'personne' ?
+                            `?controller=home&action=information_acteur&id=${suggestion.id}` :
+                            `?controller=home&action=information_movie&id=${suggestion.id}`;
 
                         suggestionsList += `
                             <li class="list-group-item">
-                            <a href="${link}"  class="list-group-item list-group-item-action">
-                            <img id="suggestion-img-${index}" alt="${recherche}" class="suggestion-image" src="">
-                                <div class="suggestion-details">
-                                    <h3 class="suggestion-name">${recherche}</h3>
-                                    <p class="suggestion-role">${role}</p>
-                                    <p class="suggestion-date">${date}</p>
-                                </div>
+                                <a href="${link}" class="list-group-item list-group-item-action">
+                                    <img id="suggestion-img-${index}" alt="${titreOuNom}" class="suggestion-image" src="">
+                                    <div class="suggestion-details">
+                                        <h5 class="suggestion-title">${titreOuNom}</h5>
+                                        <p class="suggestion-year">${annee}</p>
+                                        <p class="suggestion-details">${details}</p>
+                                    </div>
                                 </a>
-                            </li>
-                           
-                        `;
+                            </li>`;
                     });
 
-                    suggestionsList += '<a href="?controller=home&action=voirtousresultat&mot='+ searchQuery +'"> <li class="list-group-item see-all-results">Voir tous les résultats ("' + searchQuery + '")</li> </a>';
+                    suggestionsList += '<a href="?controller=home&action=voirtousresultat&mot='+ searchQuery +'&category='+category +'"> <li class="list-group-item see-all-results">Voir tous les résultats pour "' + searchQuery + '" dans "'+category+'"</li> </a>';
                     suggestionsList += '</ul>';
                     $('#search-suggestions').html(suggestionsList);
                     $('#search-suggestions').show();
+
                     suggestions.forEach(function(suggestion, index) {
-                        if (suggestion.type === 'Personne') {
-                            getImageNameBasic(suggestion.id).then(imageSrc => {
-                                $(`#suggestion-img-${index}`).attr('src', imageSrc);
-                            }).catch(error => {
-                                console.error('An error occurred:', error);
-                                $(`#suggestion-img-${index}`).attr('src', './Images/depannage.jpg');
+                          // Déterminer le type de suggestion en fonction du préfixe de suggestion.id
+                                var fetchImageFunction;
+                                if (suggestion.id.startsWith('n')) {
+                                    fetchImageFunction = getImageNameBasic;
+                                } else if (suggestion.id.startsWith('t')) {
+                                    fetchImageFunction = getImageTitleBasics;
+                                }
+
+                                // Vérifier si fetchImageFunction est défini avant de l'utiliser
+                                if (fetchImageFunction) {
+                                    fetchImageFunction(suggestion.id).then(imageSrc => {
+                                        $(`#suggestion-img-${index}`).attr('src', imageSrc);
+                                    }).catch(error => {
+                                        console.error('An error occurred:', error);
+                                        $(`#suggestion-img-${index}`).attr('src', './Images/depannage.jpg');
+                                    });
+                                }
                             });
-                        } else if (suggestion.type === 'Titre') {
-                            getImageTitleBasics(suggestion.id).then(imageSrc => {
-                                $(`#suggestion-img-${index}`).attr('src', imageSrc);
-                            }).catch(error => {
-                                console.error('An error occurred:', error);
-                                $(`#suggestion-img-${index}`).attr('src', './Images/depannage.jpg');
-                            });
-                        }
-                    });
                 },
                 error: function(xhr, status, error) {
                     if (status !== 'abort') {
@@ -139,10 +143,9 @@ $(document).ready(function() {
                     Derniere_requete = null;
                 }
             });
-        }
+        
     });
 });
-
 
 
     // Cacher les suggestions quand on clique à l'extérieur

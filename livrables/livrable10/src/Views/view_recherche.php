@@ -3,43 +3,42 @@
 
 
 </style>
-
-
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-
-
-<h1>Recherche Avancée</h1>
+<h1 style="margin-top:150px">Recherche Avancée</h1>
 <p>Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers riche et varié de divertissement...</p>
 
         
-<div class="filtre card shadow-sm m-5">
-    <div class="card-header filter-header">
-        <h3 class="card-title mb-5">Filtres</h3>
-        <form action="?controller=recherche&action=rechercher" method="post">
+<div class="formulaire mx-auto col-md-6">
+        <div class="d-flex align-items-center">
+        <img src="./Images/filtrejaune.png" alt="Filtre" style="margin-right: -37px;">
+        <h3 class="m-5">Filtres</h3>
+        </div>
+        <form action="?controller=recherche&action=rechercher" method="post" class="m-5">
+        <label class="labelfiltre" for="typeselection" class="form-label">Type de recherche</label>
+                                
+                                
                                 <div class="mb-5">
-                                    <label class="labelfiltre" for="search">Titre</label>
-                                    <input type="text" class="form-control" id="search" name="search" placeholder="Entrez le nom d'un film ou d'un acteur">
-                                    <div id="search-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
-                                </div>
-
-                                <label class="labelfiltre" for="typeselection" class="form-label">Type de recherche</label>
-                                <div class="mb-5">
-                                    <select class="form-select form-select-sm" id="typeselection" name="typeselection">
+                                    <select class="form-select" id="typeselection" name="typeselection" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
                                         <option value="titre">Titre</option>
                                         <option value="personne">Personne</option>
                                     </select>
                                 </div>
 
+        
+        
+                                <div class="mb-5">
+                                    <label class="labelfiltre" for="search" id="labelForSearch">Titre</label>
+                                    <input type="text" class="form-control" id="search" name="search" placeholder="Entrez le titre">
+                                    <div id="search-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
+                                </div>
+
+                                <div class="form-group mb-5">
+                                    <label for="modeRecherche">Mode de Recherche:</label>
+                                    <select class="form-control" id="modeRecherche" name="modeRecherche">
+                                        <option value="egal" selected>Recherche Précise</option>
+                                        <option value="like">Recherche Composée</option>
+                                        <option value="similarity">Recherche Approximative</option>
+                                    </select>
+                                </div>
 
                                 <div id="filter-box-titre" style="display: none;">
 
@@ -47,7 +46,6 @@
                                                     <div class="mb-5">
                                                             <label  class="labelfiltre"  for="types" class="form-label">Type du titre</label>
                                                             <select class="form-select filter-input" id="choices-multiple-remove-button1" name="types[]" placeholder="Choisir 3 genres MAX" multiple>
-                                                                <option value="">Sélectionner le type de film</option>
                                                                 <option value="tvShort">tvShort</option>
                                                                 <option value="tvMovie">tvMovie</option>
                                                                 <option value="tvMiniSeries">tvMiniSeries</option>
@@ -205,7 +203,7 @@
                                             
         </form>
     </div>
-</div>
+
       
         
 
@@ -220,6 +218,7 @@ $(document).ready(function() {
     initChoices();
     handleFormValidation();
     toggleFiltersOnSelection();
+    placeholderSearch() 
 });
 
 function initChoices() {
@@ -239,6 +238,18 @@ function initChoices() {
         searchResultLimit: 5
     });
 }
+function placeholderSearch() {
+    $('#typeselection').change(function(){
+        var selection = $(this).val();
+        if(selection == 'titre'){
+            $('#search').attr('placeholder', 'Entrez le titre');
+            $('#labelForSearch').text('Titre'); 
+        } else if(selection == 'personne'){
+            $('#search').attr('placeholder', 'Entrez le nom d\'une personne');
+            $('#labelForSearch').text('Nom'); 
+        }
+    });
+}
 
 function toggleFiltersOnSelection() {
     $('#typeselection').change(function() {
@@ -250,8 +261,29 @@ function toggleFiltersOnSelection() {
             $('#filter-box-personne').show();
             $('#filter-box-titre').hide();
         }
-    }).trigger('change'); // Applique immédiatement le filtre correspondant au choix initial
+        resetFormFields();
+    }).trigger('change');
 }
+
+function resetFormFields() {
+    $('#search').val('');
+    $('#dateSortieMin').val('');
+    $('#dateSortieMax').val('');
+    $('#dureeMin').val('');
+    $('#dureeMax').val('');
+    $('#noteMin').val('');
+    $('#noteMax').val('');
+    $('#votesMin').val('');
+    $('#votesMax').val('');
+    $('#dateNaissanceMin').val('');
+    $('#dateNaissanceMax').val('');
+    $('#dateDecesMin').val('');
+    $('#dateDecesMax').val('');
+   
+    $('.error').hide();
+}
+
+
 
 function handleFormValidation() {
     $('form').submit(function(e) {
