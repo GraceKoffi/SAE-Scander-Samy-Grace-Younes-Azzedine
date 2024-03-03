@@ -1,19 +1,122 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
+ #imageLien{
+    width : 50px;
+    margin-right: -37px;
+ }
+
+#fonctionalite{
+    margin-top: 150px;
+    padding-bottom: 100px;
+ }
+
+ .titreTrouver{
+    margin-top:100px
+ }
+
+ .paragrapheTrouver{
+    padding-top: 20px;
+    margin-bottom: 50px
+ }
+ 
+ #carousel{
+    margin-top: 150px;
+    padding-bottom: 100px;
+ }
+
+ .bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+ }
+ 
+
+ .boutonCarouselTitle{
+    margin-bottom: 400px;
+    margin-top: 5px;
+ }
+ .bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+    padding: 10px 20px;
+    font-size: 15px;
+ }
+
+ .carousel-text{
+    margin-top : 200px;
+    margin-left: 50px;
+    text-decoration: underline;
+ }
+
+ .images{
+    opacity: 0.3;
+ }
 
 
+ .boutonFonctionnalite{
+    margin-top: -10px;
+    margin-bottom: 20px
+ }
+
+ .label{
+    margin-bottom: 20px;
+ }
 </style>
-<p style="margin-top:100px">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler les connexions inattendues entre vos personnalités et titres préférés. Que vous cherchiez à découvrir les projets communs entre deux personnes du monde du spectacle, ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2000">
+                <div class="carousel-inner">
+                    <?php foreach ($caroussel as $index => $movie) : ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <img class="d-block w-100 images" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h1>Liens</h1>
+                                <a href='#liens'>
+                                    <button id='favoriButton' class='bouton-favori boutonCarouselTitle'>
+                                        Découvrir
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<div class="formulaire mx-auto col-md-9">
+<div id="liens" class="container">
+    <div class="row align-items-center">   
+            <h1 class="titreTrouver">Liens</h1>
+            
+            <p class="paragrapheTrouver">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler
+                les connexions inattendues entre vos personnalités et titres préférés.</br>Que vous cherchiez à découvrir les projets communs
+                entre deux personnes du monde du spectacle,</br> ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
+        </div>    
+    </div>
+</div>
+<div class="container">
+<div class="row align-items-center">
+    <a href='#fonctionalite'>
+        <button id='favoriButton' class='bouton-favori boutonFonctionnalite'>
+            Fonctionnalite
+        </button>
+    </a>
+    </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+<div class="formulaire mx-auto col-md">
         <div class="d-flex align-items-center">
+
         <img src="./Images/lienjaune.png" alt="Filtre" style="margin-right: -37px;">
+
         <h3 class="m-5">Liens</h3>
         </div>
         <form action="?controller=trouver&action=trouver" method="post" class="m-5">
 
-                                <label class="labelfiltre" for="typeselection" class="form-label">Trouver les liens par rapport au :</label>
+                                <label class="labelfiltre orm-label label" for="typeselection">Trouver les liens par rapport au :</label>
                                 <div class="mb-5">
                                     <select class="form-select" id="typeselection" name="typeselection" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
                                         <option value="titre">Titre</option>
@@ -25,7 +128,7 @@
                                 <div id="filter-box-titre" style="display: none;">
                                                 <div class="row">
                                                             <div class ="col-md-5 mx-auto">
-                                                                    <label class="labelfiltre form-label"  for="titre1">Titre n°1 : </label>
+                                                                    <label class="labelfiltre form-label label"  for="titre1">Titre n°1 : </label>
                                                                     <div class=" d-flex align-items-start">
                                                                     <select class="custom-select" name="categorytitre1" id="categorytitre1" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="all">Tout</option>
@@ -50,7 +153,7 @@
                                                             </div> 
                                                             <div class="col-md-2"></div>
                                                             <div class ="col-md-5 mx-auto">
-                                                                    <label class="labelfiltre form-label"  for="titre2">Titre n°2 : </label>
+                                                                    <label class="labelfiltre form-label label"  for="titre2">Titre n°2 : </label>
                                                                     <div class="d-flex align-items-start">
                                                                             <select class="custom-select" name="categorytitre2" id="categorytitre2" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="all">Tout</option>
@@ -78,7 +181,7 @@
 
                                                 <div class="row">
                                                             <div class ="col-md-5 mx-auto">
-                                                                    <label class="labelfiltre form-label"  for="personne">Personne n°1 : </label>
+                                                                    <label class="labelfiltre form-label label"  for="personne">Personne n°1 : </label>
                                                                     <div class="d-flex align-items-start">
                                                                             <input type="text" class="mb-1 form-control filter-input" id="personne1" name="personne1" placeholder="Personne n°1">
                                                                     </div>
@@ -87,7 +190,7 @@
                                                             </div> 
                                                             <div class="col-md-2"></div>
                                                             <div class ="col-md-5 mx-auto">
-                                                                    <label class="labelfiltre form-label"  for="personne2">Personne n°2 : </label>
+                                                                    <label class="labelfiltre form-label label"  for="personne2">Personne n°2 : </label>
                                                                     <div class="d-flex align-items-start">
                                                                             <input type="text" class="mb-1 form-control filter-input" id="personne2" name="personne2" placeholder="Personne n°2">
                                                                     </div>
@@ -101,10 +204,59 @@
                 <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Trouver</button>
                                             
         </form>
+       </div>
     </div>
-
+</div>
+    <div id="fonctionalite" class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="carousel-text">Fonctionnalite</h1>
+            </div>
+                <div class="mx-auto col-md-7">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img class="d-block w-100" src="Images/recherche.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=recherche'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                        Decouvrir
+                                        Recherche
+                                        </button>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="Images/rapprochement.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=rapprochement'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                    Decouvrir
+                                    Rapprochement
+                                    </button>
+                                </a>
+                            </div>
+                    </div>
+                    
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon chapeau" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon chapeau" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+             </div>
+            </div>
+        </div>
+    </div>
       
-        
 
 
 

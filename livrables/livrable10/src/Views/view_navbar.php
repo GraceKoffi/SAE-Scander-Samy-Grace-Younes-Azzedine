@@ -18,7 +18,6 @@
 </head>
 
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-very-dark fixed-top" style="background-color: #000000;">
 
     <a class="navbar-brand" href="?controller=home&action=home"><img src="./images/logo2.png" alt="Logo"></a>
@@ -64,7 +63,7 @@
             <option value="tvMovie">TV Movie</option>
             <option value="tvShort">TV Short</option>
         </select>
-        <input type="text" class="form-control" name="search-input" id="search-input" placeholder="Recherche un film, une serie, un acteur, ..." aria-label="Search">
+        <input type="text" class="form-control" name="search-input" id="search-input" placeholder="Recherche un film, une serie, un acteur, ..." aria-label="Search" required>
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit" id="search-btn" style="background-color: #FFCC00; border: 1px solid #FFCC00;">
                 <i class="fas fa-search"></i>

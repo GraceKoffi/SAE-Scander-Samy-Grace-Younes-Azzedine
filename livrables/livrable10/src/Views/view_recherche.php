@@ -1,19 +1,107 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
 
+#fonctionalite{
+    margin-top: 150px;
+    padding-bottom: 100px;
+ }
+
+ .boutonCarouselTitle{
+    margin-bottom: 400px;
+    margin-top: 5px;
+ }
+ .bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+    padding: 10px 20px;
+    font-size: 15px;
+ }
+
+ .carousel-text{
+    margin-top : 200px;
+    margin-left: 50px;
+    text-decoration: underline;
+ }
+ 
+ .paragrapheRecherche{
+    padding-top: 20px;
+    margin-bottom: 50px
+ }
+ .titreRecherche{
+    margin-top:100px
+ }
+ .images{
+    opacity: 0.3;
+ }
+ .boutonFonctionnalite{
+    margin-top: -10px;
+    margin-bottom: 20px
+ }
+ 
+ .label{
+    margin-bottom: 20px;
+ }
 
 </style>
-<h1 style="margin-top:150px">Recherche Avancée</h1>
-<p>Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers riche et varié de divertissement...</p>
 
-        
-<div class="formulaire mx-auto col-md-6">
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2000">
+                <div class="carousel-inner">
+                    <?php foreach ($caroussel as $index => $movie) : ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <img class="d-block w-100 images" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h1>Recherche</h1>
+                                <a href='#recherche'>
+                                    <button id='favoriButton' class='bouton-favori boutonCarouselTitle'>
+                                        Découvrir
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+<div id="recherche" class="container">
+    <div class="row align-items-center">   
+        <h1 class="titreRecherche">Recherche Avancée</h1>
+        <p class="paragrapheRecherche">Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers 
+            riche et varié de divertissement...</p>
+    </div>
+</div>
+
+<div class="container">
+<div class="row align-items-center">
+    <a href='#fonctionalite'>
+        <button id='favoriButton' class='bouton-favori boutonFonctionnalite'>
+            Fonctionnalite
+        </button>
+    </a>
+    </div>
+    </div>
+</div>
+    
+
+<div class="container">
+<div class="row">
+<div class="formulaire mx-auto col-md">
         <div class="d-flex align-items-center">
         <img src="./Images/searchjaune.png" alt="Filtre" style="margin-right: -37px;">
         <h3 class="m-5">Recherche Avancée</h3>
         </div>
         <form action="?controller=recherche&action=rechercher" method="post" class="m-5">
-        <label class="labelfiltre" for="typeselection" class="form-label">Type de recherche</label>
+        <label class="labelfiltre form-label label" for="typeselection">Type de recherche</label>
                                 
                                 
                                 <div class="mb-5">
@@ -26,13 +114,13 @@
         
         
                                 <div class="mb-5">
-                                    <label class="labelfiltre" for="search" id="labelForSearch">Titre</label>
+                                    <label class="labelfiltre label" for="search" id="labelForSearch">Titre</label>
                                     <input type="text" class="form-control" id="search" name="search" placeholder="Entrez le titre">
                                     <div id="search-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
                                 </div>
 
                                 <div class="form-group mb-5">
-                                    <label for="modeRecherche">Mode de Recherche:</label>
+                                    <label class="label" for="modeRecherche">Mode de Recherche:</label>
                                     <select class="form-control" id="modeRecherche" name="modeRecherche">
                                         <option value="egal" selected>Recherche Précise</option>
                                         <option value="like">Recherche Composée</option>
@@ -44,7 +132,7 @@
 
 
                                                     <div class="mb-5">
-                                                            <label  class="labelfiltre"  for="types" class="form-label">Type du titre</label>
+                                                            <label  class="labelfiltre label"  for="types" class="form-label">Type du titre</label>
                                                             <select class="form-select filter-input" id="choices-multiple-remove-button1" name="types[]" placeholder="Choisir 3 genres MAX" multiple>
                                                                 <option value="tvShort">tvShort</option>
                                                                 <option value="tvMovie">tvMovie</option>
@@ -60,7 +148,7 @@
                                                             </select>
                                                     </div>
 
-                                                    <label class="labelfiltre form-label"  for="dateSortieMin">L'année</label>
+                                                    <label class="labelfiltre form-label label"  for="dateSortieMin">L'année</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="dateSortieMin" name="dateSortieMin" placeholder="Année minimale">
                                                             <div   id="dateSortieMin-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1000 - max 2025) </div>
@@ -69,7 +157,7 @@
                                                             <div id="dateSortieRange-error" style="display: none; color: red;">L'année minimale doit être inférieure à l'année maximale et ne pas être égaux.</div>
                                                     </div>
 
-                                                    <label class="labelfiltre form-label">Durée (en minutes)</label>
+                                                    <label class="labelfiltre form-label label">Durée (en minutes)</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="dureeMin" name="dureeMin" placeholder="Durée minimale (en minute)">
                                                             <div id="dureeMin-error" style="display: none; color: red;">Veuillez entrer une durée valide (min 0 - max 100000)</div>
@@ -78,7 +166,7 @@
                                                             <div id="dureeRange-error" style="display: none; color: red;">L'année minimale doit être inférieure à l'année maximale et ne pas être égaux.</div>
                                                     </div>
 
-                                                    <label  class="labelfiltre" class="form-label">Genres</label>
+                                                    <label  class="labelfiltre label" class="form-label">Genres</label>
                                                     <div class="mb-5">
                                                                 <select   class="labelfiltre" id="choices-multiple-remove-button2" name="genres[]" placeholder="Choisir 3 genres MAX" multiple>   
                                                                 <option value="Game-Show">Game-Show</option>
@@ -112,7 +200,7 @@
                                                             </select>
                                                     </div>
 
-                                                    <label class="labelfiltre form-label">Note</label>
+                                                    <label class="labelfiltre form-label label">Note</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="noteMin" name="noteMin" placeholder="Note minimale (sur 10)">
                                                             <div id="noteMin-error" style="display: none; color: red;">Veuillez entrer une note valide (min 0.0 - max 10.O)</div>
@@ -121,7 +209,7 @@
                                                             <div id="noteRange-error" style="display: none; color: red;">La note minimale doit être inférieure à la note maximale et ne pas être égaux.</div>
                                                     </div>
 
-                                                    <label class="labelfiltre form-label">Nombre de votes</label>
+                                                    <label class="labelfiltre form-label label">Nombre de votes</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="votesMin" name="votesMin" placeholder="Nombre de votes minimale">
                                                             <div id="votesMin-error" style="display: none; color: red;">Veuillez entrer un nombre valide (min 0 - max 10000000)</div>
@@ -134,7 +222,7 @@
                                 </div><!-- filtre titre -->
                                 <div id="filter-box-personne" style="display: none;">
 
-                                                    <label class="labelfiltre form-label"  for="dateNaissanceMin">L'année de naissance</label>
+                                                    <label class="labelfiltre form-label label"  for="dateNaissanceMin">L'année de naissance</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="dateNaissanceMin" name="dateNaissanceMin" placeholder="Année minimale">
                                                             <div   id="dateNaissanceMin-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1- max 2025) </div>
@@ -142,7 +230,7 @@
                                                             <div id="dateNaissanceMax-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1 - max 2025)</div>
                                                             <div id="dateNaissanceRange-error" style="display: none; color: red;">L'année minimale doit être inférieure à l'année maximale et ne pas être égaux.</div>
                                                     </div>
-                                                     <label class="labelfiltre form-label"  for="dateDecesMin">L'année de décès</label>
+                                                     <label class="labelfiltre form-label label"  for="dateDecesMin">L'année de décès</label>
                                                     <div class="mb-5">
                                                             <input type="text" class="mb-1 form-control filter-input" id="dateDecesMin" name="dateDecesMin" placeholder="Année minimale">
                                                             <div   id="dateDecesMin-error" style="display: none; color: red;">Veuillez entrer une année valide (min 1- max 2025) </div>
@@ -199,18 +287,63 @@
 
                                 </div><!-- filtre personne -->
 
-                <button type="submit" id="buttonrechercher" class="btn btn-warning mt-3" style =" color: white;" >Rechercher</button>
+                <button type="submit" id="buttonrechercher" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Rechercher</button>
                                             
         </form>
+    </div>    
+</div>
     </div>
-
+    <div id="fonctionalite" class="container carousel">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="carousel-text">Fonctionnalite</h1>
+            </div>
+                <div class="mx-auto col-md-7">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img class="d-block w-100" src="Images/link.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=trouver'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                        Decouvrir
+                                        Liens
+                                        </button>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="Images/rapprochement.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=rapprochement'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                    Decouvrir
+                                    Rapprochement
+                                    </button>
+                                </a>
+                            </div>
+                    </div>
+                    
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon chapeau" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon chapeau" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+             </div>
+            </div>
+        </div>
+    </div>
       
-        
-
-
-
-
-
+      
 
 
 <script>
