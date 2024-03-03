@@ -97,8 +97,8 @@
 <div class="row">
 <div class="formulaire mx-auto col-md">
         <div class="d-flex align-items-center">
-        <img src="./Images/filtrejaune.png" alt="Filtre" style="margin-right: -37px;">
-        <h3 class="m-5">Filtres</h3>
+        <img src="./Images/searchjaune.png" alt="Filtre" style="margin-right: -37px;">
+        <h3 class="m-5">Recherche Avancée</h3>
         </div>
         <form action="?controller=recherche&action=rechercher" method="post" class="m-5">
         <label class="labelfiltre form-label label" for="typeselection">Type de recherche</label>

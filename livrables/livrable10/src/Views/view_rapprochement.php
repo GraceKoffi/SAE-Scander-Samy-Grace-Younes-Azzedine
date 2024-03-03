@@ -1,5 +1,7 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
+
+
  #imageRapprochement{
     width : 50px;
     margin-right: -37px;
@@ -261,6 +263,17 @@ function toggleFiltersOnSelection() {
         }
         resetFormFields();
     }).trigger('change');
+}
+
+function resetFormFields() {
+    $('#titre1').val('');
+    $('#titre2').val('');
+    $('#personne1').val('');
+    $('#personne2').val('');
+  
+   
+    $('.error').hide();
+
 }
 
 function resetFormFields() {

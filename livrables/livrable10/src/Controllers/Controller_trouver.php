@@ -32,12 +32,15 @@ class Controller_trouver extends Controller {
                 }
                 if ($nombrededoublon1 == 1 && $nombrededoublon2 == 1) {
                     // Logique pour quand il y a exactement un doublon pour chaque titre
-                    $tconst1 = $m->gettconstunique($_POST['titre1']) ;
-                    $tconst2 = $m->gettconstunique($_POST['titre2']) ;
+
+                    $tconst1 = $m->gettconstunique($_POST['titre1'],$category1) ;
+                    $tconst2 = $m->gettconstunique($_POST['titre2'],$catgory2) ;
+
                     $tab = [
                         "result" => $m->ActeurEnCommun($tconst1, $tconst2),
                         "titre1" => $_POST['titre1'],
                         "titre2" => $_POST['titre2'],
+                       
                     ];
                     $this->render("trouver_result", $tab);
                 } else {

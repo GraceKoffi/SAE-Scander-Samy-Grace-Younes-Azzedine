@@ -550,15 +550,25 @@ class Model
 
         
     }
-    public function gettconstunique($titre){
+    public function gettconstunique($titre,$category){
 
         $titre = trim($titre);
-        $requete = $this->bd->prepare("SELECT tconst 
+       
+            $sql = "SELECT tconst 
         FROM title_basics
-        WHERE lower(primarytitle) = lower(:titre) ; ");
+        WHERE lower(primarytitle) = lower(:titre) "; 
+        
+        if($category !== "all"){
+
+            $sql .= " AND titletype = :category ";
+            }
+        
+        
+         $sql .= " ; ";
        
-       
+         $requete = $this->bd->prepare($sql);
         $requete->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $requete->bindParam(':category', $category, PDO::PARAM_STR);
         $requete->execute();
         return $requete->fetch(PDO::FETCH_COLUMN);        
     }
