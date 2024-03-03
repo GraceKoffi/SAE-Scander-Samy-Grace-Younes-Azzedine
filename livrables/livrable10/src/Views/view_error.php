@@ -1,2 +1,2 @@
 <?php
-echo "<p> Message : ".print_r($tab)."</p>";
+echo "<p> Message : ".var_dump($tab)."</p>";

@@ -3,7 +3,7 @@ class Controller_recherche extends Controller {
 
     public function action_home() {
         $m = Model::getModel();
-        $tab = [];
+        $tab = [ 'caroussel' => $m->filmpopulaire()]; 
         $this->render("recherche", $tab);
     }
 

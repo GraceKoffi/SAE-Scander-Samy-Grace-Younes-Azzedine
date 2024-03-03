@@ -276,7 +276,8 @@ class rapoFilm:
         #Initialisation
         tab_noeud_traite = []
         tab_branch_traite = set()
-        sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_debut)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+        sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst_debut)s;"
+        #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_debut)s AND (tp.category = 'actor' OR tp.category = 'actress');"
         value = {"tconst_debut": self.tconstDebut}
         cur.execute(sql, value)
         tabs_nconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -284,7 +285,8 @@ class rapoFilm:
             tab_nconst_branche = []
             for noeud in tabs_nconst_noeud:
                 tab_noeud_traite.append(noeud)
-                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
+                #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
+                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
                 value = {"nconst": noeud}
                 cur.execute(sql, value)
                 for e in cur.fetchall() :
@@ -312,7 +314,8 @@ class rapoFilm:
             #recup noeud (tconst) pour l'étape i+1
             tabs_nconst_noeud = []
             for tconst in tab_branch_traite :
-                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
                 value = {"tconst": tconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
@@ -335,7 +338,8 @@ class rapoFilm:
         tab_noeud_traite = []
         tab_branch_traite = set()
         dic = {"type": "fin"}
-        sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_fin)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+        #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst_fin)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+        sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst_fin)s;"
         value = {"tconst_fin": self.tconstFin}
         cur.execute(sql, value)
         tabs_nconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -344,8 +348,8 @@ class rapoFilm:
             for noeud in tabs_nconst_noeud :
                 
                 tab_noeud_traite.append(noeud)
-                
-                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
+                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": noeud}
                 cur.execute(sql, value)
                 
@@ -374,7 +378,8 @@ class rapoFilm:
             
             tabs_tconst_noeud = []
             for tconst in tab_branch_traite :
-                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
                 value = {"tconst": tconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
