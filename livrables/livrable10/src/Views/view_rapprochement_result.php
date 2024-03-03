@@ -27,6 +27,7 @@ foreach (array_unique($result['data']['path']) as $item) {
 
     if ($item[0] == "n") {
         $posterPath = $m->getPersonnePhoto($item);; // Supposons que getPersonnePhoto est une fonction PHP existante
+        var_dump($posterPath);
         $hrefValue = "?controller=home&action=information_acteur&id=" . $item;
         $cardContent = '<a href="' . $hrefValue . '" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
               <div class="cardrecherche" style="cursor: pointer;">

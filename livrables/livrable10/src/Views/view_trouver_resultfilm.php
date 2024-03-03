@@ -84,7 +84,7 @@ async function displayMovies() {
                 <div class="card-bodyrecherche">`;
 
         
-            cardContent += `
+            cardContent += `p
                 <h2 class="card-1recherche">${displayValue(item.primarytitle, 'Aucune information')}</h2>
                 <p class="card-2recherche">Type : ${displayValue(item.titletype, 'Aucune information')}</p>
                 <p class="card-3recherche">Date : ${displayValue(item.startyear, 'Aucune information')}</p>

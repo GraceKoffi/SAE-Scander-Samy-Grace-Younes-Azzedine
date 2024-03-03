@@ -43,13 +43,12 @@
  }
 
 </style>
-
 <div class="container-fluid">
     <div class="row align-items-center">
         <div class="col">
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2000">
                 <div class="carousel-inner">
-                    <?php foreach ($caroussel as $index => $movie) : ?>
+                    <?php foreach ($caroussel['results'] as $index => $movie) : ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                             <img class="d-block w-100 images" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
                             <div class="carousel-caption d-none d-md-block">

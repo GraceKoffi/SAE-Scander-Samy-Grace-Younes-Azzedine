@@ -1093,7 +1093,7 @@ class Model
         // Utilisation de cURL pour récupérer les films actuellement en salle
         $movie_data = file_get_contents($url);
         $movies = json_decode($movie_data, true);
-       return $movies;
+        return $movies;
     }
     public function getPersonnePhoto($id) {
         $apiKey = "9e1d1a23472226616cfee404c0fd33c1";
@@ -1118,14 +1118,23 @@ class Model
 
     public function getFilmPhoto($id) {
         $apiKey = "9e1d1a23472226616cfee404c0fd33c1";
-        $url = "https://api.themoviedb.org/3/movie/{$id}?api_key={$apiKey}&language=fr";
+        $url = "https://api.themoviedb.org/3/find/{$id}?api_key={$apiKey}&language=fr&external_source=imdb_id";
     
         try {
             $response = file_get_contents($url);
-            $data = json_decode($response, true)['results'];
-    
+            $data = json_decode($response, true);
+            
+            $tableau = ["movie_results", "tv_results", "tv_episode_results", "tv_season_results"];
+            $posterPath = "./Images/depannage.jpg";
+            foreach($tableau as $element){
+                if(isset($data[$element][0]['poster_path']) && size($data[$element]) > 0){
+                    $posterPath .="https://image.tmdb.org/t/p/w400".$data[$element][0]['poster_path'];
+                    break;
+                }
+            }
+            
             // Retourne le chemin de l'image de dépannage si aucun poster n'est trouvé
-            return isset($data['poster_path']) ? "https://image.tmdb.org/t/p/w400{$data['poster_path']}" : "./Images/depannage.jpg";
+            return $posterPath;
         } catch (Exception $error) {
             error_log("Erreur lors de la récupération des données: " . $error->getMessage());
             return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
