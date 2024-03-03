@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<!-- Coding By CodingNepal - codingnepalweb.com -->
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Login & Registration Form</title>
-  <!---Custom CSS File--->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
 <style>
     /* Import Google font - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
@@ -93,6 +81,7 @@ body{
 .signup{
   font-size: 17px;
   text-align: center;
+  margin-right: 500px;
 }
 .signup label{
   color: #009579;
@@ -121,15 +110,11 @@ body{
     color: black; 
     border: 2px solid #4CAF50;
 }
+.mdp{
+  margin-bottom: 20px;
+}
   
 </style>
-<body>   
-<!-- <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
-    <nav class="scroll-reveal">
-        <a class="translate" href="?controller=home">Accueil</a>
-        <a class="translate" href="?controller=recherche">Rechercher</a>
-        <a class="translate" href="?controller=trouver">Trouver</a>
-        <a class="translate" href="?controller=rapprochement">Rapprochement</a> -->
 
         <?php
     require "Views/view_navbar.php";
@@ -171,7 +156,7 @@ body{
         }
     }
     ?> 
-<div class="container">
+<div class="container formulaire">
     <input type="checkbox" id="check">
     <div class="login form">
         <h1>Connection</h1>
@@ -180,7 +165,9 @@ body{
             <input type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control" required>
             <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
             <input type="password" placeholder="Entrer votre mot de passe" name="passWord" class="form-control" required>
+            <div class="mdp">
             <a href="?controller=resetPassWord">Mot de passe oublier ?</a>
+            </div>
             <input type="submit" class="btn btn-primary submit-btn" value="Connection">
         </form>
         <div class="signup">
@@ -200,11 +187,13 @@ body{
             <input type="password" id="confirmPassword" placeholder="Confirmer votre mot de passe" class="form-control" name="secondPassword" required>
             <input type="submit" class="btn btn-primary submit-btn" value="Creer un compte">
         </form>
+      
         <div class="signup">
             <span class="signup">Vous avez un compte
              <label for="check">Connection</label>
             </span>
         </div>
+      </div>
     </div>
 </div>
 
@@ -232,27 +221,5 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     }
 });
 
-// document.getElementById('signupForm').addEventListener('submit', function(event) {
-//     var inputs = this.getElementsByTagName('input');
-//     for (var i = 0; i < inputs.length; i++) {
-//         if (inputs[i].value == '') {
-//             inputs[i].classList.add('is-invalid');
-//             event.preventDefault();
-//         } else {
-//             inputs[i].classList.remove('is-invalid');
-//         }
-//     }
-//     var password = document.getElementById('signupPassword').value;
-//     var confirmPassword = document.getElementById('confirmPassword').value;
-//     if (password != confirmPassword) {
-//         document.getElementById('confirmPassword').classList.add('is-invalid');
-//         event.preventDefault();
-//     } else {
-//         document.getElementById('confirmPassword').classList.remove('is-invalid');
-//     }
-// });
 
 </script>
-
-</body>
-</html>

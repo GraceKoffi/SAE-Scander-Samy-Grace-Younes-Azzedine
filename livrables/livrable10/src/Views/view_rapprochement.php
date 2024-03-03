@@ -48,11 +48,13 @@
     margin-left: 50px;
     text-decoration: underline;
  }
+ .carousel-textLabel{
+    margin-left: 50px;
+ }
 
  .images{
     opacity: 0.3;
  }
-
 
  .boutonFonctionnalite{
     margin-top: -10px;
@@ -86,6 +88,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- <div id="rapprochement" class="container">
     <div class="row align-items-center">   
@@ -191,6 +194,9 @@
         <div class="row">
             <div class="col-md-4">
                 <h1 class="carousel-text">Fonctionnalite</h1>
+                <p class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
+                    Comme Recherche et Lien
+                </p>
             </div>
                 <div class="mx-auto col-md-7">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -202,6 +208,7 @@
                     <div class="carousel-item active">
                     <img class="d-block w-100" src="Images/recherche.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
+                                <h2>Recherche</h2>
                                 <a href='?controller=recherche'>
                                     <button id='favoriButton' class='bouton-favori'>
                                         Decouvrir
@@ -213,6 +220,7 @@
                     <div class="carousel-item">
                         <img class="d-block w-100" src="Images/link.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
+                                <h2>Liens</h2>
                                 <a href='?controller=trouver'>
                                     <button id='favoriButton' class='bouton-favori'>
                                     Decouvrir

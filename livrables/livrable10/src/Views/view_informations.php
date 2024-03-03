@@ -162,7 +162,6 @@ else if(isset($_GET['filmId'])){
     $id_imdb = $_GET['filmId'];
 }
 echo $id_imdb;
-var_dump($id_imdb);
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
@@ -398,7 +397,6 @@ if (isset($_SESSION['username'])) {
     </div>
 </div>
 
-<?php var_dump($info);?>
 <script><?=require "Js/informations.js"; ?></script>
 
 <script>

@@ -12,6 +12,16 @@
     .bouton{
         margin-top: 20px;
     }
+
+    .top{
+        margin-top: 100px;
+    }
+    .left{
+        margin-left: 100px;
+    }
+    .buttonAnuler{
+        color: white !important;
+    }
 </style>
 <body>
 <?php
@@ -19,6 +29,9 @@ require "Views/view_navbar.php";
 if(isset($_GET['retour'])){
         $retour = trim(e($_GET['retour']));
         switch ($retour) {
+            case 1:
+                $message = "Mail Eenvoyer";
+                $alertClass = "alert alert-success";
             case -1:
                 $message = "Utilisateur inconnu";
                 $alertClass = "alert-danger";
@@ -60,7 +73,6 @@ if(isset($tab)){
     $username = $tab['username'] ?? ''; // Si 'username' n'est pas défini dans le tableau, $username sera une chaîne vide.
     $type = $tab['type'] ?? ''; // Si 'type' n'est pas défini dans le tableau, $type sera une chaîne vide.
     $email = $tab['email'] ?? ''; // Si 'email' n'est pas défini dans le tableau, $email sera une chaîne vide.
-    var_dump($tab);
 
 }else{
     $message = "";
@@ -71,11 +83,11 @@ if(isset($tab)){
 
 
 
-
+echo "<div class='conatiner top left'>";
+    echo "<div class='row'";
 
     echo "
-    <div class='container mt-5'>
-        <h2 class='mb-4'>Réinitialisation du mot de passe</h2>
+        <div class='col'>
     ";
     if(isset($_GET['etape'])){
         if($_GET['etape'] == 1){
@@ -86,7 +98,7 @@ if(isset($tab)){
                     <label for='username'>Nom d'utilisateur</label>
                         <input type='text' class='form-control' id='username' name='username' required>
                         <input type='submit' class='bouton btn btn-primary submit-btn' value='Passer prochaine etape'>
-                        <a href='?' class='bouton btn btn-default' id='cancel-changes'>Annuler</a>
+                        <a href='?' class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Annuler</a>
                 </div>
             </form>
             ";
@@ -103,15 +115,16 @@ if(isset($tab)){
                                         <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
                                         <button type='submit' class='btn' id='save-changes'>
                                             <a href='?controller=resetPassWord&action=resetEtape1' 
-                                            class='bouton btn btn-default' id='cancel-changes'>Revenir en arriére</a>
+                                            class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Revenir en arriére</a>
                                         </button>
                                         </div>
                                     </form>
                             ";
                     }
                     else{
-                        $email = $email[0];
+                        
                         echo "
+
                             <h2>$message  $username</h2>
                                 <label for='email'>Adresse e-mail</label>
                                     <input type='email' class='form-control' id='email' name='email' value='$email' required disabled>
@@ -119,15 +132,18 @@ if(isset($tab)){
                                     <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
                                         <button type='submit' class='bouton btn' id='save-changes'>
                                          <a href='?controller=resetPassWord&action=resetEtape1' 
-                                    class='bouton btn btn-default' id='cancel-changes'>Revenir en arriére</a>
+                                    class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Revenir en arriére</a>
                                 </button>
                             </div>
                         </form>
                         ";
                     }
         }
-    }
+    }   
+            echo "</div>";
+        echo "</div>";
     echo "</div>";
+echo "</div>";
 ?>
     <!-- Inclure Bootstrap JS (facultatif) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

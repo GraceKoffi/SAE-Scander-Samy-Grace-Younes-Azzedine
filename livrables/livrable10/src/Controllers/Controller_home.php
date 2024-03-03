@@ -83,11 +83,11 @@ Class Controller_home extends Controller{
         $tab = $m->getCommentaryActor(trim(e($id)));
         if(isset($_SESSION['username'])){
             $userId = $m->getUserId($_SESSION['username'])["userid"];
-            if(empty($m->favorieExistFilm($userId, trim(e($id))))){
-                $_SESSION['favori'] = 'false';
+            if(empty($m->favorieExistActeur($userId, trim(e($id))))){
+                $_SESSION['favoriActeur'] = 'false';
             }
             else{
-                $_SESSION['favori'] = 'true';
+                $_SESSION['favoriActeur'] = 'true';
             }
         }
         $tab = [ 'titre'=>$m->getInformationsFilmParticipant(trim(e($id))),
@@ -202,7 +202,7 @@ Class Controller_home extends Controller{
     public function action_favorie_acteur(){
         $m = Model::getModel();
         if(isset($_GET['acteurId'])){
-            $userId = $this->getUserId($_SESSION['username'])["userid"];
+            $userId = $m->getUserId($_SESSION['username'])["userid"];
             if(empty($m->favorieExistActeur($userId, trim(e($_GET['acteurId']))))){
                 $m->AddFavorieActeur($userId, trim(e($_GET['acteurId'])));
 
