@@ -125,13 +125,10 @@ body {
 Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous les cinéphiles ! Tout comme IMDB, FinderCine vous propose un univers complet dédié au cinéma et à la télévision, où vous pouvez explorer une base de données exhaustive de films, séries TV, acteurs, réalisateurs, et bien plus encore. Que vous cherchiez à découvrir les dernières sorties, à vous plonger dans les critiques des œuvres ou à trouver des recommandations personnalisées selon vos goûts, FinderCine est l'outil parfait pour satisfaire votre passion pour le septième art. Avec une interface conviviale et des fonctionnalités innovantes, nous vous offrons une expérience immersive et enrichissante, vous permettant de rester au courant des tendances actuelles, de participer à des discussions animées avec une communauté de passionnés, et de suivre vos créateurs favoris. Rejoignez-nous sur FinderCine et commencez dès aujourd'hui votre voyage cinématographique !</p>
 </div>
 
-<?php
-var_dump($caroussel[0]);
-?>
 <div class="col-8">
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="3500">
     <div class="carousel-inner">
-        <?php foreach ($caroussel as $index => $movie) : ?>
+        <?php foreach ($caroussel['results'] as $index => $movie) : ?>
             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                 <img class="d-block w-100" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
                 <div class="carousel-caption d-none d-md-block">
