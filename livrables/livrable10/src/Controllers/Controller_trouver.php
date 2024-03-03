@@ -28,12 +28,13 @@ class Controller_trouver extends Controller {
                         ];
                         $result = $m->addUserRecherche($data);
                     }
-                    $tconst1 = $m->gettconstunique($_POST['titre1']) ;
-                    $tconst2 = $m->gettconstunique($_POST['titre2']) ;
+                    $tconst1 = $m->gettconstunique($_POST['titre1'],$category1) ;
+                    $tconst2 = $m->gettconstunique($_POST['titre2'],$category2) ;
                     $tab = [
                         "result" => $m->ActeurEnCommun($tconst1, $tconst2),
                         "titre1" => $_POST['titre1'],
                         "titre2" => $_POST['titre2'],
+                       
                     ];
                     $this->render("trouver_result", $tab);
                 } else {

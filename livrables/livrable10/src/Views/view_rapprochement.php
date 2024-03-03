@@ -1,279 +1,198 @@
-<script src="https://unpkg.com/scrollreveal@4.0.7/dist/scrollreveal.min.js"></script>
-
+<?php require "Views/view_navbar.php"; ?>
 <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Helvetica, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden; /* Allow horizontal scrolling if necessary */
-            overflow-y: auto; /* Allow vertical scrolling */
-        }
 
-
-
-
-        #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
-
-
-
-        .image-container {
-            text-align: center;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .image-wrapper {
-            margin: 10px;
-            text-align: center;
-            flex-basis: calc(33.33% - 20px);
-            transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out, blur 0.5s ease-in-out;
-            overflow: hidden;
-        }
-
-        .large-image {
-            width: 100%;
-            height: auto;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        
-
-        #filmCount {
-            text-align: center;
-            color: white;
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
-
-
-        .form-container {
-            position: relative;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            width: 70%;
-            text-align: center;
-            border-radius: 10px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .form-input::placeholder {
-            color: white;
-        }
-
-        .form-title {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .select-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .form-submit {
-            background-color: #b992db;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .form-submit:hover {
-            background-color: #906bb2;
-        }
-    
-
-    .paragraphe{
-        margin-top: 100px;
-    }
-
-    .form{
-        margin-top: 100px;
-    }
-    .fonctionnalite{
-        margin-top: 100px;
-    }
 
 </style>
+<p style="margin-top:100px">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler les connexions inattendues entre vos personnalités et titres préférés. Que vous cherchiez à découvrir les projets communs entre deux personnes du monde du spectacle, ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
 
-<body>
-<canvas id="canvas"></canvas>    
-<?php require "Views/view_navbar.php";?>
-<!-- <header>
-    <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
-    <nav class="scroll-reveal">
-        <a class="translate" href="?controller=home">Accueil</a>
-        <a class="translate" href="?controller=recherche">Rechercher</a>
-        <a class="translate" href="?controller=trouver">Trouver</a>
-        <a class="translate" href="?controller=rapprochement">Rapprochement</a>
-        <a class="translate" href="?controller=connect"></a>
-    </nav>
-</header> -->
-<div class="paragraphe">
-    <h1 style="color: #000;">Explorez l'univers fascinant du cinéma</h1>
-    <p style="color: #000;">
-        Découvrez la magie du septième art à travers des connexions uniques. Notre fonctionnalité de rapprochement vous permet de lier deux films ou deux personnalités à travers une chaîne captivante. Sélectionnez vos favoris et explorez les acteurs et les films qui les unissent !
-    </p>
-</div>
 
-<div class="form-container form">
-    <h2 class="form-title">Lancez-vous</h2>
-    <form action="?controller=rapprochement&action=rapprochement" method="post" style="text-align: center;">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <input type="text" placeholder="Champ 1" class="form-input" id="champ1" name="champ1" required>
-            <input type="text" placeholder="Champ 2" class="form-input" id="champ2" name="champ2" required>
+<div class="formulaire mx-auto col-md-9">
+        <div class="d-flex align-items-center">
+        <img src="./Images/networkjaune.png" alt="Filtre" style="margin-right: -37px;">
+        <h3 class="m-5">Chemin le plus court</h3>
         </div>
-        <div class="select-container">
-            <select class="form-input" name="type">
-                <option value="Film">Film</option>
-                <option value="Acteur">Acteur</option>
-            </select>
-        </div>
-        <br>
-        <input type="submit" value="Envoyer" class="form-submit">
-    </form>
-</div>
+        <form action="?controller=trouver&action=trouver" method="post" class="m-5">
+
+                                <label class="labelfiltre" for="typeselection" class="form-label">Trouver les liens par rapport au :</label>
+                                <div class="mb-5">
+                                    <select class="form-select" id="typeselection" name="typeselection" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
+                                        <option value="titre">Titre</option>
+                                        <option value="personne">Personne</option>
+                                    </select>
+                                </div>
+
+
+                                <div id="filter-box-titre" style="display: none;">
+                                                <div class="row">
+                                                            <div class ="col-md-5 mx-auto">
+                                                                    <label class="labelfiltre form-label"  for="titre1">Titre n°1 : </label>
+                                                                    <div class=" d-flex align-items-start">
+                                                                    <select class="custom-select" name="categorytitre1" id="categorytitre1" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="all">Tout</option>
+                                                                                <option value="movie">Movie</option>
+                                                                                <option value="tvSeries">TV Series</option>
+                                                                                <option value="tvEpisode">TV Episode</option>
+                                                                                <option value="video">Video</option>
+                                                                                <option value="tvSpecial">TV Special</option>
+                                                                                <option value="tvPilot">TV Pilot</option>
+                                                                                <option value="short">Short</option>
+                                                                                <option value="videoGame">Video Game</option>
+                                                                                <option value="tvMiniSeries">TV Mini-Series</option>
+                                                                                <option value="tvMovie">TV Movie</option>
+                                                                                <option value="tvShort">TV Short</option>
+                                                                            </select>
+                                                                            <input type="text" class="mb-1 form-control filter-input" style = "border-top-left-radius: 0; border-bottom-left-radius: 0;" id="titre1" name="titre1" placeholder="Titre n°1">
+                                                                            
+
+                                                                    </div>
+                                                                    <div id="titre1-error" style="display: none; color: red;">Veuillez sélectionner un titre. </div>
+                                                                     
+                                                            </div> 
+                                                            <div class="col-md-2"></div>
+                                                            <div class ="col-md-5 mx-auto">
+                                                                    <label class="labelfiltre form-label"  for="titre2">Titre n°2 : </label>
+                                                                    <div class="d-flex align-items-start">
+                                                                            <select class="custom-select" name="categorytitre2" id="categorytitre2" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="all">Tout</option>
+                                                                                <option value="movie">Movie</option>
+                                                                                <option value="tvSeries">TV Series</option>
+                                                                                <option value="tvEpisode">TV Episode</option>
+                                                                                <option value="video">Video</option>
+                                                                                <option value="tvSpecial">TV Special</option>
+                                                                                <option value="tvPilot">TV Pilot</option>
+                                                                                <option value="short">Short</option>
+                                                                                <option value="videoGame">Video Game</option>
+                                                                                <option value="tvMiniSeries">TV Mini-Series</option>
+                                                                                <option value="tvMovie">TV Movie</option>
+                                                                                <option value="tvShort">TV Short</option>
+                                                                            </select>
+                                                                            <input type="text" class="mb-1 form-control filter-input" style = "border-top-left-radius: 0; border-bottom-left-radius: 0;" id="titre2" name="titre2" placeholder="Titre n°2">
+
+                                                                    </div>
+                                                                    <div id="titre2-error" style="display: none; color: red;">Veuillez sélectionner un titre. </div>
+
+                                                            </div> 
+                                                </div>  
+                                </div><!-- filtre titre -->
+                                <div id="filter-box-personne" style="display: none;">
+
+                                                <div class="row">
+                                                            <div class ="col-md-5 mx-auto">
+                                                                    <label class="labelfiltre form-label"  for="personne">Personne n°1 : </label>
+                                                                    <div class="d-flex align-items-start">
+                                                                            <input type="text" class="mb-1 form-control filter-input" id="personne1" name="personne1" placeholder="Personne n°1">
+                                                                    </div>
+                                                                    <div id="personne1-error" style="display: none; color: red;">Veuillez sélectionner une personne. </div>
+
+                                                            </div> 
+                                                            <div class="col-md-2"></div>
+                                                            <div class ="col-md-5 mx-auto">
+                                                                    <label class="labelfiltre form-label"  for="personne2">Personne n°2 : </label>
+                                                                    <div class="d-flex align-items-start">
+                                                                            <input type="text" class="mb-1 form-control filter-input" id="personne2" name="personne2" placeholder="Personne n°2">
+                                                                    </div>
+                                                                    <div id="personne2-error" style="display: none; color: red;">Veuillez sélectionner une personne. </div>
+
+                                                            </div> 
+                                                </div> 
+
+                                </div><!-- filtre personne -->
+
+                <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Trouver</button>
+                                            
+        </form>
+    </div>
+
+      
+        
 
 
 
 
-<?php require "Views/view_footer.php";?>
-</body>
+
+
 
 <script>
 
-// Get the canvas element and set its width and height
-var canvas = document.getElementById('canvas');
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+$(document).ready(function() {
+    handleFormValidation();
+    toggleFiltersOnSelection();
+
+});
+function toggleFiltersOnSelection() {
+    $('#typeselection').change(function() {
+        var typeSelection = $(this).val();
+        if (typeSelection === 'titre') {
+            $('#filter-box-titre').show();
+            $('#filter-box-personne').hide();
+        } else {
+            $('#filter-box-personne').show();
+            $('#filter-box-titre').hide();
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-// Get the context of the canvas
-var ctx = canvas.getContext('2d');
-
-// Create an array to store the dots
-var dotsArray = [];
-
-// Define the Dot class
-class Dot {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.speedX = (Math.random() - 0.5) * 3;
-        this.speedY = (Math.random() - 0.5) * 3;
-        this.size = Math.random() * 5 + 1;
-    }
-
-    // Method to draw a dot
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#000';
-        ctx.fill();
-    }
-
-    // Method to update the position of a dot
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > canvas.width) {
-            this.speedX *= -1;
-        }
-
-        if (this.y < 0 || this.y > canvas.height) {
-            this.speedY *= -1;
-        }
-
-        this.draw();
-    }
-
-    // Method to calculate the distance to another dot
-    distanceTo(otherDot) {
-        var dx = this.x - otherDot.x;
-        var dy = this.y - otherDot.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
+        resetFormFields();
+    }).trigger('change');
 }
 
-// Function to initialize the dots
-function initDots() {
-    for (var i = 0; i < 50; i++) {
-        var x = Math.random() * canvas.width;
-        var y = Math.random() * canvas.height;
-        dotsArray.push(new Dot(x, y));
-    }
+function resetFormFields() {
+    $('#titre1').val('');
+    $('#titre2').val('');
+    $('#personne1').val('');
+    $('#personne2').val('');
+  
+   
+    $('.error').hide();
 }
 
-// Function to animate the dots
-function animateDots() {
-    requestAnimationFrame(animateDots);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (var i = 0; i < dotsArray.length; i++) {
-        dotsArray[i].update();
-    }
 
-    connectDots(); // Call the new function
-}
-
-// Function to draw lines between close dots
-function connectDots() {
-    for (var i = 0; i < dotsArray.length; i++) {
-        for (var j = i + 1; j < dotsArray.length; j++) {
-            var dot1 = dotsArray[i];
-            var dot2 = dotsArray[j];
-
-            var distance = dot1.distanceTo(dot2);
-            if (distance < 100) { // You can adjust this value
-                ctx.beginPath();
-                ctx.moveTo(dot1.x, dot1.y);
-                ctx.lineTo(dot2.x, dot2.y);
-                ctx.strokeStyle = '#000';
-                ctx.stroke();
+function handleFormValidation() {
+    $('form').submit(function(e) {
+        var isValid = true;
+        var typeSelection = $('#typeselection').val();
+        $('.error').hide(); // Cache tous les messages d'erreur
+        
+        if (typeSelection === 'titre') {
+            var titre1 = $('#titre1').val().trim();
+            var titre2 = $('#titre2').val().trim();
+            if (!titre1) {
+                $('#titre1-error').show();
+                isValid = false;
+            }
+            if (!titre2) {
+                $('#titre2-error').show();
+                isValid = false;
+            }
+        } else if (typeSelection === 'personne') {
+            var personne1 = $('#personne1').val().trim();
+            var personne2 = $('#personne2').val().trim();
+            if (!personne1) {
+                $('#personne1-error').show();
+                isValid = false;
+            }
+            if (!personne2) {
+                $('#personne2-error').show();
+                isValid = false;
             }
         }
-    }
-}
 
-// Call the functions
-initDots();
-animateDots();
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#titre1, #titre2, #personne1, #personne2').on('input', function() {
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(errorId).hide();
+    });
+}
 
 
 </script>
+
+
+
+
+
+
+<?php require "Views/view_footer.php"; ?>
