@@ -86,8 +86,27 @@ class Model
 
     }
     
+    public function getFavorieActeur($username){
+        $sql = "SELECT * FROM FavorieActeur
+                WHERE userId = :userId;
+                ";
+        $query = $this->bd->prepare($sql);
+        $userId = $this->getUserId($username)["userid"];
+        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-
+    public function getFavorieFilm($username){
+        $sql = "SELECT * FROM FavorieFilm
+                WHERE userId = :userId;
+                ";
+        $query = $this->bd->prepare($sql);
+        $userId = $this->getUserId($username)["userid"];
+        $query->bindValue(":userId", $userId, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     public function favorieExistActeur($userId, $acteurId){
@@ -1068,7 +1087,10 @@ class Model
 
     public function getRechercherData($data){
         $userId = $this->getUserId($data["username"])["userid"];
-        $sql = "SELECT * FROM RechercheData WHERE userId = :userId AND TypeRecherche = :typeData;";
+        $sql = "SELECT *
+                FROM RechercheData
+                WHERE userId = :userId AND TypeRecherche = :typeData
+                ORDER BY rehcercheTime DESC;";
         $query = $this->bd->prepare($sql);
         $query->bindParam(":userId", $userId, PDO::PARAM_STR);
         $query->bindParam(":typeData", $data["type"], PDO::PARAM_STR);
@@ -1129,6 +1151,23 @@ class Model
             error_log("Erreur lors de la récupération des données: " . $error->getMessage());
             return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
         }
+    }
+
+    public function getInfoActeur($id){
+        $sql = "SELECT * FROM name_basics WHERE nconst = :nconst";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":nconst", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getInfoFilm($id){
+        $sql = "SELECT * FROM title_basics WHERE tconst = :tconst";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":tconst", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
     
 }

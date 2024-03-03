@@ -21,9 +21,6 @@ class Controller_contact extends Controller{
             $email = trim(e($_POST['email']));
             $name = trim(e($_POST['nom']));
             $message = trim(e($_POST['message']));
-            var_dump($email);
-            var_dump($name);
-            var_dump($_POST['message']);
             $mail->addAddress($email);
             $mail->Subject = "Merci pour votre message $name";
             $mail->Body = <<<END

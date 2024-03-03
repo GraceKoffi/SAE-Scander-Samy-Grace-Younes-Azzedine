@@ -7,7 +7,22 @@ Class Controller_connect extends Controller{
     
     public function action_render_user($username){
         $m = Model::getModel();
-        $result = $m->getUserData($username);   
+        $result = $m->getUserData($username);
+        $typeRecherche = ["Recherche", "Trouver", "Rapprochement"];
+        foreach($typeRecherche as $type){
+            $typeData = [
+                "username" => $_SESSION['username'],
+                "type" => $type
+            ];
+            $r = $m->getRechercherData($typeData);
+            $result[] = [$type =>$r];
+        }
+        $favoActeur = $m->getFavorieActeur($_SESSION['username']);
+        $favoFilm = $m->getFavorieFilm($_SESSION['username']);
+
+        $result[] = ["FavorieActeur" => $favoActeur];
+        $result[] = ["FavorieFilm" => $favoFilm];
+
         $tab = ["tab" => $result];
         $this->render("connect_user", $tab);
         
@@ -19,21 +34,6 @@ Class Controller_connect extends Controller{
         $this->render("connect_setting", $tab);
     }
 
-    public function action_render_rechercheData(){
-        $m = Model::getModel();
-        if(isset($_GET["type"])){
-            $data = [
-                "username" => $_SESSION['username'],
-                "type" => trim(e($_GET['type']))
-            ];
-            $tab = ["tab" => $m->getRechercherData($data)];
-            $this->render("rechercheData", $tab);    
-        }
-        else{
-            $tab = ["tab" => "Valeur manquant"];
-            $this->render("error", $tab);
-        }
-    }
 
     public function action_login(){
         if(isset($_POST['userName']) && isset($_POST['passWord'])){

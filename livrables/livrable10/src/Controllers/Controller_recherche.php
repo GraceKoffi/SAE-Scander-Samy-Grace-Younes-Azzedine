@@ -10,6 +10,18 @@ class Controller_recherche extends Controller {
 
     public function action_rechercher() {
         $m = Model::getModel();
+        if(isset($_SESSION['username'])){
+            $data = [
+                "UserName" => $_SESSION['username'],
+                "TypeRecherche" => "Recherche",
+                "MotsCles" => trim($_POST['search'])
+            ];
+            $result = $m->addUserRecherche($data);
+            if(!empty($result)){
+                $tab = ["tab" => $result["message"]];
+                $this->render("error", $tab);
+            }
+        }
 
         if ($_POST['typeselection'] == 'titre') {
             $titre = isset($_POST['search']) && trim($_POST['search']) !== '' ? $_POST['search'] : null;
@@ -33,18 +45,6 @@ class Controller_recherche extends Controller {
                  
             ];
             
-            if(isset($_SESSION['username'])){
-                $data = [
-                    "UserName" => $_SESSION['username'],
-                    "TypeRecherche" => "Recherche",
-                    "MotsCles" => $titre
-                ];
-                $result = $m->addUserRecherche($data);
-                if(!empty($result)){
-                    $tab = ["tab" => $result["message"]];
-                    $this->render("error", $tab);
-                }
-            }
             $this->render("rechercheavancee_resultat", $tab);
 
             
@@ -67,18 +67,6 @@ class Controller_recherche extends Controller {
                     "typereponse" =>$_POST['typeselection'],
         
         ];
-        if(isset($_SESSION['username'])){
-            $data = [
-                "UserName" => $_SESSION['username'],
-                "TypeRecherche" => "Recherche",
-                "MotsCles" => $titre
-            ];
-            $result = $m->addUserRecherche($data);
-            if(!empty($result)){
-                $tab = ["tab" => $result["message"]];
-                $this->render("error", $tab);
-            }
-        }
 
             $this->render("rechercheavancee_resultat", $tab);
         }

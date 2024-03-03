@@ -14,9 +14,9 @@
     <div class="row">
         <div class="col-lg-12">
             <ul class="list-inline footer-links">
-                <li class="list-inline-item"><a href="#">Qui sommes-nous?</a></li>
+                <li class="list-inline-item"><a href="#"></a></li>
                 <li class="list-inline-item"><a href="?controller=contact">Contact</a></li>
-                <li class="list-inline-item"><a href="#">Politique de confidentialité</a></li>
+                <li class="list-inline-item"><a href="#"></a></li>
             </ul>
         </div>
     </div>

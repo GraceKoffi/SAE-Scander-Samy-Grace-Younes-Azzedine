@@ -1,12 +1,22 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
 
+.bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+    padding: 5px 10px;
+ }
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
         <?php if (isset($personne1) && isset($personne2)): ?>
         <h1>Résultats entre "<?= e($personne1) ?>" et "<?= e($personne2) ?>"</h1>
         <?php endif; ?>
+        <p>
+        <a href="?controller=recherche">
+        <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
+        </a>
+        </p>
     </div>
 </div>
 
@@ -84,7 +94,7 @@ async function displayMovies() {
                 <div class="card-bodyrecherche">`;
 
         
-            cardContent += `p
+            cardContent += `
                 <h2 class="card-1recherche">${displayValue(item.primarytitle, 'Aucune information')}</h2>
                 <p class="card-2recherche">Type : ${displayValue(item.titletype, 'Aucune information')}</p>
                 <p class="card-3recherche">Date : ${displayValue(item.startyear, 'Aucune information')}</p>

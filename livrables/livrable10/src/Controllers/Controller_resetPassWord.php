@@ -11,7 +11,6 @@ class Controller_resetPassWord extends Controller{
             if($m->userExist(trim(e($_POST['username'])))["exists"] == true) {
                 $_SESSION['usernameResetPass'] = trim(e($_POST['username']));
                 $email = $m->emailExist(trim(e($_POST['username'])));
-                var_dump($email);
                 if(empty($email)) {
                     $tab = [
                         "tab" => ["Message" => "Aucun email saisie pour l'utilisateur", 
@@ -54,8 +53,7 @@ class Controller_resetPassWord extends Controller{
                     else{
                         $email = $_SESSION['passWordActif'];
                     }
-                    var_dump($email[0]);
-                    $mail->addAddress($email[0]);
+                    $mail->addAddress($email);
                     $mail->Subject = "Password Reset";
                     $mail->Body = <<<END
 
@@ -65,10 +63,10 @@ class Controller_resetPassWord extends Controller{
                     END;
 
                     try {
-                        $email = $email[0];
+                        $email = $email;
                         $mail->send();
                         $tab = ["tab" => "Mail envoyer à $email regarder votre boite mail"];
-                        $this->render("error", $tab);
+                        $this->render("isreset", $tab);
 
 
                     } catch (Exception $e) {
