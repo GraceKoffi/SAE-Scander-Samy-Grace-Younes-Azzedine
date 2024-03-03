@@ -217,7 +217,7 @@ class Model
         return $requete->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function doublonFilm($titre,$category) {
+    public function doublonFilm($titre, $category=null) {
         $titre = trim($titre);
        
             
@@ -226,7 +226,7 @@ class Model
         WHERE lower(primarytitle) = lower(:titre)";
         
         
-        if($category !== "all"){
+        if($category !== "all" && $category !==null){
 
             $sql .= " AND titletype = :category ";
         }
@@ -234,7 +234,7 @@ class Model
         
         $sql .= " ; ";
         $requete = $this->bd->prepare($sql);
-        if($category !== "all"){
+        if($category !== "all" && $category !==null){
 
             $requete->bindParam(':category', $category, PDO::PARAM_STR);
         }
@@ -244,19 +244,19 @@ class Model
         return $requete->fetch(PDO::FETCH_COLUMN);  
     }
 
-    public function listeDoublon($titre,$category) {
+    public function listeDoublon($titre, $category = null) {
         $titre = trim($titre);
                     
             $sql = "SELECT *
         FROM title_basics
         WHERE lower(primarytitle) = lower(:titre)";
-         if($category !== "all"){
+         if($category !== "all" && $category !== null){
             $sql .= " AND titletype = :category ";
          }
        
         $sql .= "; ";
         $requete = $this->bd->prepare($sql);
-        if($category !== "all"){
+        if($category !== "all" && $category !== null){
 
             $requete->bindParam(':category', $category, PDO::PARAM_STR);
         }
@@ -264,6 +264,7 @@ class Model
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function doublonActeur($personne) {
         $personne = trim($personne);
         $requete = $this->bd->prepare("SELECT COUNT(*) 
@@ -287,6 +288,7 @@ class Model
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function voirtousresultat($mot,$type) {
         $mot = trim($mot);
         $mot = "%" . $mot . "%";
@@ -361,7 +363,8 @@ class Model
     }
     
 
-    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech) {
+    public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, 
+                                    $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech) {
         $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres,tr.averagerating , tr.numvotes
                 FROM title_basics tb
                 LEFT JOIN title_ratings tr ON tr.tconst=tb.tconst
@@ -920,7 +923,8 @@ class Model
         try {
             $userId = $this->getUserId($data["UserName"])["userid"];
 
-            $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle, rehcercheTime) VALUES (:userId, :TypeRecherche, :MotsCles, CURRENT_TIMESTAMP)";
+            $sql = "INSERT INTO RechercheData (userId, typeRecherche, motCle, rehcercheTime) 
+                    VALUES (:userId, :TypeRecherche, :MotsCles, CURRENT_TIMESTAMP)";
             $query = $this->bd->prepare($sql);
             $query->bindParam(':userId', $userId, PDO::PARAM_INT);
             $query->bindParam(':TypeRecherche', $data["TypeRecherche"], PDO::PARAM_STR);
@@ -1078,9 +1082,44 @@ class Model
         
         // Utilisation de cURL pour récupérer les films actuellement en salle
         $movie_data = file_get_contents($url);
-        $movies = json_decode($movie_data, true)['results'];
+        $movies = json_decode($movie_data, true);
        return $movies;
     }
+    public function getPersonnePhoto($id) {
+        $apiKey = "9e1d1a23472226616cfee404c0fd33c1";
+        $url = "https://api.themoviedb.org/3/find/{$id}?api_key={$apiKey}&language=fr&external_source=imdb_id";
     
+        try {
+            $response = file_get_contents($url);
+            $data = json_decode($response, true);
+    
+            $posterPath = "./Images/depannage.jpg"; // Photo de dépannage par défaut
+    
+            if (isset($data['person_results']) && count($data['person_results']) > 0 && isset($data['person_results'][0]['profile_path'])) {
+                $posterPath = "https://image.tmdb.org/t/p/w400" . $data['person_results'][0]['profile_path'];
+            }
+    
+            return $posterPath;
+        } catch (Exception $error) {
+            error_log("Erreur lors de la récupération des données: " . $error->getMessage());
+            return "./Images/depannage.jpg";
+        }
+    }
+
+    public function getFilmPhoto($id) {
+        $apiKey = "9e1d1a23472226616cfee404c0fd33c1";
+        $url = "https://api.themoviedb.org/3/movie/{$id}?api_key={$apiKey}&language=fr";
+    
+        try {
+            $response = file_get_contents($url);
+            $data = json_decode($response, true)['results'];
+    
+            // Retourne le chemin de l'image de dépannage si aucun poster n'est trouvé
+            return isset($data['poster_path']) ? "https://image.tmdb.org/t/p/w400{$data['poster_path']}" : "./Images/depannage.jpg";
+        } catch (Exception $error) {
+            error_log("Erreur lors de la récupération des données: " . $error->getMessage());
+            return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
+        }
+    }
     
 }

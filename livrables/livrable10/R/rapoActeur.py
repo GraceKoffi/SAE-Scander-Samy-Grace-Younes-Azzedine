@@ -277,8 +277,8 @@ class rapoActeur:
         #Initialisation
         tab_noeud_traite = []
         tab_branch_traite = set()
-        #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_debut)s;"
-        sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_debut)s AND tb.titleType = 'movie';"
+        sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_debut)s;"
+        #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_debut)s AND tb.titleType = 'movie';"
         value = {"nconst_debut": self.nconstDebut}
         cur.execute(sql, value)
         tabs_tconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -286,8 +286,8 @@ class rapoActeur:
             tab_nconst_branche = []
             for noeud in tabs_tconst_noeud:
                 tab_noeud_traite.append(noeud)
-                #sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
-                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": noeud}
                 cur.execute(sql, value)
                 for e in cur.fetchall() :
@@ -315,8 +315,8 @@ class rapoActeur:
             #recup noeud (tconst) pour l'étape i+1
             tabs_tconst_noeud = []
             for nconst in tab_branch_traite :
-                #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
-                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
+                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": nconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():
@@ -341,8 +341,8 @@ class rapoActeur:
         tab_noeud_traite = []
         tab_branch_traite = set()
         dic = {"type": "fin"}
-        #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_fin)s;"
-        sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_fin)s AND tb.titleType = 'movie';"
+        sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst_fin)s;"
+        #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst_fin)s AND tb.titleType = 'movie';"
         value = {"nconst_fin": self.nconstFin}
         cur.execute(sql, value)
         tabs_tconst_noeud = [noeud[0] for noeud in cur.fetchall()]
@@ -352,8 +352,8 @@ class rapoActeur:
                 
                 tab_noeud_traite.append(noeud)
                 
-                #sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
-                sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
+                sql = "SELECT nconst FROM title_principals WHERE tconst = %(tconst)s;"
+                #sql = "SELECT tp.nconst FROM title_principals tp WHERE tp.tconst = %(tconst)s AND (tp.category = 'actor' OR tp.category = 'actress');"
                 value = {"tconst": noeud}
                 cur.execute(sql, value)
                 
@@ -382,8 +382,9 @@ class rapoActeur:
             
             tabs_tconst_noeud = []
             for nconst in tab_branch_traite :
-                #sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
-                sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
+                #
+                sql = "SELECT tconst FROM title_principals WHERE nconst = %(nconst)s;"
+                #sql = "SELECT tp.tconst FROM title_principals tp JOIN title_basics tb ON tp.tconst = tb.tconst WHERE tp.nconst = %(nconst)s AND tb.titleType = 'movie';"
                 value = {"nconst": nconst}
                 cur.execute(sql, value)
                 for e in cur.fetchall():

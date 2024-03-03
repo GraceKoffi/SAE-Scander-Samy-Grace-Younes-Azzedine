@@ -2,6 +2,8 @@
 
 Class Controller_home extends Controller{
 
+    public function __contruct(){}
+    
     public function action_home(){
         $m = Model::getModel();
         if (isset($_POST["suggestion"]) && isset($_POST["category"]) ) {

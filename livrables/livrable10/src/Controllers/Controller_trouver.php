@@ -1,7 +1,8 @@
 <?php
 class Controller_trouver extends Controller {
     public function action_fom_trouver() {
-        $tab = [];
+        $m = Model::getModel();
+        $tab = [ 'caroussel' => $m->filmpopulaire()]; 
         $this->render("trouver", $tab);
     }
 
@@ -14,20 +15,23 @@ class Controller_trouver extends Controller {
                 $category2 = $_POST['categorytitre2'] ;
                 $nombrededoublon1 = $m->doublonFilm($_POST['titre1'], $category1);
                 $nombrededoublon2 = $m->doublonFilm($_POST['titre2'], $category2);
-              
+                if(isset($_SESSION['username'])) {
+                    $data = [
+                        "UserName" => $_SESSION['username'],
+                        "TypeRecherche" => "Trouver",
+                        "MotsCles" => [
+                            $_POST['titre1'],
+                            $_POST['titre2']
+                        ]
+                    ];
+                    $result = $m->addUserRecherche($data);
+                    if(!empty($result)) {
+                        $tab = ["tab" => $result["message"]];
+                        $this->render("error", $tab);
+                    }
+                }
                 if ($nombrededoublon1 == 1 && $nombrededoublon2 == 1) {
                     // Logique pour quand il y a exactement un doublon pour chaque titre
-                    if(isset($_SESSION['username'])) {
-                        $data = [
-                            "UserName" => $_SESSION['username'],
-                            "TypeRecherche" => "Titre",
-                            "MotsCles" => [
-                                $_POST['titre1'],
-                                $_POST['titre2']
-                            ]
-                        ];
-                        $result = $m->addUserRecherche($data);
-                    }
                     $tconst1 = $m->gettconstunique($_POST['titre1']) ;
                     $tconst2 = $m->gettconstunique($_POST['titre2']) ;
                     $tab = [
@@ -49,11 +53,11 @@ class Controller_trouver extends Controller {
             } elseif($typeSelection == "personne" && isset($_POST['personne1']) && isset($_POST['personne2'])) {
                 $nombrededoublon1 = $m->doublonActeur($_POST['personne1']);
                 $nombrededoublon2 = $m->doublonActeur($_POST['personne2']);
-                if ($nombrededoublon1 == 1 && $nombrededoublon2 == 1) {
+                
                 if(isset($_SESSION['username'])) {
                     $data = [
                         "UserName" => $_SESSION['username'],
-                        "TypeRecherche" => "Personne",
+                        "TypeRecherche" => "Trouver",
                         "MotsCles" => [
                             $_POST['personne1'],
                             $_POST['personne2']
@@ -64,7 +68,10 @@ class Controller_trouver extends Controller {
                         $tab = ["tab" => $result["message"]];
                         $this->render("error", $tab);
                     }
+                
                 }
+                
+                if ($nombrededoublon1 == 1 && $nombrededoublon2 == 1) {
                 $nconst1 = $m->getnconstunique($_POST['personne1']) ;
                 $nconst2 = $m->getnconstunique($_POST['personne2']) ;
                 $tab = [
