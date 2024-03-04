@@ -36,10 +36,6 @@ Class Controller_rapprochement extends Controller{
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 }
                 
                 if ($isMultipleTitle1 == 1 && $isMultipleTitle2 == 1) {
@@ -74,10 +70,6 @@ Class Controller_rapprochement extends Controller{
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 }
                 
                 if ($isMultipleActor1 == 1 && $isMultipleActor2 == 1) {

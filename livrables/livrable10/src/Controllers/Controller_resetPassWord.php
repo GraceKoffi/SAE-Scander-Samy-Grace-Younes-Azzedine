@@ -66,7 +66,7 @@ class Controller_resetPassWord extends Controller{
                         $email = $email;
                         $mail->send();
                         $tab = ["tab" => "Mail envoyer à $email regarder votre boite mail"];
-                        $this->render("isreset", $tab);
+                        $this->render("error", $tab);
 
 
                     } catch (Exception $e) {
@@ -125,8 +125,8 @@ class Controller_resetPassWord extends Controller{
             ];
             $result = $m->updatePassword($data);
             if($result['status'] == "OK"){
-                $tab = ["tab" => "message ok"];
-                $this->render("reset", $tab);
+                $tab = ["tab" => "Votre mot de passe à été reinitialiser"];
+                $this->render("error", $tab);
             }
             else{
                 $tab = ["tab" => "Error dans la modification du mot de passe"];
