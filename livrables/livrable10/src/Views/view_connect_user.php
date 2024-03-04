@@ -1,329 +1,563 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .logo {
-            width: 100px;
-            height: 100px;
-            background-image: url('Images/findercine1.jpg');
-            background-size: cover;
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-        .search-count {
-            background-color: black;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-            color: white;
-            padding: 50px 0;
-            text-align: center;
-        }
+<?php
+require "Views/view_navbar.php";
 
-        .card {
-            display: grid;
-            grid-template-columns: 300px;
-            grid-template-rows: 210px 210px 80px;
-            grid-template-areas: "image" "text" "stats";
-
-            border-radius: 18px;
-            background: white;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.9);
-            font-family: roboto;
-            text-align: center;
-            transition: 0.5s ease;
-            cursor: pointer;
-            margin:30px;
-            }
-
-        .card-image {
-            grid-area: image;
-            }
-        .card-text {
-            grid-area: text;
-            }
-        .card-stats {
-            grid-area: stats; 
-            }
-
-
-        .card-image {
-            grid-area: image;
-            background: url("Images/54qqo354uyy11.jpg");
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            background-size: cover;
-            }
-
-        .card-text {
-            grid-area: text;
-            margin: 25px;
-            }
-        .card-text .date {
-            color: rgb(255, 7, 110);
-            font-size:13px;
-            }
-        .card-text p {
-            color: grey;
-            font-size:15px;
-            font-weight: 300;
-            }
-        .card-text h2 {
-            margin-top:0px;
-            font-size:28px;
-            }
-
-        .card-stats {
-            grid-area: stats; 
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr;
-
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            background: grey;
-            }
-
-        .card-stats .stat {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-
-            color: white;
-            padding:10px;
-            }
-
-        .card:hover {
-            transform: scale(1.15);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
-        }
-        .card-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 50vh; /* Ajustez la hauteur selon vos besoins */
-        }
-        .favorites-container {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px;
-        }
-
-        .favorites-div {
-            width: 45%;
-            border: 1px solid #ccc;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-        .view-all-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .view-all-link:hover {
-            text-decoration: underline;
-        }
-
-        .favori-message {
-            text-align: center;
-            color: #333;
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        
-        .paragraphe{
-            margin-top: 80px;
-        }
-  </style>
-</head>
-<body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <img class="scroll-reveal logo" src="Images/findercine1.jpg" alt="Logo Musee de France" width="100">
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="?controller=home">Acceuil</a></li>
-                <li class="nav-item"><a class="nav-link" href="?controller=recherche">Recherche</a></li>
-                <li class="nav-item"><a class="nav-link" href="?controller=trouver">Trouver</a></li>
-                <li class="nav-item"><a class="nav-link" href="?controller=rapprochement">Rapprochement</a></li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="?controller=connect&action=settings">Settings</a></li>
-                <li class="nav-item"><a class="nav-link" href="?controller=connect&action=logout">Logout</a></li>
-            </ul>
-        </div>
-    </nav> -->
-    <?php
-    require "Views/view_navbar.php";
-    // Récupérer la variable 'retour' de l'URL
-    if(isset($_GET['retour'])){
-        $retour = trim(e($_GET['retour']));
-        switch ($retour) {
-            case 1:
-                $message = "Modification pris en compte";
-                $alertClass = "alert-success";
-                break;
-            case 0:
-                $message = "Aucune modification";
-                $alertClass = "alert-secondary";
-                break;
-            case -1:
-                $message = "Une erreur est survenu";
-                $alertClass = "alert-danger";
-                break;
-            default:
-                $message = "";
-                $alertClass = "";
-        }
-    
-        // Si un message a été défini, afficher l'alerte
-        if ($message != "") {
-            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
-                    $message
-                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                  </div>";
-        }
+// Récupérer la variable 'retour' de l'URL
+if(isset($_GET['retour'])){
+    $retour = trim(e($_GET['retour']));
+    switch ($retour) {
+        case 1:
+            $message = "Modification pris en compte";
+            $alertClass = "alert-success";
+            break;
+        case 0:
+            $message = "Aucune modification";
+            $alertClass = "alert-secondary";
+            break;
+        case -1:
+            $message = "Une erreur est survenu";
+            $alertClass = "alert-danger";
+            break;
+        default:
+            $message = "";
+            $alertClass = "";
     }
-    ?>
 
-    <div class="jumbotron paragraphe text-center">
-        <h1 class="display-4">Salut, <?php echo $_SESSION['username'];?> !</h1>
-        <p class="lead">Bienvenue sur votre page de profil. Vous pouvez consulter ici toutes vos recherches.</p>
-        <p id="searchCount">Voux avez realiser <span id="counter"><?php echo $tab["Total"]["totalrecherches"];?></span> recherche(s)</p>
-        <a href="?controller=connect&action=logout"><button class="btn btn-primary">Logout</button></a>
-       
-    </div>
-    
-<a href="?controller=connect&action=render_rechercheData&type=Recherche">
-<div class="card-container">
-    <div class="card">
-        <div class="card-image"></div>
-            <div class="card-text">
-                <?php
-                if($tab["TotalParType"]["countrecherche"] == 0){
-                    $formattedDateTime = "Pas de recherche realiser";
-                }
-                else{
-                    $rechercheTime = $tab["RecherTime"]["recherche"];
-                    $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
-                }
-                ?>
-                <span class="date"><?php echo $formattedDateTime; ?></span>    
-                <h2>Recherche</h2>
-                <p>Vous retrouver ici votre historique de Recherche</p>
+    // Si un message a été défini, afficher l'alerte
+    if ($message != "") {
+        echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                $message
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>";
+    }
+}
+?>
+
+<style>
+    .connect{
+        margin-top: 250px;
+    }
+
+    .buttonLarge{
+        height: 80px;
+        background-color: yellow !important;
+        color: black !important;
+    }
+
+    .images{
+        width: 90%;
+        opacity: 0.3;
+    }
+
+    .item{
+    margin-top:10px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .collapsBody{
+    background-color: black;
+  }
+
+  .bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+    padding: 10px 20px;
+    font-size: 15px;
+ }
+ .collaps-beetwen{
+    margin-top: 50px;
+ }
+
+ .titreTrouver{
+    margin-top:100px
+ }
+
+ .favoris{
+    margin-top: 400px;
+ }
+
+ .historique{
+    margin-top: 400px;
+ }
+
+ .colapsFavorie{
+    margin-bottom: 500px;
+ }
+
+</style>
+
+    <div id="fonctionalite" class="container connect">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="titreTrouver">Salut <?php echo $_SESSION['username']?></h1>
+                
+                <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
+                    <p>Compte est une fonctionnalité inédite, rendant votre expérience magique
+                    </p>
+                </div>
             </div>
-        <div class="card-stats">
-                <div class="stat">
-                    <div class="value"><sup></sup></div>
-                        <div class="type"></div>
+                <div class="mx-auto col-md-7">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img class="d-block w-100" src="Images/_2f221533-58bb-497e-806d-5add2e522048.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='#historique'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                        Decouvrir votre
+                                        Historique
+                                        </button>
+                                </a>
+                            </div>
                     </div>
-            <div class="stat">
-            <div class="value"><?php echo $tab["TotalParType"]["countrecherche"];?></div>
-            <div class="type">Element(s)</div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="Images/_2abaf182-b6a4-47a4-b32f-a33481c1f963.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=connect&action=settings'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                    Acceder
+                                    aux parametres
+                                    </button>
+                                </a>
+                            </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="Images/_5b4cbf0b-0827-4bc1-ba32-34f9096f70b2.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='#favoris'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                    Decouvrir vos
+                                    Favoris
+                                    </button>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="Images/_41d30475-6fbc-41b9-9e6d-2c1c2646dfdb.jpeg" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href='?controller=connect&action=logout'>
+                                    <button id='favoriButton' class='bouton-favori'>
+                                    Deconnexion
+                                    </button>
+                                </a>
+                            </div>
+                    </div>
+                    
+                    </div>
+                </div>
+             </div>
             </div>
         </div>
     </div>
-</a>
-    
-<a href="?controller=connect&action=render_rechercheData&type=Trouver">
-    <div class="card">
-    <div class="card-image"></div>
-    <div class="card-text">
-        <?php
-        if($tab["TotalParType"]["counttrouver"] == 0){
-            $formattedDateTime = "Pas de recherche realiser";
-        }
-        else{
-            $rechercheTime = $tab["RecherTime"]["trouver"];
-            $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
-        }
-        ?>
-        <span class="date"><?php echo $formattedDateTime; ?></span>
-        <h2>Trouver</h2>
-        <p>Vous retrouver ici votre historique de Trouver</p>
-    </div>
-    <div class="card-stats">
-        <div class="stat">
-        <div class="value"><sup></sup></div>
-        <div class="type"></div>
-        </div>
-        <div class="stat">
-        <div class="value"><?php echo $tab["TotalParType"]["counttrouver"]?></div>
-        <div class="type">Element(s)</div>
-        </div>
-    </div>
-    </div>
-</a>
 
-<a href="?controller=connect&action=render_rechercheData&type=Rapprochement">
-    <div class="card">
-    <div class="card-image"></div>
-    <div class="card-text">
-        <?php
-        if($tab["TotalParType"]["countrapprochement"] == 0){
-            $formattedDateTime = "Pas de recherche realiser";
+<div id="historique" class="container-fluid historique">
+    <div class="row align-items-center">   
+            <div class="col">
+            <h1 class="titreTrouver">Historique</h1>
+            
+            <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
+                <p>Redécouvrez vos recherche grace à l'historisation de vos recherche.
+                </p>
+            </div>
+        </div>
+        </div>    
+    </div>
+</div>
+
+
+<div class="container-fluid">
+<div class="collaps-beetwen">
+<p>
+  <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseRecherche" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <p>Recherche
+                </p>
+            </div>
+        </div>
+    </div>
+  </button>
+</p>
+</div>
+<div class="collapse" id="collapseRecherche">
+  <div class="card card-body collapsBody">
+  <?php
+        if(isset($tab[0]) && sizeof($tab[0]["Recherche"]) > 0){
+            foreach($tab[0]["Recherche"] as $historique){
+
+                $motClee = $historique['motcle'];
+                $time = $historique['rehcerchetime'];
+                // Date donnée
+                $dateDonnee = new DateTime($time);
+
+                // Date actuelle
+                $dateActuelle = new DateTime();
+
+                // Calcul de la différence
+                $intervalle = $dateActuelle->diff($dateDonnee);
+
+                // Construction du message
+                $message = "Il y a ";
+                if ($intervalle->y > 0) {
+                    $message .= $intervalle->y . " an" . ($intervalle->y > 1 ? "s" : "");
+                } elseif ($intervalle->m > 0) {
+                    $message .= $intervalle->m . " mois";
+                } elseif ($intervalle->d > 0) {
+                    $message .= $intervalle->d . " jour" . ($intervalle->d > 1 ? "s" : "");
+                } elseif ($intervalle->h > 0) {
+                    $message .= $intervalle->h . " heure" . ($intervalle->h > 1 ? "s" : "");
+                } elseif ($intervalle->i > 0) {
+                    $message .= $intervalle->i . " minute" . ($intervalle->i > 1 ? "s" : "");
+                } else {
+                    $message .= "quelques secondes";
+                }
+
+
+                // Affichage du résultat
+
+                echo"
+                 <div class='cardrecherche item' style='cursor: pointer;'>
+                <div class='card-bodyrecherche'>
+                 <h2 class='card-1recherche'>$motClee</h2>
+                <p class='card-2recherche'>$message</p>
+                 </div>
+                 </div>";
+            }
         }
         else{
-            $rechercheTime = $tab["RecherTime"]["rapprochement"];
-            $formattedDateTime = "Realiser le ".date("d/m/Y H:i", strtotime($rechercheTime));
+            echo"
+                    <div class='mx-auto row'>
+                        <p>
+                        <a href='?controller=recherche'>
+                        <button id='favoriButton' class='bouton-favori'>Realiser un votre première recherche </button>
+                        </a>
+                        </p>  
+                </div>
+            ";
         }
-        ?>
-        <span class="date"><?php echo $formattedDateTime; ?></span>
-        <h2>Rapprochement</h2>
-        <p>Vous retrouver ici votre historique de Rapprochement</p>
-    </div>
-    <div class="card-stats">
-        <div class="stat">
-        <div class="value"><sup></sup></div>
-        <div class="type"></div>
-        </div>
-        <div class="stat">
-        <div class="value"><?php echo $tab["TotalParType"]["countrapprochement"]?></div>
-        <div class="type">Element(s)</div>
-        </div>
-    </div>
-    </div>
-</a>
+    ?>
+  <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count">
+    <p>Resultat : <?php echo sizeof($tab[0]["Recherche"]); ?></p>
+  </div>
 
 </div>
-<div class="favorites-container">
-        <div class="favorites-div" id="filmFavorites">
-            <h2>Favorite Films</h2>
-            <p class="favori-message">Vous avez <?php echo $tab['TotalFavorieFilm']['favoriefilmcount']; ?> favoris.</p>
-            <ul id="filmList">
-                <!-- List of favorite films -->
-            </ul>
-            <a href="view-all-films.php" class="view-all-link">Voir tous les films favoris</a>
-        </div>
+</div>
+    
 
-        <div class="favorites-div" id="actorFavorites">
-            <h2>Favorite Actors</h2>
-            <p class="favori-message">Vous avez <?php echo $tab['TotalFavorieActeur']['favorieacteurcount']; ?> favoris.</p>
-            <ul id="actorList">
-                <!-- List of favorite actors -->
-            </ul>
-            <a href="view-all-actors.php" class="view-all-link">Voir tous les acteurs favoris</a>
+
+
+<div class="collaps-beetwen">
+<p>
+  <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseLiens" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <p>Liens
+                </p>
+            </div>
         </div>
     </div>
+  </button>
+</p>
+</div>
+<div class="collapse" id="collapseLiens">
+  <div class="card card-body collapsBody">
+  <?php
+        if(isset($tab[1]) && sizeof($tab[1]["Trouver"]) > 0){
+            foreach($tab[1]["Trouver"] as $historique){
+
+                $motClee = $historique['motcle'];
+                $time = $historique['rehcerchetime'];
+                // Date donnée
+                $dateDonnee = new DateTime($time);
+
+                // Date actuelle
+                $dateActuelle = new DateTime();
+
+                // Calcul de la différence
+                $intervalle = $dateActuelle->diff($dateDonnee);
+
+                // Construction du message
+                $message = "Il y a ";
+                if ($intervalle->y > 0) {
+                    $message .= $intervalle->y . " an" . ($intervalle->y > 1 ? "s" : "");
+                } elseif ($intervalle->m > 0) {
+                    $message .= $intervalle->m . " mois";
+                } elseif ($intervalle->d > 0) {
+                    $message .= $intervalle->d . " jour" . ($intervalle->d > 1 ? "s" : "");
+                } elseif ($intervalle->h > 0) {
+                    $message .= $intervalle->h . " heure" . ($intervalle->h > 1 ? "s" : "");
+                } elseif ($intervalle->i > 0) {
+                    $message .= $intervalle->i . " minute" . ($intervalle->i > 1 ? "s" : "");
+                } else {
+                    $message .= "quelques secondes";
+                }
+
+
+                // Affichage du résultat
+
+                echo"
+                 <div class='cardrecherche item' style='cursor: pointer;'>
+                <div class='card-bodyrecherche'>
+                 <h2 class='card-1recherche'>$motClee</h2>
+                    <p class='card-2recherche'>$message</p>
+                 </div>
+                 </div>";
+            }
+        }
+        else{
+            echo "
+                    <div class='mx-auto row'>
+                        <p>
+                        <a href='?controller=trouver'>
+                        <button id='favoriButton' class='bouton-favori'>Realiser un votre premier lien</button>
+                        </a>
+                        </p>  
+                </div>";
+
+        }
+    ?>
+  <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count">
+    <p>Resultat : <?php echo sizeof($tab[1]["Trouver"]); ?></p>
+  </div>
+
+</div>
+    
+  </div>
+
+
+
+<div class="collaps-beetwen">
+<p>
+  <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseRapprochement" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <p>Rapprochement
+                </p>
+            </div>
+        </div>
+    </div>
+  </button>
+</p>
+</div>
+<div class="collapse" id="collapseRapprochement">
+  <div class="card card-body collapsBody">
+  <?php
+        if(isset($tab[2]) && sizeof($tab[2]["Rapprochement"]) > 0){
+            foreach($tab[2]["Rapprochement"] as $historique){
+
+                $motClee = $historique['motcle'];
+                $time = $historique['rehcerchetime'];
+                // Date donnée
+                $dateDonnee = new DateTime($time);
+
+                // Date actuelle
+                $dateActuelle = new DateTime();
+
+                // Calcul de la différence
+                $intervalle = $dateActuelle->diff($dateDonnee);
+
+                // Construction du message
+                $message = "Il y a ";
+                if ($intervalle->y > 0) {
+                    $message .= $intervalle->y . " an" . ($intervalle->y > 1 ? "s" : "");
+                } elseif ($intervalle->m > 0) {
+                    $message .= $intervalle->m . " mois";
+                } elseif ($intervalle->d > 0) {
+                    $message .= $intervalle->d . " jour" . ($intervalle->d > 1 ? "s" : "");
+                } elseif ($intervalle->h > 0) {
+                    $message .= $intervalle->h . " heure" . ($intervalle->h > 1 ? "s" : "");
+                } elseif ($intervalle->i > 0) {
+                    $message .= $intervalle->i . " minute" . ($intervalle->i > 1 ? "s" : "");
+                } else {
+                    $message .= "quelques secondes";
+                }
+
+
+                // Affichage du résultat
+
+                echo"
+                 <div class='cardrecherche item' style='cursor: pointer;'>
+                <div class='card-bodyrecherche'>
+                 <h2 class='card-1recherche'>$motClee</h2>
+                    <p class='card-2recherche'>$message</p>
+                 </div>
+                 </div>";
+            }
+        }
+        else{
+            echo "
+                    <div class='mx-auto row'>
+                        <p>
+                        <a href='?controller=rapprochement'>
+                        <button id='favoriButton' class='bouton-favori'>Realiser un votre premier rapprochement </button>
+                        </a>
+                        </p>  
+                        
+                </div>";
+
+        }
+    ?>
+  <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count">
+    <p>Resultat : <?php echo sizeof($tab[2]["Rapprochement"]); ?></p>
+  </div>
+
+</div>
+    
+  </div>
+</div>
+
+</div>
+
+<div id="favoris" class="container-fluid favoris">
+    <div class="row align-items-center">   
+            <div class="col">
+            <h1 class="titreTrouver">Favoris</h1>
+            
+            <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
+                <p>Redécouvrez vos recherche grace à l'historisation de vos recherche.
+                </p>
+            </div>
+        </div>
+        </div>    
+    </div>
+</div>
+<div class="container-fluid colapsFavorie">
+<div class="collaps-beetwen">
+<p>
+  <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseRecherche" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <p>Favorie Acteur
+                </p>
+            </div>
+        </div>
+    </div>
+  </button>
+</p>
+</div>
+<div class="collapse" id="collapseRecherche">
+  <div class="card card-body collapsBody">
+  <?php
+        $m = Model::getModel();
+        if(isset($tab[3]) && sizeof($tab[3]["FavorieActeur"]) > 0){
+            foreach($tab[3]["FavorieActeur"] as $historique){
+
+                $id = $historique['acteurid'];
+                $data = $m->getInfoActeur($id);
+                print_r($data);
+                
+                
+
+                echo"
+                 <div class='cardrecherche item' style='cursor: pointer;'>
+                <div class='card-bodyrecherche'>
+                 <h2 class='card-1recherche'>$motClee</h2>
+                 <p class='card-2recherche'>Type : ${displayValue(item.birthyear, 'Aucune information')}</p>
+                 <p class='card-3recherche'>Date : ${displayValue(item.primaryprofession, 'Aucune information')}</p>
+                 </div>
+                 </div>";
+            }
+        }
+        else{
+            echo"
+                    <div class='mx-auto row'>
+                        <p>
+                        <a href='?controller=recherche'>
+                        <button id='favoriButton' class='bouton-favori'>Decouvrez vos favoris</button>
+                        </a>
+                        </p>  
+                </div>
+            ";
+        }
+    ?>
+  <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count">
+    <p>Resultat : <?php echo sizeof($tab[3]["FavorieActeur"]); ?></p>
+  </div>
+
+</div>
+</div>
+    
+
+
+
+<div class="collaps-beetwen">
+<p>
+  <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseLiens" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <p>Favorie Film
+                </p>
+            </div>
+        </div>
+    </div>
+  </button>
+</p>
+</div>
+<div class="collapse" id="collapseLiens">
+  <div class="card card-body collapsBody">
+  <?php
+        $m = Model::getModel();
+        if(isset($tab[4]) && sizeof($tab[4]["FavorieFilm"]) > 0){
+            foreach($tab[4]["FavorieFilm"] as $historique){
+
+                $id = $historique['filmid'];
+                $data = $m->getInfoFilm($id);
+                $primaryTitle = isset($data['primarytitle']) && $data['primarytitle'] !== '' ? $data['primarytitle'] : "Aucune Information";
+                $type = isset($data['titletype']) && $data['titletype'] !== '' ? $data['titletype'] : "Aucune Information";
+                $date = isset($data['startyear']) && $data['startyear'] !== '' ? $data['startyear'] : "Aucune Information";
+                $genres = isset($data['genres']) && $data['genres'] !== '' ? $data['genres'] : "Aucune Information";
+                
+
+                echo"
+                <a href='?controller=home&action=information_movie&id=$id' class='card-linkrecherche' style='text-decoration: none; color: inherit;'>
+                <div class='cardrecherche item' style='cursor: pointer;'>
+                <div class='card-bodyrecherche'>
+                 <h2 class='card-1recherche'>$primaryTitle</h2>
+                 <p class='card-2recherche'>Type : $type</p>
+                 <p class='card-3recherche'>Date : $date</p>
+                 <p class='card-4recherche'>Genres : $genres</p>
+                 </div>
+                 </div>
+                 </a>";
+            }
+        }
+        else{
+            echo "
+                    <div class='mx-auto row'>
+                        <p>
+                        <a href='?controller=recherche'>
+                        <button id='favoriButton' class='bouton-favori'>Decouvrez vos favoris</button>
+                        </a>
+                        </p>  
+                </div>";
+
+        }
+    ?>
+  <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count">
+    <p>Resultat : <?php echo sizeof($tab[4]["FavorieFilm"]); ?></p>
+  </div>
+
+</div>
+    
+  </div>
+  </div>
+
+</div>
+
 <script>
+
    // Supposons que l'ID de votre alerte est 'myAlert'
 var alertElement = document.getElementById('myAlert');
 
@@ -332,7 +566,8 @@ window.setTimeout(function() {
     alertElement.setAttribute('hidden', true);
 }, 2000);
 
-</script>
+    </script>
+
 <?php require "Views/view_footer.php"; ?>
-</body>
-</html>
+
+    

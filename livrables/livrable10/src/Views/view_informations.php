@@ -411,7 +411,9 @@ if (isset($_SESSION['username'])) {
     </div>
 </div>
 
+
 <script src="Js/informations.js"></script>
+
 
 <script>
        /*

@@ -160,7 +160,6 @@ $sexe="Femme";
 
    }
 }
-
   ?>  
     
     
@@ -188,13 +187,13 @@ $sexe="Femme";
 <?php
 if (isset($_SESSION['username'])) {
      // Récupérez la valeur de filmId depuis l'URL
-    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+    $favori = isset( $_SESSION['favoriActeur']) ?  $_SESSION['favoriActeur'] : 'false';
     $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
     $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
     echo "
     <div class='film' data-favori='$favori'>
         <h2 id='titreFilm'>Mon Film Préféré</h2>
-        <a href='?controller=home&action=favorie_acteur&acteurId=$id_imdb'>
+        <a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'>
             <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
         </a>
     </div>
@@ -297,6 +296,7 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 </div>
+<div style="margin-top: 100px"></div>
 <div class="container mt-4">
     <div class="row">
         <?php foreach($titre as $v) : ?>

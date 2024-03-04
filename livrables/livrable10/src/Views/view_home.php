@@ -194,6 +194,7 @@ Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous le
 <div class="row m-2">
 
 <div class="col-8">
+
 <h3 class="m-4" style="border-left:2px solid #FFCC00;padding-left: 6px;"> Populaire </h3>
     <div id="carouselExampleControls" class="carousel slide ml-4" data-ride="carousel" data-interval="3500">
         <div class="carousel-inner">

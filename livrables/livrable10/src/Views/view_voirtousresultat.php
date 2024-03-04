@@ -1,12 +1,21 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
-
+.bouton-favori{
+    border-radius: 10px 5%;
+    background-color: yellow;
+    padding: 5px 10px;
+ }
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
         <?php if (isset($titre)): ?>
         <h1>Résultats "<?= e($titre) ?>" dans "<?= e($category) ?>"  </h1>
         <?php endif; ?>
+        <p>
+        <a href="?controller=recherche">
+        <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
+        </a>
+        </p>
     </div>
 </div>
 
