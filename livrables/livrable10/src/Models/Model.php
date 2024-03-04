@@ -696,7 +696,7 @@ class Model
     public function getNcont($primaryName){
         $sql = "SELECT nconst
                 FROM name_basics
-                WHERE primaryName = :primaryName";
+                WHERE lower(primaryname) = lower(:primaryName) ;";
 
         $query = $this->bd->prepare($sql);
         $PrimaryName = e($primaryName);
@@ -709,7 +709,7 @@ class Model
     public function getTconst($primaryTitle){
         $sql = "SELECT tconst
                 FROM title_basics
-                WHERE primaryTitle = :primaryTitle;
+                WHERE lower(primarytitle) = lower(:primaryTitle); 
                 ";
         $query = $this->bd->prepare($sql);
         $PrimaryTitle = e($primaryTitle);
@@ -1195,4 +1195,13 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function getInfoActeur($id){
+        $sql = "SELECT * FROM name_basics WHERE nconst = :nconst";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":nconst", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+
+    }
+
 }
