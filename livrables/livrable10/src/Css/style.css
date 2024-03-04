@@ -382,3 +382,17 @@ h1{
     color: #666;
   }
   
+.cssmodal{
+
+  padding: 0px 0px;
+  font-size: 13px;
+  border-radius: 36px;
+  background: #FFCC00;
+  border-color: #FFCC00;
+}
+.cssmodal:hover{
+
+  background: #b69202;
+  border-color: #FFCC00;
+
+}

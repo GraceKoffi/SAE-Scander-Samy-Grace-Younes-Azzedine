@@ -2,16 +2,20 @@
 <html lang="fr">
 <head>
     <title>FinderCine</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.js"></script>
+
+
+    <link rel="icon"  sizes="128x128" href="./images/logoofficielle.png" type="image/png">
+
+
 <link rel="stylesheet" href="./css/style.css">
 
    
@@ -20,7 +24,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-very-dark fixed-top" style="background-color: #000000;">
 
-    <a class="navbar-brand" href="?controller=home&action=home"><img src="./images/logo2.png" alt="Logo"></a>
+    <a class="navbar-brand" href="?controller=home&action=home"><img src="./images/logoofficielle.png" alt="Logo"></a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             

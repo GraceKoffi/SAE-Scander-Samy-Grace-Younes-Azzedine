@@ -1,9 +1,4 @@
 <?php require "Views/view_navbar.php"; ?>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <style>
 body {
@@ -33,8 +28,10 @@ body {
 
 .composent-card:hover {
     transform: scale(1.1);
-    border: 2px solid white; /* Encadrement blanc lors du survol */
+    border: 2px solid #FFCC00; /* Encadrement blanc lors du survol */
 }
+
+
 
 .card-title {
     color: white; /* Titre en blanc */
@@ -52,6 +49,7 @@ body {
     background-color: yellow; /* Couleur de fond jaune */
     color: black; /* Texte en noir */
 }
+
 
 .custom-modal {
             color: black;
@@ -161,15 +159,15 @@ if(isset($_GET['id'])){
 else if(isset($_GET['filmId'])){
     $id_imdb = $_GET['filmId'];
 }
-echo $id_imdb;
+
 $api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
 $response = file_get_contents($url);
 $data = json_decode($response);
-$couverture = null;
-$portait= null;
-$overview= null;
+$couverture =null;
+$portrait= "./Images/depannage.jpg";
+$overview= 'Inconnu';
 
 
 
@@ -178,21 +176,21 @@ $results = array_merge($data->movie_results, $data->tv_results, $data->tv_episod
 
 foreach ($results as $result) {
     if (isset($result->backdrop_path) && $result->backdrop_path !== null) {
-        $couverture = $result->backdrop_path;
+        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->backdrop_path;
         break;  // Sortir de la boucle dès qu'une valeur est trouvée
     }
     if (isset($result->still_path) && $result->still_path!== null) {
-        $couverture = $result->still_path;
+        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->still_path;
         break;  // Sortir de la boucle dès qu'une valeur est trouvée
     }
 }
 foreach ($results as $result) {
     if (isset($result->poster_path) && $result->poster_path!== null) {
-        $portrait = $result->poster_path;
+        $portrait = "https://image.tmdb.org/t/p/w400" . $result->poster_path;
         break;  // Sortir de la boucle dès qu'une valeur est trouvée
     }
     if (isset($result->still_path) && $result->still_path!== null) {
-        $portrait = $result->still_path;
+        $portrait = "https://image.tmdb.org/t/p/w400" . $result->still_path;
         break;  // Sortir de la boucle dès qu'une valeur est trouvée
     }
 }
@@ -205,38 +203,50 @@ foreach ($results as $result) {
 }
 
 
-
-
-
-
 ?>
  
  <div class="container-fluid position-relative px-0">
     <div class="row">
         <div class="col-md-12">
-            <img class="img-fluid w-100" src="https://image.tmdb.org/t/p/w1280<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);">
+        <?php if($couverture): ?>
+            <img class="img-fluid w-100" src="<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);">
+        <?php else: ?>
+            <div class="col-md-12" style="background-color: black; height: 1180px;">
+            </div>
+        <?php endif; ?>
             <div class="info-container">
                 <div class="row">
                     <div class="col-md-3">
-                        <img class="mx-auto" src="https://image.tmdb.org/t/p/w400<?= $portrait ?>" alt="Portrait">
+                        <img class="mx-auto" src=<?= $portrait ?> alt="Portrait">
                     </div>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                    <h1><?= ($info['primarytitle'] !== null) ? $info['primarytitle'] : 'Inconnu'; ?></h1>
-<h2> <?= ($info['runtimeminutes'] !== null) ? $info['runtimeminutes'] . ' minutes' : 'Inconnu'; ?> - <?= ($info['startyear'] !== null) ? $info['startyear'] : 'Inconnu'; ?>
-</h2>
-<h3><?= ($info['genres'] !== null) ? $info['genres'] : 'Inconnu'; ?></h3>
-<h3><?= ($info['averagerating'] !== null) ? $info['averagerating'] : 'Inconnu'; ?></h3>
-<h3>
-    <?php
-    if (is_array($realisateur) && array_key_exists('realisateur', $realisateur)) {
-        echo ($realisateur['realisateur'] == null) ? "Inconnu" : $realisateur['realisateur'];
-    } else {
-        echo "Inconnu";
-    }
-    ?>
-</h3>
-<p><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
+                    <h1><?= ($info[0]['primarytitle'] !== null) ? $info[0]['primarytitle'] : 'Inconnu'; ?></h1>
+                    <p style= "margin-bottom : 50px;"> <?= ($info[0]['runtimeminutes'] !== null) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'; ?> &middot; <?= ($info[0]['startyear'] !== null) ? $info[0]['startyear'] : 'Inconnu'; ?> &middot; <?= ($info[0]['genres'] !== null) ? $info[0]['genres'] : 'Inconnu'; ?></p>
+                    <h6 style= "margin-top : 50px;">Synopsis</h6>
+                    <p style="font-size: 13px;"><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
+                    
+                    <div class= "row" style= "margin-top : 50px;">
+                    <div class= "col-md-4" >
+                    <h6> Note sur 10 </h6>
+                    <p style="font-size: 13px;"><?= ($info[0]['averagerating'] !== null) ? $info[0]['averagerating'] : 'Inconnu'; ?></p>
+                    </div>
+                    <div class= "col-md-4" >
+                    <h6>Réalisateur</h6>
+                    <?php
+                    if (is_array($realisateur) && array_key_exists('realisateur', $realisateur)) {
+                        echo '<p style="font-size: 13px;">' . ($realisateur['realisateur'] == null ? "Inconnu" : $realisateur['realisateur']) . '</p>';
+                    } else {
+                        echo '<p style="font-size: 13px;"> Inconnu </p>';
+                    }
+                    ?>
+                    </div>
+
+<button type="button" class="btn btn-primary col-md-2 cssmodal" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+                    </div>
+                    
+
+
 
 <?php
 if (isset($_SESSION['username'])) {
@@ -255,7 +265,10 @@ if (isset($_SESSION['username'])) {
     ";
 }
 ?>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+
+
+
+
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -361,16 +374,16 @@ if (isset($_SESSION['username'])) {
 </div>
 
 <div class="container mt-4">
+    <h3 style="    border-left:2px solid #FFCC00;padding-left: 6px;"> Participants </h3>
     <div class="row">
+    <?php if(empty($acteur)): ?>
+            <p>Aucun participant connu.</p>
+        <?php else: ?>
         <?php foreach($acteur as $v) : ?>
             <?php 
                 $id_acteur = $v['nconst'];
                 $url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
 
-                // $ch = curl_init($url);
-                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                // $response = curl_exec($ch);
-                // curl_close($ch);
 
                 $response = file_get_contents($url);
                 $data = json_decode($response);
@@ -394,10 +407,13 @@ if (isset($_SESSION['username'])) {
                 </a>
             </div>
         <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
 
-<script><?=require "Js/informations.js"; ?></script>
+
+<script src="Js/informations.js"></script>
+
 
 <script>
        /*
