@@ -258,8 +258,6 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
     <div class="scrolling-wrapper">
 
     <?php foreach ($movie as $movies) : ?>
-        
-
         <a href="?controller=home&action=information_movie&id=<?= $movies['tconst'] ?>"  class="card composent-card" style="width: 200px;">
         <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movies['tconst'] ?>">
         <div class="card-body">

@@ -37,7 +37,7 @@
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
-        <h1>Résultats entre "<?php echo $result[0]["search1"]?>" et "<?php echo $result[0]["search2"] ?> :</h1>
+        <h1>Résultats entre "<?php echo $result[0]["search1"]?>" et "<?php echo $result[0]["search2"] ?>" :</h1>
         <p><?php if(round($result["data"]["time"], 1) < 60): ?>
           <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?> s
           <?php elseif (round($result['data']['time']) > 60): ?>

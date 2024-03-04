@@ -19,6 +19,8 @@ Class Controller_rapprochement extends Controller{
             $typeSelection = $_POST['typeselection'];
             if($typeSelection == "titre" && isset($_POST['titre1']) 
                 && isset($_POST['titre2'])){
+                $debut = 'tconst1';
+                $fin = 'tconst2';
                 
                 $isMultipleTitle1 = $m->doublonFilm($_POST['titre1']);
                 $isMultipleTitle2 = $m->doublonFilm($_POST['titre2']);
@@ -56,11 +58,12 @@ Class Controller_rapprochement extends Controller{
             }
             else if($typeSelection == "personne" 
                     && isset($_POST['personne1']) && isset($_POST['personne2'])) {
-                    
+                $debut = 'nconst1';
+                $fin = 'nconst2';
                 $isMultipleActor1 = $m->doublonActeur($_POST['personne1']);
                 $isMultipleActor2 = $m->doublonActeur($_POST['personne2']);
-                $serach1 = $_POST['personne1'];  
-                $serach2 = $_POST['personne2'];  
+                $search1 = $_POST['personne1'];  
+                $search2 = $_POST['personne2'];  
                 if(isset($_SESSION['username'])) {
                     $data = [
                         "UserName" => $_SESSION['username'],
@@ -123,7 +126,7 @@ Class Controller_rapprochement extends Controller{
                 "search1" =>$_POST['titre1'],
                 "search2" =>$_POST['titre2']
             );
-            $this->apiCall($postData);   
+            $this->apiCall($postData, $arraySearch);   
         }
         else{
             $tab = ["tab" => "Une Erreur est survenu essayer de call"];
