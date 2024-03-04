@@ -15,10 +15,21 @@ Class Controller_home extends Controller{
             return; // Important pour éviter le rendu d'une vue après une réponse AJAX.
         }
         
-        $tab = [ 'caroussel' => $m->filmpopulaire(),]; 
-                            
-                        
-           $this->render("home",$tab);
+        $caroussel = $m->filmpopulaire();
+        $filmnote = $m->filmmieuxnote();
+    
+        // Préparer les films par genre
+        $filmsParGenre = [
+            'Action' => $m->listhome('Action'),
+            'Science-Fiction' => $m->listhome('Sci-Fi'),
+            'Drame' => $m->listhome('Drama'),
+            'Jeunesse' => $m->listhome('Animation'),
+            'Crime'=>$m->listhome('Crime'),
+            'Horreur'=>$m->listhome('Horror'),
+        ];
+    
+        // Passer les films populaires et les films par genre à la vue
+        $this->render("home", ['caroussel' => $caroussel, 'filmsParGenre' => $filmsParGenre, 'filmnote' => $filmnote]);
     }
     
     public function action_voirtousresultat() {

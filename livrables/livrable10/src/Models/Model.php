@@ -69,16 +69,15 @@ class Model
         tp.nconst,
         nb.primaryName AS nomActeur,
         COALESCE(nb.birthyear::TEXT, 'Inconnu') AS dateActeur,
-        COALESCE(tp.characters, 'Inconnu') AS nomDeScene
+        COALESCE(tp.category::TEXT, 'Inconnu') AS nomDeScene
         
         
     FROM 
         title_principals tp
-    JOIN 
+    LEFT JOIN 
         name_basics nb ON tp.nconst = nb.nconst
     WHERE 
-        tp.category IN ('actor', 'actress')
-        AND tp.tconst = :id ;");
+       tp.tconst = :id ;");
 
         $requete->bindParam(':id', $id, PDO::PARAM_STR);
         $requete->execute();
@@ -163,11 +162,7 @@ class Model
 
     public function getInformationsMovie($id) {
         $requete = $this->bd->prepare("SELECT
-        COALESCE(tb.primaryTitle, 'Inconnu') AS primaryTitle,
-        COALESCE(tb.startYear::TEXT, 'Inconnu') AS startYear,
-        COALESCE(tb.runtimeMinutes::TEXT, 'Inconnu') AS runtimeMinutes,
-        COALESCE(tb.genres, 'Inconnu') AS genres,
-        COALESCE(tr.averagerating::TEXT, 'Inconnu') AS averagerating
+       tb.primaryTitle,tb.startyear,tb.runtimeMinutes,tb.genres, tr.averagerating
         
        
     FROM
@@ -180,9 +175,9 @@ class Model
         );
    
         
-        $requete->bindParam(':id', $id, PDO::PARAM_INT);
+        $requete->bindParam(':id', $id, PDO::PARAM_STR);
         $requete->execute();
-        return $requete->fetch(PDO::FETCH_ASSOC);
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -1088,12 +1083,39 @@ class Model
 
     public function filmpopulaire(){
         $api_key = "9e1d1a23472226616cfee404c0fd33c1";
-        $url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
+        $url = "https://api.themoviedb.org/3/movie/popular?api_key=" . $api_key;
         
         // Utilisation de cURL pour récupérer les films actuellement en salle
         $movie_data = file_get_contents($url);
         $movies = json_decode($movie_data, true);
        return $movies;
+    }
+
+    public function filmmieuxnote(){
+        $api_key = "9e1d1a23472226616cfee404c0fd33c1";
+        $url = "https://api.themoviedb.org/3/movie/top_rated?api_key=" . $api_key;
+        
+        // Utilisation de cURL pour récupérer les films actuellement en salle
+        $movie_data = file_get_contents($url);
+        $movies = json_decode($movie_data, true);
+       return $movies;
+    }
+    public function listhome($genre){
+
+        $requete = $this->bd->prepare("SELECT tb.tconst, tb.primaryTitle, tb.startYear, tr.averageRating, tr.numVotes
+        FROM title_basics tb
+        JOIN title_ratings tr ON tb.tconst = tr.tconst
+        WHERE tb.genres ILIKE :genre AND tr.numVotes > 100000
+        ORDER BY RANDOM()
+        LIMIT 10 ;");
+            $genre = '%' . $genre . '%';
+            $requete->bindParam(':genre', $genre, PDO::PARAM_STR);
+            $requete->execute();
+            return $requete->fetchAll(PDO::FETCH_ASSOC);
+        
+        
+
+
     }
     public function getPersonnePhoto($id) {
         $apiKey = "9e1d1a23472226616cfee404c0fd33c1";
@@ -1131,5 +1153,7 @@ class Model
             return "./Images/depannage.jpg"; // Retourne le chemin vers une image de dépannage en cas d'erreur
         }
     }
+
+
     
 }
