@@ -113,10 +113,11 @@ body{
 .mdp{
   margin-bottom: 20px;
 }
+
   
 </style>
 
-        <?php
+  <?php
     require "Views/view_navbar.php";
     // Récupérer la variable 'retour' de l'URL
     if(isset($_GET['retour'])){
@@ -127,19 +128,19 @@ body{
                 $alertClass = "alert-danger";
                 break;
             case -1:
-                $message = "Aucun Champ saisie";
+                $message = "Aucun Champ saisie veuillez saisir un champs";
                 $alertClass = "alert-danger";
                 break;
             case -2:
-                $message = "Le mot de passe saisie ne correspond pas";
+                $message = "Le mot de passe saisie ne correspond pas au premier mot de passe saisie";
                 $alertClass = "alert-danger";
                 break;
             case -3:
-                $message = "Une erreur est survenue dans l'enregistrement";
+                $message = "Une erreur est survenue dans la création du compte";
                 $alertClass = "alert-danger";
                 break;
             case -4:
-                $message = "Une erreur est survenue dans la connection à votre compte";
+                $message = "Une erreur est survenue lors de la connection à votre compte";
                 $alertClass = "alert-danger";
                 break;
             default:
@@ -149,10 +150,14 @@ body{
     
         // Si un message a été défini, afficher l'alerte
         if ($message != "") {
-            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
-                    $message
-                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                  </div>";
+          echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' 
+                role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                  <div style='padding-top: 10px'>
+                    <p style='border-left:2px solid black ;padding-left: 5px;'>
+                      <img style='transform: scale(0.7); padding-bottom: 2px;' src='Images/icons8-warning-50.png' alt='warning'>$message
+                    </p>
+                </div>
+              </div>";
         }
     }
     ?> 
@@ -202,12 +207,40 @@ body{
 <script>
 // JavaScript pour valider le formulaire
    // Supposons que l'ID de votre alerte est 'myAlert'
-var alertElement = document.getElementById('myAlert');
+   var alertElement = document.getElementById('myAlert');
+  var initialOpacity = 1; // Opacité initiale (complètement visible)
+  var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
 
-// Faire disparaître l'alerte après 3 secondes
-window.setTimeout(function() {
-    alertElement.setAttribute('hidden', true);
-}, 2000);
+// Fonction pour réduire l'opacité progressivement
+var alertElement = document.getElementById('myAlert');
+    alertElement.style.opacity = 1; // Afficher l'alerte
+
+    // Faire disparaître l'alerte après 2 secondes avec un effet de fondu et un flou
+    setTimeout(function() {
+        fadeOutAndBlur();
+    }, 2000);
+
+    // Fonction pour réduire l'opacité progressivement et augmenter le flou
+    function fadeOutAndBlur() {
+        var currentTime = 0;
+        var interval = 50; // Intervalle de mise à jour (50 ms)
+        var fadeDuration = 500; // Durée du fondu en millisecondes (0.5 seconde)
+        var maxBlur = 5; // Niveau maximal de flou
+
+        var fadeInterval = setInterval(function() {
+            currentTime += interval;
+            var opacity = 1 - (currentTime / fadeDuration); // Calcul de l'opacité
+            var blurAmount = (currentTime / fadeDuration) * maxBlur; // Calcul du niveau de flou
+
+            alertElement.style.opacity = Math.max(opacity, 0); // Assurez-vous que l'opacité ne devienne pas négative
+            alertElement.style.filter = `blur(${blurAmount}px)`; // Appliquer le flou
+
+            if (currentTime >= fadeDuration) {
+                clearInterval(fadeInterval); // Arrêtez l'intervalle lorsque l'opacité atteint 0
+                alertElement.setAttribute('hidden', true); // Masquez complètement l'alerte
+            }
+        }, interval);
+    }
 
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     var inputs = this.getElementsByTagName('input');

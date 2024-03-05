@@ -22,27 +22,34 @@ if(isset($_GET['retour'])){
             case 1:
                 $message = "Mail Eenvoyer";
                 $alertClass = "alert alert-success";
+                $image='icons8-check-50.png';
             case -1:
                 $message = "Utilisateur inconnu";
                 $alertClass = "alert-danger";
+                $image='icons8-warning-50.png';
                 break;
             case -2:
                 $message = "Une erreur est surnvenu";
                 $alertClass = "alert-danger";
+                $image='icons8-warning-50.png';
                 break;    
             case 2:
                 $message = "Email inconnu";
                 $alertClass = "alert-danger";
+                $image='icons8-warning-50.png';
                 break;
             case 3:
                 $message = "Mail envoyer regardez votre boite mail";
                 $alertClass = "alert-success";
+                $image='icons8-check-50.png';
             case -3 :
                 $message = "Token inconnu";
                 $alertClass = "alert-danger";
+                $image='icons8-warning-50.png';
             case -4 :
                 $message = "Le token a expiré";
                 $alertClass = "alert-danger";
+                $image='icons8-warning-50.png';
 
             default:
                 $message = "";
@@ -51,10 +58,14 @@ if(isset($_GET['retour'])){
     
         // Si un message a été défini, afficher l'alerte
         if ($message != "") {
-            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
-                    $message
-                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                  </div>";
+            echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' 
+                    role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                    <div style='padding-top: 10px'>
+                        <p style='border-left:2px solid black ;padding-left: 5px'>
+                        <img style='transform: scale(0.7); padding-bottom: 2px;' src='Images/$image' alt='warning'>$message
+                        </p>
+                    </div>
+                </div>";
         }
     }
     
@@ -142,11 +153,39 @@ echo "</div>";
     <script>
     // Supposons que l'ID de votre alerte est 'myAlert'
     var alertElement = document.getElementById('myAlert');
+  var initialOpacity = 1; // Opacité initiale (complètement visible)
+  var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
 
-    // Faire disparaître l'alerte après 3 secondes
-    window.setTimeout(function() {
-        alertElement.setAttribute('hidden', true);
+// Fonction pour réduire l'opacité progressivement
+var alertElement = document.getElementById('myAlert');
+    alertElement.style.opacity = 1; // Afficher l'alerte
+
+    // Faire disparaître l'alerte après 2 secondes avec un effet de fondu et un flou
+    setTimeout(function() {
+        fadeOutAndBlur();
     }, 2000);
+
+    // Fonction pour réduire l'opacité progressivement et augmenter le flou
+    function fadeOutAndBlur() {
+        var currentTime = 0;
+        var interval = 50; // Intervalle de mise à jour (50 ms)
+        var fadeDuration = 500; // Durée du fondu en millisecondes (0.5 seconde)
+        var maxBlur = 5; // Niveau maximal de flou
+
+        var fadeInterval = setInterval(function() {
+            currentTime += interval;
+            var opacity = 1 - (currentTime / fadeDuration); // Calcul de l'opacité
+            var blurAmount = (currentTime / fadeDuration) * maxBlur; // Calcul du niveau de flou
+
+            alertElement.style.opacity = Math.max(opacity, 0); // Assurez-vous que l'opacité ne devienne pas négative
+            alertElement.style.filter = `blur(${blurAmount}px)`; // Appliquer le flou
+
+            if (currentTime >= fadeDuration) {
+                clearInterval(fadeInterval); // Arrêtez l'intervalle lorsque l'opacité atteint 0
+                alertElement.setAttribute('hidden', true); // Masquez complètement l'alerte
+            }
+        }, interval);
+    }
 
     function toggleFieldAndHideButton(editBtn, inputField) {
                 inputField.disabled = !inputField.disabled;

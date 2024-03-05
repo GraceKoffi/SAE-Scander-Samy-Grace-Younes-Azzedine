@@ -30,12 +30,15 @@ require "Views/view_navbar.php"; ?>
 </style>
 <?php
     if(strpos($tab, "Mail") !== false){
-        $titre = "Message envoyer";
+        $titre = "Regarder votre boite mail";
     }
     else if(strpos($tab, "reinitialiser")){
         $titre = "Mot de passe reinitisalier";
     }
-    
+    else if(strpos($tab, 'Merci')){
+        $titre = "Merci pour votre message";
+    }
+
     else {
         $titre = "Une erreur est survenue";
     }
