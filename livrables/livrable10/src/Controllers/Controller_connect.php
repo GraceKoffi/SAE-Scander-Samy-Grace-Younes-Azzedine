@@ -20,8 +20,8 @@ Class Controller_connect extends Controller{
         $favoActeur = $m->getFavorieActeur($_SESSION['username']);
         $favoFilm = $m->getFavorieFilm($_SESSION['username']);
 
-        $result[] = ["FavorieActeur" => $favoActeur];
-        $result[] = ["FavorieFilm" => $favoFilm];
+        $result[] = ["FavorieActeur" => array_reverse($favoActeur)];
+        $result[] = ["FavorieFilm" => array_reverse($favoFilm)];
 
         $tab = ["tab" => $result];
         $this->render("connect_user", $tab);

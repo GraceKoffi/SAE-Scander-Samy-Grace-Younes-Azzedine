@@ -61,13 +61,13 @@
 <?php
 $m = Model::getModel();
 $index = 0;
-foreach (array_unique($result['data']['path']) as $item) {
+foreach ($result['data']['path'] as $item) {
     if ($item[0] == "n") {
         $infoItem = $m->getInfoActeur($item);
         $primaryName = isset($infoItem['primaryname']) ? $infoItem['primaryname'] : 'Aucune information';
         $birthDay = isset($infoItem['birthyear']) ?  $infoItem['birthyear'] : 'Aucune information';
         $primaryProfession = isset($infoItem['primaryprofession']) ? $infoItem['primaryprofession'] : 'Aucune information';
-        $posterPath = $m->getPersonnePhoto($item);; // Supposons que getPersonnePhoto est une fonction PHP existante
+        $posterPath = $m->getPersonnePhoto($item); 
         $hrefValue = "?controller=home&action=information_acteur&id=" . $item;
         $cardContent = '<a href="' . $hrefValue . '" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
               <div class="cardrecherche item" style="cursor: pointer;">
@@ -102,7 +102,7 @@ foreach (array_unique($result['data']['path']) as $item) {
       $titleType = isset($infoItem['titletype']) ? $infoItem['titletype'] : 'Aucune information';
       $startYear = isset($infoItem['startyear']) ? $infoItem['startyear'] : 'Aucune information';
       $genres = isset($infoItem['genres']) ? $infoItem['genres'] : 'Aucune information';
-      $posterPath = $m->getFilmPhoto($item); // Supposons que getPersonnePhoto est une fonction PHP existante
+      $posterPath = $m->getFilmPhoto($item);
       $hrefValue = "?controller=home&action=information_movie&id=" . $item;
       $cardContent = '<a href="' . $hrefValue . '" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
             <div class="cardrecherche item" style="cursor: pointer;">

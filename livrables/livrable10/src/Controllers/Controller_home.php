@@ -167,16 +167,15 @@ Class Controller_home extends Controller{
                     "anonyme" => $_POST['anonymous'],
                     "rating" => $_POST['commentNote']
                 ];
-                try{
+                
                     $m->addCommentaryActor($data);
                     $_GET['retour'] = '1';
                     
                     $this->action_information_acteur();
-                }
-                catch(PDOException $e){
+                /* }
                     $_GET['retour'] = '-1';
                     $this->action_information_acteur();
-                }
+                } */
         }
         else{
             $_GET['retour'] = '-1';
