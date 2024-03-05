@@ -86,8 +86,8 @@ body {
         .comment-rating {
         font-size: 14px;
         font-weight: bold;
-        color: #007bff; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
-        margin-top: 5px; /* Espace entre le titre et la note */
+        color: #888; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
+        margin-top: 10px; /* Espace entre le titre et la note */
         }
 
 /* CSS pour le message "Aucun commentaire" */
@@ -99,6 +99,21 @@ body {
             margin-top: 20px; /* Espace entre le message et le reste du contenu */
         }
 
+        .modal-content{
+            background-color: black;
+        }
+
+        .star-container {
+            margin-top: -15px;
+            margin-left: -5px;
+            display: flex;
+            align-items: center; /* Aligne les étoiles verticalement */
+        }
+        .star {
+            font-size: 20px; /* Taille des étoiles */
+            color: black; /* Couleur des étoiles */
+            margin-right: 5px; /* Espacement entre les étoiles */
+        }
 </style>
 
 
@@ -207,8 +222,8 @@ if (isset($_SESSION['username'])) {
     <div class="modal-content">
             <!-- En-tête de la modal -->
             <div class="modal-header">
-                <h5 class="modal-title titre">Commentaires</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title titre" style="color: yellow; margin-top: 5px">Commentaires <img style="transform: scale(0.9);"src="./images/icons8-message-48.png" alt="Star" class="star"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: yellow;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -233,11 +248,24 @@ if (isset($_SESSION['username'])) {
                         $rating = $commentaire['rating'];
                 ?>
                         <div class="comment-bubble">
-                            <div class="comment-author"><?php echo $author; ?></div>
-                            <div class="comment-title"><?php echo $title; ?></div>
-                            <div class="comment-rating">Note : <?php echo $rating; ?></div>
+                            <div class="comment-author">Par <?php echo $author; ?></div>
+                            <div class="comment-title">
+                                <p style="border-left:2px solid black;padding-left: 6px;"><?php echo $title; ?></p>
+                            </div>
+                        <div class="star-container">
+                            <?php 
+                                for($i = 0; $i<$rating; $i++){
+                                    echo "
+                                    <span class='star'>★</span>
+                                    ";
+                                }
+                            ?>
+                            <!-- Ajoutez plus d'étoiles ici si nécessaire -->
+                        </div>
+                        <div class="comment-rating">
                             <?php echo $content; ?>
                         </div>
+                    </div>
                 <?php
                     }
                 } else {
@@ -249,53 +277,66 @@ if (isset($_SESSION['username'])) {
             </div>
 
             <!-- Pied de la modal -->
-            <div class="modal-footer form">
+            <div style="padding-right: 50px;"class="modal-form col-12">
+            <hr style="margin-left: 20px; border: none; height: 2px; background-color: #999;">
+                <div class="container formulaire">
+                    <div class="row">
+
+                        <div class="col-12">
                 <!-- Formulaire pour ajouter un commentaire -->
-                <form id="commentForm" action="?controller=home&action=ajoutComActeur&id=<?php echo $id_acteur;?>" method="post">
-                    <div class="form-group">
-                        <label class="custom-form-label">Anonyme :</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousYes" value="0" checked required>
-                            <label class="form-check-label check" for="anonymousYes">Oui</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousNo" value="1" required>
-                            <label class="form-check-label check" for="anonymousNo">Non</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentTitle" class="custom-form-label">Titre du commentaire :</label>
-                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentNote" class="custom-form-label">Note :</label>
-                        <!-- Fil des notes -->
-                        <div class="rating-range note">
-                            <span>0</span>
-                            <span>1</span>
-                            <span>2</span>
-                            <span>3</span>
-                            <span>4</span>
-                            <span>5</span>
-                        </div>
-                        <!-- Note (1-5) -->
-                        <input type="range" class="form-control-range" id="commentNote" name="commentNote" min="0" max="5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentInput" class="custom-form-label">Ajouter un commentaire :</label>
-                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required></textarea>
-                    </div>
-                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
-                        Vous devez être connecté pour envoyer un commentaire.
-                    </div>
+                                <form id="commentForm" action="?controller=home&action=ajoutComActeur&id=<?php echo $id_acteur;?>" method="post">
+                                    <div class="form-group">
+                                        
+                                        <label class="custom-form-label" style="padding-left: 10px; margin-top: 20px; color: white;">Anonyme :</label>
+                                        <div class="form-check">
+                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="0">Oui</option>
+                                                                                <option value="1" selected>Non</option>
+                                                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentTitle" class="custom-form-label" style="margin-top: 20px; color: white;">Titre du commentaire :</label>
+                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required placeholder="Titre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentNote" class="custom-form-label" style="margin-top: 20px; color: white;">Note :</label>
+                                        <!-- Fil des notes -->
+                                        <div class="form-check">
+                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="0" selected>0</option>
+                                                                                <option value="1">1</option>
+                                                                                <option value="2">2</option>
+                                                                                <option value="3">3</option>
+                                                                                <option value="4">4</option>
+                                                                                <option value="5">5</option>
+                                                                                <option value="6">6</option>
+                                                                                <option value="7">7</option>
+                                                                                <option value="8">8</option>
+                                                                                <option value="9">9</option>
+                                                                                <option value="10">10</option>
+                                                                            </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentInput" class="custom-form-label" style="margin-top: 20px; color: white;">Ajouter un commentaire :</label>
+                                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required placeholder="Commentaire"></textarea>
+                                    </div>
+                                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
+                                        Vous devez être connecté pour envoyer un commentaire.
+                                    </div>
 
-                    <button type="submit" class="btn btn-primary custom-submit-btn" id="submitBtn">Envoyer</button>
-            </form>
-
+                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Envoyer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <div style="margin-top: 100px"></div>
 <div class="container mt-4">
     <div class="row">
@@ -332,7 +373,16 @@ if (isset($_SESSION['username'])) {
 </div>
 
 
+<script>
+var alertElement = document.getElementById('myAlert');
 
+// Faire disparaître l'alerte après 3 secondes
+        window.setTimeout(function() {
+            alertElement.setAttribute('hidden', true);
+        }, 2000);
+     var submitBtn = document.getElementById('submitBtn');
+    var alertNotLoggedIn = document.getElementById('alertNotLoggedIn');
+</script>
 
 
 

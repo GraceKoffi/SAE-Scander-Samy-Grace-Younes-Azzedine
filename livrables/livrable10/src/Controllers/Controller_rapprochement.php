@@ -9,13 +9,15 @@ Class Controller_rapprochement extends Controller{
     
     public function action_rapprochement()
     {
-        if(isset($_POST['typeselection'])){
+        if(isset($_POST['typeselection']) && $_POST['typeselection'] !== "" 
+            && isset($_POST['typeselectionRapo']) && $_POST['typeselectionRapo'] !== ""){
 
             $m = Model::getModel();
             $debut = '';
             $fin = '';
             $search1 = '';
             $search2 = '';
+            $_SESSION['mode'] = $_POST['typeselectionRapo'];
             $typeSelection = $_POST['typeselection'];
             if($typeSelection == "titre" && isset($_POST['titre1']) 
                 && isset($_POST['titre2'])){
@@ -92,6 +94,7 @@ Class Controller_rapprochement extends Controller{
             $postData = array(
                 $debut => $val1,
                 $fin => $val2,
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" => $search1,
@@ -112,7 +115,8 @@ Class Controller_rapprochement extends Controller{
         if(isset($_POST['selectedTconst1']) && isset($_POST['selectedTconst2'])){
             $postData = array(
                 $debut => $_POST['selectedTconst1'],
-                $fin => $_POST['selectedTconst2']
+                $fin => $_POST['selectedTconst2'],
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" =>$_POST['titre1'],
@@ -135,7 +139,8 @@ Class Controller_rapprochement extends Controller{
             
             $postData = array(
                 $debut => $_POST['selectednconst1'],
-                $fin => $_POST['selectednconst2']
+                $fin => $_POST['selectednconst2'],
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" =>$_POST['personne1'],

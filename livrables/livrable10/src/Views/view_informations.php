@@ -109,8 +109,8 @@ body {
         .comment-rating {
         font-size: 14px;
         font-weight: bold;
-        color: #007bff; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
-        margin-top: 5px; /* Espace entre le titre et la note */
+        color: #888; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
+        margin-top: 10px; /* Espace entre le titre et la note */
         }
 
 /* CSS pour le message "Aucun commentaire" */
@@ -121,6 +121,32 @@ body {
             text-align: center;
             margin-top: 20px; /* Espace entre le message et le reste du contenu */
         }
+
+        .modal-content{
+            background-color: black;
+        }
+
+        .star-container {
+            margin-top: -15px;
+            margin-left: -5px;
+            display: flex;
+            align-items: center; /* Aligne les étoiles verticalement */
+        }
+        .star {
+            font-size: 20px; /* Taille des étoiles */
+            color: black; /* Couleur des étoiles */
+            margin-right: 5px; /* Espacement entre les étoiles */
+        }
+
+        
+
+        .star-button {
+            font-size: 50px; /* Taille de l'étoile */
+            color: white; /* Couleur de l'étoile */
+            background: none;
+            border: none;
+            cursor: pointer;
+    }
 
 </style>
 
@@ -221,7 +247,32 @@ foreach ($results as $result) {
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-7">
-                    <h1><?= ($info[0]['primarytitle'] !== null) ? $info[0]['primarytitle'] : 'Inconnu'; ?></h1>
+                    <h1><?= ($info[0]['primarytitle'] !== null) ? $info[0]['primarytitle'] : 'Inconnu'; ?>
+                    <?php 
+                        if(isset($_SESSION['username'])) {
+                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+                            if($favori == 'false'){
+                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                                            color: white;
+                                                            background: none;
+                                                            border: none; 
+                                                            cursor: pointer;'>
+                                                            ★</button></a>
+                                    </span>";
+                            }
+                            else{
+                                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                        color: yellow;
+                                        background: none;
+                                        border: none; 
+                                        cursor: pointer;'>
+                                        ★</button></a>
+                                </span>";
+                            }
+                        }
+                        ?>
+                    
+                    </h1>
                     <p style= "margin-bottom : 50px;"> <?= ($info[0]['runtimeminutes'] !== null) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'; ?> &middot; <?= ($info[0]['startyear'] !== null) ? $info[0]['startyear'] : 'Inconnu'; ?> &middot; <?= ($info[0]['genres'] !== null) ? $info[0]['genres'] : 'Inconnu'; ?></p>
                     <h6 style= "margin-top : 50px;">Synopsis</h6>
                     <p style="font-size: 13px;"><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
@@ -248,26 +299,6 @@ foreach ($results as $result) {
 
 
 
-<?php
-if (isset($_SESSION['username'])) {
-     // Récupérez la valeur de filmId depuis l'URL
-    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
-    $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
-    $titre = ($favori === 'true') ? 'Retirer ce film des favoris' : 'Ajouter ce film aux favoris';
-    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
-    echo "
-    <div class='film' data-favori='$favori'>
-        <h2 id='titreFilm'>$titre</h2>
-        <a href='?controller=home&action=favorie_movie&filmId=$id_imdb'>
-            <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
-        </a>
-    </div>
-    ";
-}
-?>
-
-
-
 
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -275,8 +306,8 @@ if (isset($_SESSION['username'])) {
     <div class="modal-content">
             <!-- En-tête de la modal -->
             <div class="modal-header">
-                <h5 class="modal-title titre">Commentaires</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title titre" style="color: yellow; margin-top: 5px">Commentaires <img style="transform: scale(0.9);"src="./images/icons8-message-48.png" alt="Star" class="star"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: yellow;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -301,11 +332,24 @@ if (isset($_SESSION['username'])) {
                         $rating = $commentaire['rating'];
                 ?>
                         <div class="comment-bubble">
-                            <div class="comment-author"><?php echo $author; ?></div>
-                            <div class="comment-title"><?php echo $title; ?></div>
-                            <div class="comment-rating">Note : <?php echo $rating; ?></div>
+                            <div class="comment-author">Par <?php echo $author; ?></div>
+                            <div class="comment-title">
+                                <p style="border-left:2px solid black;padding-left: 6px;"><?php echo $title; ?></p>
+                            </div>
+                        <div class="star-container">
+                            <?php 
+                                for($i = 0; $i<$rating; $i++){
+                                    echo "
+                                    <span class='star'>★</span>
+                                    ";
+                                }
+                            ?>
+                            <!-- Ajoutez plus d'étoiles ici si nécessaire -->
+                        </div>
+                        <div class="comment-rating">
                             <?php echo $content; ?>
                         </div>
+                    </div>
                 <?php
                     }
                 } else {
@@ -317,53 +361,65 @@ if (isset($_SESSION['username'])) {
             </div>
 
             <!-- Pied de la modal -->
-            <div class="modal-footer form mx-auto">
+            <div style="padding-right: 50px;"class="modal-form col-12">
+            <hr style="margin-left: 20px; border: none; height: 2px; background-color: #999;">
+                <div class="container formulaire">
+                    <div class="row">
+
+                        <div class="col-12">
                 <!-- Formulaire pour ajouter un commentaire -->
-                <form id="commentForm" action="?controller=home&action=ajoutComMovie&id=<?php echo $id_imdb;?>" method="post">
-                    <div class="form-group">
-                        <label class="custom-form-label">Anonyme :</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousYes" value="0" checked required>
-                            <label class="form-check-label check" for="anonymousYes">Oui</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousNo" value="1" required>
-                            <label class="form-check-label check" for="anonymousNo">Non</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentTitle" class="custom-form-label">Titre du commentaire :</label>
-                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentNote" class="custom-form-label">Note :</label>
-                        <!-- Fil des notes -->
-                        <div class="rating-range note">
-                            <span>0</span>
-                            <span>1</span>
-                            <span>2</span>
-                            <span>3</span>
-                            <span>4</span>
-                            <span>5</span>
-                        </div>
-                        <!-- Note (1-5) -->
-                        <input type="range" class="form-control-range" id="commentNote" name="commentNote" min="0" max="5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="commentInput" class="custom-form-label">Ajouter un commentaire :</label>
-                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required></textarea>
-                    </div>
-                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
-                        Vous devez être connecté pour envoyer un commentaire.
-                    </div>
+                                <form id="commentForm" action="?controller=home&action=ajoutComMovie&id=<?php echo $id_imdb;?>" method="post">
+                                    <div class="form-group">
+                                        
+                                        <label class="custom-form-label" style="padding-left: 10px; margin-top: 20px; color: white;">Anonyme :</label>
+                                        <div class="form-check">
+                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="0">Oui</option>
+                                                                                <option value="1" selected>Non</option>
+                                                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentTitle" class="custom-form-label" style="margin-top: 20px; color: white;">Titre du commentaire :</label>
+                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required placeholder="Titre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentNote" class="custom-form-label" style="margin-top: 20px; color: white;">Note :</label>
+                                        <!-- Fil des notes -->
+                                        <div class="form-check">
+                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                                <option value="0" selected>0</option>
+                                                                                <option value="1">1</option>
+                                                                                <option value="2">2</option>
+                                                                                <option value="3">3</option>
+                                                                                <option value="4">4</option>
+                                                                                <option value="5">5</option>
+                                                                                <option value="6">6</option>
+                                                                                <option value="7">7</option>
+                                                                                <option value="8">8</option>
+                                                                                <option value="9">9</option>
+                                                                                <option value="10">10</option>
+                                                                            </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="commentInput" class="custom-form-label" style="margin-top: 20px; color: white;">Ajouter un commentaire :</label>
+                                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required placeholder="Commentaire"></textarea>
+                                    </div>
+                                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
+                                        Vous devez être connecté pour envoyer un commentaire.
+                                    </div>
 
-                    <button type="submit" class="btn btn-primary custom-submit-btn" id="submitBtn">Envoyer</button>
-            </form>
-
+                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Envoyer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
      
                     </div>
