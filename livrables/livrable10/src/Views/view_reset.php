@@ -33,7 +33,7 @@
                     <div class='form-group'>
                             <label for='token' class="labelReset">Réinitialiser votre mot de passe</label>
                                 <div class="inputReset">
-                                    <input type='text' class='form-control' id='passWord' name='passWord'>
+                                    <input type='text' class='form-control' id='passWord' name='passWord' required>
                                 </div>
                                 
                                 <div class="inputReset">

@@ -295,7 +295,7 @@ if (isset($_SESSION['username'])) {
                                         
                                         <label class="custom-form-label" style="padding-left: 10px; margin-top: 20px; color: white;">Anonyme :</label>
                                         <div class="form-check">
-                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
                                                                                 <option value="0">Oui</option>
                                                                                 <option value="1" selected>Non</option>
                                                                             </select>
@@ -303,13 +303,13 @@ if (isset($_SESSION['username'])) {
                                     </div>
                                     <div class="form-group">
                                         <label for="commentTitle" class="custom-form-label" style="margin-top: 20px; color: white;">Titre du commentaire :</label>
-                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required placeholder="Titre">
+                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required placeholder="Titre" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="commentNote" class="custom-form-label" style="margin-top: 20px; color: white;">Note :</label>
                                         <!-- Fil des notes -->
                                         <div class="form-check">
-                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
                                                                                 <option value="0" selected>0</option>
                                                                                 <option value="1">1</option>
                                                                                 <option value="2">2</option>
@@ -332,7 +332,7 @@ if (isset($_SESSION['username'])) {
                                         Vous devez être connecté pour envoyer un commentaire.
                                     </div>
 
-                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Envoyer</button>
+                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block; padding-bottom: 5px;" >Envoyer</button>
                             </form>
                         </div>
                     </div>
