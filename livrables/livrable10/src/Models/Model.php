@@ -47,22 +47,28 @@ class Model
 
     }
 
-    public function getInformationsFilmParticipant($id){
-
-        $requete = $this->bd->prepare("SELECT tb.primarytitle,tb.tconst
-        FROM title_basics tb
-        JOIN title_principals tp ON tb.tconst = tp.tconst
-        LEFT JOIN title_ratings tr ON tb.tconst = tr.tconst
-        WHERE tp.nconst = :id AND tr.numVotes > 10000
-        ORDER BY RANDOM()
-        LIMIT 4;");
-
+    public function getInformationsFilmParticipant($id) {
+        // Récupération des knownForTitles
+        $requete = $this->bd->prepare("WITH tconst_list AS (
+            SELECT unnest(string_to_array(knownForTitles, ',')) AS tconst
+            FROM name_basics
+            WHERE nconst = :id
+          )
+          SELECT tb.tconst, tb.primaryTitle, tb.startYear
+          FROM title_basics tb
+          JOIN tconst_list tl ON tb.tconst = tl.tconst;
+          ");
         $requete->bindParam(':id', $id, PDO::PARAM_STR);
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
 
     }
+    
+    
+   
+ 
 
+     
     public function getInformationsActeurParticipant($id){
 
         $requete = $this->bd->prepare("SELECT 
@@ -181,7 +187,7 @@ class Model
 
     public function getInformationsMovie($id) {
         $requete = $this->bd->prepare("SELECT
-       tb.primaryTitle,tb.startyear,tb.runtimeMinutes,tb.genres, tr.averagerating
+       tb.primaryTitle,tb.titletype, tb.startyear,tb.runtimeMinutes,tb.genres, tr.averagerating
         
        
     FROM

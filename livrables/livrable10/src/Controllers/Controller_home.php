@@ -101,6 +101,8 @@ Class Controller_home extends Controller{
                 $_SESSION['favoriActeur'] = 'true';
             }
         }
+
+        
         $tab = [ 'titre'=>$m->getInformationsFilmParticipant(trim(e($id))),
                   'info'=>$m->getInformationsActeur(trim(e($id))),
                   'commentaires'=>$tab

@@ -1,32 +1,58 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
-body {
-    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
-    margin: 0;
-    font-family: 'Calibri', sans-serif;
-    color: white;
+
+..middot{
+
+
+font-size: 24px;
 }
-.container-fluid {
-    position: relative;
+.btncommentaire {
+background-color: #FFCC00; /* Couleur de fond initiale */
+border: 2px solid #FFCC00; /* Couleur de bordure initiale */
+color: white;
+border-radius: 25px;
+padding: 15px;
 }
 
+.btncommentaire:hover {
+background-color: #c79f00; /* Couleur de fond au survol */
+border: 2px solid #FFCC00; /* Couleur de bordure au survol */
+}
+
+/* Styliser spécifiquement l'état :active */
+.btncommentaire:active {
+background-color: #c79f00; /* Couleur de fond pendant le clic */
+border: 2px solid #FFCC00; /* Couleur de bordure pendant le clic */
+outline: none; /* Optionnel: supprime l'outline */
+box-shadow: none; /* Optionnel: supprime l'ombre de la boîte (si vous utilisez Bootstrap) */
+}
+.aucunparticipant{
+
+font-size:20px;
+margin-top:30px;
+}
 .composent-card {
-    background-color: #333; /* Gris foncé */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); /* Effet d'ombre 3D */
-    margin: 10px; /* Espacement entre les cartes */
-    transition: transform 0.3s, border 0.3s; /* Ajout de la transition pour la bordure */
-    
+background-color: #333; /* Gris foncé */
+box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); /* Effet d'ombre 3D */
+margin: 40px; /* Espacement entre les cartes */
+transition: transform 0.3s, border 0.3s; /* Ajout de la transition pour la bordure */
+
 }
 
 .composent-card:hover {
-    transform: scale(1.1);
-    border: 2px solid white; /* Encadrement blanc lors du survol */
+transform: scale(1.1);
+border: 2px solid #FFCC00; /* Encadrement blanc lors du survol */
+text-decoration: none !important;
+color: inherit !important;
 }
 
+
+
 .card-title {
-    color: white; /* Titre en blanc */
-    font-size: 17px;/*taille de la police*/
+color: white; /* Titre en blanc */
+font-size: 17px;/*taille de la police*/
 }
+
 
 .custom-modal {
             color: black;
@@ -137,53 +163,84 @@ if(isset($_GET['id'])){
 else if(isset($_GET['acteurId'])){
     $id_acteur = $_GET['acteurId'];
 }
-$url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
-        
 
+$couvertures = []; 
+foreach ($titre as $id_f){
+    $tconst= $id_f['tconst'];
+    $url = "https://api.themoviedb.org/3/find/{$tconst}?api_key={$api_key}&external_source=imdb_id";
+    $response = file_get_contents($url);
+    $data = json_decode($response, true); // true pour obtenir le résultat en array
+
+    // Fusionner tous les résultats possibles
+    $results = array_merge($data['movie_results'], $data['tv_results'], $data['tv_episode_results'], $data['tv_season_results']);
+
+    
+    foreach ($results as $result) {
+        if (isset($result['backdrop_path']) && $result['backdrop_path'] !== null) {
+            $couvertures[] = "https://image.tmdb.org/t/p/w1280" . $result['backdrop_path'];
+          
+            break; // Sortir de la boucle dès qu'une couverture est trouvée
+        }
+    }
+    
+
+}
+
+if (empty($couvertures)) { // Si aucune couverture n'est trouvée, utiliser une image de dépannage
+    $couvertures[] = "./Images/cinemadepannage.jpg";
+}
+
+$url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
 
 $response = file_get_contents($url);
 $data = json_decode($response);
-$portrait= null;
-$sexe=null;
-$biographie=null;
+$portrait= "./Images/depannage.jpg";
 
 if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
-    $portrait = $data->person_results[0]->profile_path;
+    $portrait = "https://image.tmdb.org/t/p/w400" . $data->person_results[0]->profile_path;
 }
-if (isset($data->person_results[0]->gender) && $data->person_results[0]->gender !== null) {
-   if ($data->person_results[0]->gender==2){
 
-    $sexe="Homme";
-   }
-   else{
-$sexe="Femme";
 
-   }
-}
   ?>  
     
     
-
-    <div class="container-fluid position-relative px-0 mt-5">
+     
+ <div style="position: relative; margin-top:35px;">
     <div class="row">
-       <div class="info-container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <img class="mx-auto" src="https://image.tmdb.org/t/p/w400<?= $portrait ?>" alt="Portrait">
-                    </div>
-                    <div class="col-md-7">
-                    <h2><?= $info['primaryname']; ?></h2>
-                    <h3><?= $info['birthyear']; ?></h3>
-                    <h3><?= $info['deathyear']; ?></h3>
-                    <h3><?= $info['primaryprofession']; ?></h3>
-                      
-             <p><?= $sexe; ?></p>  
-                       
-                    </div>
-                </div>
+        <!-- Couverture -->
+        <div class="backdrop col-md-12" style="z-index: 1;">
+        <img id="imageCourante" class="img-fluid" src="<?= $couvertures[0]; ?>"  alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">        
+    </div>
+    </div>
+
+
+
+
+    
+    <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
+        <!-- Portrait à gauche -->
+        <div class="afficheportrait col-md-3 ml-3">
+            <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+        </div>
+        <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
+        <div class="col-md-7 mr-3">
+            <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
+                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?></h1>
+                <p>Année : <?= ($info['birthyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <?= ($info['primaryprofession'] ?? 'Inconnu'); ?></p>
+                <button style="margin-top: 320px;" type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
             </div>
+        </div>
     </div>
 </div>
+
+
+  
+
+
+
+
+
+
 <?php
 if (isset($_SESSION['username'])) {
      // Récupérez la valeur de filmId depuis l'URL
@@ -200,7 +257,6 @@ if (isset($_SESSION['username'])) {
     ";
 }
 ?>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -296,9 +352,15 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 </div>
-<div style="margin-top: 100px"></div>
+<?php var_dump($titre); 
+var_dump($couvertures);
+?>
 <div class="container mt-4">
+<h3 style="    border-left:2px solid #FFCC00;padding-left: 6px;">Connu pour : </h3>
     <div class="row">
+    <?php if(empty($titre)): ?>
+            <p class="aucunparticipant">Aucun titre.</p>
+        <?php else: ?>
         <?php foreach($titre as $v) : ?>
             <?php 
                 $id_film = $v['tconst'];
@@ -307,12 +369,12 @@ if (isset($_SESSION['username'])) {
             
                 $response = file_get_contents($url);
                 $data = json_decode($response);
-                $portrait_film = null;
+                $portrait_film = "./Images/depannage.jpg";
                 $results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
 
                 foreach ($results as $result) {
                     if (isset($result->poster_path) && $result->poster_path!== null) {
-                        $portrait_film = $result->poster_path;
+                        $portrait_film = "https://image.tmdb.org/t/p/w500" . $result->poster_path;
                         break;  // Sortir de la boucle dès qu'une valeur est trouvée
                     }
                 }
@@ -320,20 +382,35 @@ if (isset($_SESSION['username'])) {
             ?>
             <div class="col-md-3 custom-card d-flex align-items-stretch"> <!-- Choisissez la classe de colonne Bootstrap en fonction de votre mise en page -->
             <a href="?controller=home&action=information_movie&id=<?php echo $id_film; ?>" class="card composent-card" style="width: 200px;">
-                    <img src="https://image.tmdb.org/t/p/w500<?= $portrait_film ?>" alt="Poster" class="card-img-top">
+                    <img src=<?= $portrait_film ?> alt="Poster" class="card-img-top">
                     <div class="card-body">
                         <h2 class="card-title"><?= $v['primarytitle'] ?></h2>
+                        <h3 class="card-title"><?= $v['startyear'] ?></h3>
                        
                     </div>
                 </a>
             </div>
         <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
 
 
 
+<script>
+$(document).ready(function() {
+    var couvertures = <?php echo json_encode($couvertures); ?>; // Votre tableau PHP de couvertures converti en JSON
+    var indexCourant = 0;
 
+    setInterval(function() {
+        // Incrémenter l'indexCourant ou le réinitialiser si on a atteint la fin du tableau
+        indexCourant = (indexCourant + 1) % couvertures.length;
+        // Mettre à jour la source de l'image
+        $('#imageCourante').attr('src', couvertures[indexCourant]);
+    }, 3000); // Change l'image toutes les 3000 millisecondes (3 secondes)
+});
+
+</script>
 
 
 <?php require "Views/view_footer.php"; ?>

@@ -1,266 +1,468 @@
+<?php require "Views/view_navbar.php"; ?>
 
-<table id="example" class="table table-striped nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011-04-25</td>
-                <td>$320,800</td>
-            </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011-07-25</td>
-                <td>$170,750</td>
-            </tr>
-            <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>2009-01-12</td>
-                <td>$86,000</td>
-            </tr>
-            <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior Javascript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2012-03-29</td>
-                <td>$433,060</td>
-            </tr>
-            <tr>
-                <td>Donna Snider</td>
-                <td>Customer Support</td>
-                <td>New York</td>
-                <td>27</td>
-                <td>2011-01-25</td>
-                <td>$112,000</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </tfoot>
-    </table>
+<style>
 
-
-<!-- Balise link pour DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.bootstrap5.min.css">
-
-<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.bootstrap5.min.css">
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"></script>
-<script src="https://cdn.datatables.net/searchpanes/2.2.0/js/searchPanes.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-<?php
-                $totalPages = ceil($totalResultats / $perPage);
-$range = 5;
-$start = max($page - $range, 1);
-$end = min($page + $range, $totalPages);
-?>
-<ul class="pagination" style="center">
-    <?php
-    // Génération des liens de pagination
-    for ($i = $start; $i <= $end; $i++) :
-    ?>
-        <li class="page-item <?php echo ($page == $i) ? 'active' : ''; ?>">
-            <a class="page-link" href="?controller=recherche&action=pagination&page=<?php echo $i; ?>"><?php echo $i; ?></a>
-        </li>
-    <?php endfor; ?>
-
-    <?php if ($end < $totalPages) : ?>
-        <li class="page-item">
-            <a class="page-link" href="#">...</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?controller=recherche&action=pagination&page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a>
-        </li>
-    <?php endif; ?>
-</ul>
-
-
-
-
-tt2039417 probleme affichage / aussi tt0194207
-<img src="https://image.tmdb.org/t/p/w200<?= $portrait ?>" alt="<?= e($v['primarytitle']) ?>">
-
-
-
-
-
-
-
-<?php
-$api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" . $api_key;
-
-// Utilisation de cURL pour récupérer les films actuellement en salle
-
-   // $ch = curl_init($url);
-// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-// $response = curl_exec($ch);
-// curl_close($ch);
-$movie_data = file_get_contents($url);
-
-$movies = json_decode($movie_data, true)['results'];
-
-$tab_poster = [];
-
-// Parcourir la liste des films
-foreach ($movies as $movie) {
-    $backdrop_path = $movie['backdrop_path'];
-    $imageposter=$movie['poster_path']; 
-    $titrecaroussel=$movie['title'];
-    $tabimage[]=$imageposter;
-    $tab_poster[] = $backdrop_path;
-    $titrecarou[]=$titrecaroussel;
+.container-fluid {
+    position: relative;
 }
-?>
 
-<h1 class="mt-5"> Film Populaire </h1>
-<div class="row mt-5">
+.info-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: white;
+    padding: 80px;
+}
+.composent-card {
+    background-color: #333; /* Gris foncé */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); /* Effet d'ombre 3D */
+    margin: 40px; /* Espacement entre les cartes */
+    transition: transform 0.3s, border 0.3s; /* Ajout de la transition pour la bordure */
+    
+}
+
+.composent-card:hover {
+    transform: scale(1.1);
+    border: 2px solid #FFCC00; /* Encadrement blanc lors du survol */
+}
 
 
-<div class="col-md-7 mt-5">
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="3500">
-<div class="carousel-inner">
-    <?php for ($i = 0; $i < count($tabimage); $i++) : ?>
-        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
-            <img class="d-block w-100" src="https://image.tmdb.org/t/p/w1280<?= $tab_poster[$i] ?>" alt="Slide <?= $i + 1 ?>">
-            <div class="carousel-caption d-none d-md-block">
-                <!-- Image superposée -->
-                <img src="https://image.tmdb.org/t/p/w500<?= $tabimage[$i] ?>" class="img-fluid" style="width: 150px; height: auto; position: absolute; bottom: 20px; left: 20px;">
-                <!-- Texte -->
-                <h5 style="position: absolute; bottom: 20px; left: 180px; color: white; font-size:40px;"><?= $titrecarou[$i] ?></h5>
-            </div>
-        </div>
-    <?php endfor; ?>
-</div>
 
-    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
-    </div>
-    </div>
+.card-title {
+    color: white; /* Titre en blanc */
+    font-size: 17px;/*taille de la police*/
+}
+
+.film {
+    /* Styles de base pour tous les films */
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.film.favori {
+    /* Styles spécifiques pour les films favoris */
+    background-color: yellow; /* Couleur de fond jaune */
+    color: black; /* Texte en noir */
+}
+
+
+.custom-modal {
+            color: black;
+        }
+
+        /* Style personnalisé pour le texte du formulaire */
+        .custom-form-label {
+            color: black;
+        }
+
+        /* Style personnalisé pour le bouton d'envoi */
+        .custom-submit-btn {
+            background-color: white;
+            color: black;
+        }
+        .comment-bubble {
+            background-color: yellow;
+            color: black;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        /* Style personnalisé pour le nom de l'auteur */
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Style personnalisé pour la note du commentaire */
+        .comment-note {
+            margin-bottom: 5px;
+        }
+
+        .check{
+            color: black;
+        }
+        .titre{
+            color: black;
+        }
+        /* Style pour le fil des notes */
+        .rating-range {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            margin-top: 10px;
+        }
+
+        .note{
+            color: black;
+        }
+        
+        .form{
+            text-align: center;
+        }
+
+        .comment-rating {
+        font-size: 14px;
+        font-weight: bold;
+        color: #007bff; /* Couleur de la note, vous pouvez ajuster selon vos préférences */
+        margin-top: 5px; /* Espace entre le titre et la note */
+        }
+
+/* CSS pour le message "Aucun commentaire" */
+        .no-comments {
+            font-size: 16px;
+            font-weight: bold;
+            color: #888; /* Couleur du texte pour le cas où il n'y a pas de commentaires */
+            text-align: center;
+            margin-top: 20px; /* Espace entre le message et le reste du contenu */
+        }
+
+</style>
 
 <?php
-
-$genres = [
-    'Action' => 28,
-    'Thriller' => 53,
-    'Jeunesse' => 16,
-    'Horreur' => 27,
-    'Comédie' => 35,
-    'Crime' => 80,
-    'Science-Fiction' => 878
-];
-
-foreach ($genres as $genre_name => $genre_id) {
-    $movies = get_movies($genre_id, $api_key);
-
-    echo '<div class="container mt-4 films-section">';
-    echo '<h5>' . $genre_name . '</h5>';
-    echo '<div class="scrolling-container">';
-    echo '<div class="scrolling-wrapper">';
-
-    foreach ($movies as $movie) {
-        $tmdb_id = $movie['id'];
-        $imdb_id = get_imdb_id($tmdb_id, $api_key);  // Fonction pour obtenir l'ID IMDB
-        $poster_path = $movie['poster_path'];
-
-        echo '<a href="?controller=home&action=information_movie&id=' . $imdb_id . '"  class="card composent-card" style="width: 200px;">';
-        echo '<img src="https://image.tmdb.org/t/p/w500' . $poster_path . '" alt="Poster" class="card-img-top">';
-        echo '<div class="card-body">';
-        echo '<img src="./images/star.png" alt="Star" class="star">';
-        echo '<span class="note">' . $movie['vote_average'] . '</span>';
-        echo '<h6 class="card-subtitle mb-2 text-muted">  sodksodks skdskdsl</h6>';
-       
-    
-        echo '<h5 class="card-title">' . $movie['title'] . '</h5>';
-        echo '</div>';
-        echo '</a>';
+if(isset($_GET['retour'])){
+    $retour = trim(e($_GET['retour']));
+    switch ($retour) {
+        case 1:
+            $message = "Commentaire ajouté avec succés";
+            $alertClass = "alert-success";
+            break;
+        case -1:
+            $message = "Une erreur est survenu";
+            $alertClass = "alert-danger";
+            break;
+        default:
+            $message = "";
+            $alertClass = "";
     }
 
-    echo '</div>';
-    echo '<button class="scroll-btn left"><</button>';
-    echo '<button class="scroll-btn right">></button>';
-    echo '</div>';
-    echo '</div>';
 
+    // Si un message a été défini, afficher l'alerte
+    if ($message != "") {
+        echo "<div id='myAlert' class='alert $alertClass alert-dismissible fade show' role='alert' style='position: fixed; top: 0; width: 100%; z-index: 9999;'>
+                $message
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+              </div>";
+    }
     
 }
 
-
-
-function get_movies($genre_id, $api_key) {//recup une liste au hasard en 1 50 de film avec le genre concernet 
- 
-    $allMovies = [];
-    $minPage = 1;
-    $maxPage = 50;
-    $page = rand($minPage, $maxPage);
-
-    $url = "https://api.themoviedb.org/3/discover/movie?api_key={$api_key}&include_adult=false&with_genres={$genre_id}&page={$page}";
-
-    // $ch = curl_init($url);
-    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // $response = curl_exec($ch);
-    // curl_close($ch);
-    $response = file_get_contents($url);
-    $movies = json_decode($response, true)['results'];
-    return $allMovies = array_merge($allMovies, $movies);
+$id_imdb = '';
+if(isset($_GET['id'])){
+    $id_imdb = $_GET['id'];
+} 
+else if(isset($_GET['filmId'])){
+    $id_imdb = $_GET['filmId'];
 }
 
+$api_key = "9e1d1a23472226616cfee404c0fd33c1";
+$url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
 
-function get_imdb_id($tmdb_id, $api_key) {//recup idImdb avec id tmdb
-    $url = "https://api.themoviedb.org/3/movie/{$tmdb_id}?api_key={$api_key}";
+$response = file_get_contents($url);
+$data = json_decode($response);
+$couverture =null;
+$portrait= "./Images/depannage.jpg";
+$overview= 'Inconnu';
 
-    // $ch = curl_init($url);
-    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // $response = curl_exec($ch);
-    // curl_close($ch);
-    $response = file_get_contents($url);
-    $movie = json_decode($response, true);
-    return $movie['imdb_id'];
+
+
+// Créez un tableau avec tous les résultats que vous voulez vérifier
+$results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
+
+foreach ($results as $result) {
+    if (isset($result->backdrop_path) && $result->backdrop_path !== null) {
+        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->backdrop_path;
+        break;  // Sortir de la boucle dès qu'une valeur est trouvée
+    }
+    if (isset($result->still_path) && $result->still_path!== null) {
+        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->still_path;
+        break;  // Sortir de la boucle dès qu'une valeur est trouvée
+    }
 }
+foreach ($results as $result) {
+    if (isset($result->poster_path) && $result->poster_path!== null) {
+        $portrait = "https://image.tmdb.org/t/p/w400" . $result->poster_path;
+        break;  // Sortir de la boucle dès qu'une valeur est trouvée
+    }
+    if (isset($result->still_path) && $result->still_path!== null) {
+        $portrait = "https://image.tmdb.org/t/p/w400" . $result->still_path;
+        break;  // Sortir de la boucle dès qu'une valeur est trouvée
+    }
+}
+
+foreach ($results as $result) {
+    if (isset($result->overview) && $result->overview !== null) {
+        $overview = $result->overview;
+        break;  // Sortir de la boucle dès qu'une valeur est trouvée
+    }
+}
+
 
 ?>
+ 
+ <div class="container-fluid position-relative px-0">
+    <div class="row">
+        <div class="col-md-12">
+        <?php if($couverture): ?>
+            <img class="img-fluid w-100" src="<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);">
+        <?php else: ?>
+            <div class="col-md-12" style="background-color: black; height: 1180px;">
+            </div>
+        <?php endif; ?>
+            <div class="info-container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="mx-auto" src=<?= $portrait ?> alt="Portrait">
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
+                    <h1><?= ($info[0]['primarytitle'] !== null) ? $info[0]['primarytitle'] : 'Inconnu'; ?></h1>
+                    <p style= "margin-bottom : 50px;"> <?= ($info[0]['runtimeminutes'] !== null) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'; ?> &middot; <?= ($info[0]['startyear'] !== null) ? $info[0]['startyear'] : 'Inconnu'; ?> &middot; <?= ($info[0]['genres'] !== null) ? $info[0]['genres'] : 'Inconnu'; ?></p>
+                    <h6 style= "margin-top : 50px;">Synopsis</h6>
+                    <p style="font-size: 13px;"><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
+                    
+                    <div class= "row" style= "margin-top : 50px;">
+                    <div class= "col-md-4" >
+                    <h6> Note sur 10 </h6>
+                    <p style="font-size: 13px;"><?= ($info[0]['averagerating'] !== null) ? $info[0]['averagerating'] : 'Inconnu'; ?></p>
+                    </div>
+                    <div class= "col-md-4" >
+                    <h6>Réalisateur</h6>
+                    <?php
+                    if (is_array($realisateur) && array_key_exists('realisateur', $realisateur)) {
+                        echo '<p style="font-size: 13px;">' . ($realisateur['realisateur'] == null ? "Inconnu" : $realisateur['realisateur']) . '</p>';
+                    } else {
+                        echo '<p style="font-size: 13px;"> Inconnu </p>';
+                    }
+                    ?>
+                    </div>
+
+<button type="button" class="btn btn-primary col-md-2 cssmodal" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+                    </div>
+                    
+
+
+
+<?php
+if (isset($_SESSION['username'])) {
+     // Récupérez la valeur de filmId depuis l'URL
+    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+    $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
+    $titre = ($favori === 'true') ? 'Retirer ce film des favoris' : 'Ajouter ce film aux favoris';
+    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
+    echo "
+    <div class='film' data-favori='$favori'>
+        <h2 id='titreFilm'>$titre</h2>
+        <a href='?controller=home&action=favorie_movie&filmId=$id_imdb'>
+            <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
+        </a>
+    </div>
+    ";
+}
+?>
+
+
+
+
+<!-- La modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+            <!-- En-tête de la modal -->
+            <div class="modal-header">
+                <h5 class="modal-title titre">Commentaires</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Corps de la modal -->
+            <div class="modal-body">
+                <!-- Affichage des commentaires -->
+                <!-- Exemple de données commentaires -->
+                <?php
+                if (!empty($commentaires)) {
+                    $m = Model::getModel();
+                    foreach ($commentaires as $commentaire) {
+                        if($commentaire['anonyme']){
+                            $author = $m->getUsername($commentaire['userid'])['username'];
+                        }
+                        else{
+                            $author = 'Anonyme';
+                        }
+                        
+                        $title = $commentaire['titrecom'];
+                        $content = $commentaire['commentary'];
+                        $rating = $commentaire['rating'];
+                ?>
+                        <div class="comment-bubble">
+                            <div class="comment-author"><?php echo $author; ?></div>
+                            <div class="comment-title"><?php echo $title; ?></div>
+                            <div class="comment-rating">Note : <?php echo $rating; ?></div>
+                            <?php echo $content; ?>
+                        </div>
+                <?php
+                    }
+                } else {
+                ?>
+                    <div class="no-comments">Aucun commentaire</div>
+                <?php
+                }
+                ?>
+            </div>
+
+            <!-- Pied de la modal -->
+            <div class="modal-footer form mx-auto">
+                <!-- Formulaire pour ajouter un commentaire -->
+                <form id="commentForm" action="?controller=home&action=ajoutComMovie&id=<?php echo $id_imdb;?>" method="post">
+                    <div class="form-group">
+                        <label class="custom-form-label">Anonyme :</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousYes" value="0" checked required>
+                            <label class="form-check-label check" for="anonymousYes">Oui</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="anonymous" id="anonymousNo" value="1" required>
+                            <label class="form-check-label check" for="anonymousNo">Non</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentTitle" class="custom-form-label">Titre du commentaire :</label>
+                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentNote" class="custom-form-label">Note :</label>
+                        <!-- Fil des notes -->
+                        <div class="rating-range note">
+                            <span>0</span>
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
+                            <span>4</span>
+                            <span>5</span>
+                        </div>
+                        <!-- Note (1-5) -->
+                        <input type="range" class="form-control-range" id="commentNote" name="commentNote" min="0" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentInput" class="custom-form-label">Ajouter un commentaire :</label>
+                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required></textarea>
+                    </div>
+                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
+                        Vous devez être connecté pour envoyer un commentaire.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary custom-submit-btn" id="submitBtn">Envoyer</button>
+            </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <h3 style="    border-left:2px solid #FFCC00;padding-left: 6px;"> Participants </h3>
+    <div class="row">
+    <?php if(empty($acteur)): ?>
+            <p>Aucun participant connu.</p>
+        <?php else: ?>
+        <?php foreach($acteur as $v) : ?>
+            <?php 
+                $id_acteur = $v['nconst'];
+                $url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
+
+
+                $response = file_get_contents($url);
+                $data = json_decode($response);
+                $profilePath = null;
+                $id_api=null;
+                if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
+                    $profilePath = $data->person_results[0]->profile_path;
+                }
+                if (isset($data->person_results[0]->id) && $data->person_results[0]->id !== null) {
+                    $id_api = $data->person_results[0]->id;
+                }
+            ?>
+            <div class="col-md-3 custom-card d-flex align-items-stretch"> <!-- Choisissez la classe de colonne Bootstrap en fonction de votre mise en page -->
+            <a href="?controller=home&action=information_acteur&id=<?php echo $id_acteur; ?>&id_api=<?php echo $id_api; ?>" class="card composent-card" style="width: 200px;">
+            <?php $imageSrc = ($profilePath !== null) ? "https://image.tmdb.org/t/p/w500{$profilePath}" : "./Images/depannage.jpg"; ?>
+            <img src="<?php echo $imageSrc; ?>" alt="Poster" class="card-img-top">                          <div class="card-body">
+                        <h2 class="card-title"><?= $v['nomacteur'] ?></h2>
+                        <h3 class="card-title"><?= $v['dateacteur'] ?></h3>
+                        <h4 class="card-title"><?= $v['nomdescene'] ?></h4>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>
+
+
+<script src="Js/informations.js"></script>
+
+
+<script>
+       /*
+       $(document).ready(function() {
+            // Écouteur d'événement pour le clic sur le bouton
+            $("#favoriButton").click(function() {
+                // Récupérez l'état actuel du film (favori ou non)
+                const estFavori = $(".film").data("favori");
+
+                // Effectuez l'appel Ajax ici
+                $.ajax({
+                    type: "GET", // Ou "GET" selon vos besoins
+                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
+                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
+                    success: function(response) {
+                        // Mettez à jour l'interface utilisateur en fonction de la réponse
+                        if (estFavori) {
+                            $(".film").data("favori", false);
+                            $("#favoriButton").text("+");
+                            $("#titreFilm").text("Ajouter au favori");
+                            $(".film").removeClass("favori"); // Retirez la classe "favori"
+                        } else {
+                            $(".film").data("favori", true);
+                            $("#favoriButton").text("-");
+                            $("#titreFilm").text("Favori");
+                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
+                        }
+                    },
+                    error: function() {
+                        alert("Erreur lors de la mise à jour des favoris.");
+                    }
+                });
+            });
+        });
+        */
+        var alertElement = document.getElementById('myAlert');
+
+// Faire disparaître l'alerte après 3 secondes
+        window.setTimeout(function() {
+            alertElement.setAttribute('hidden', true);
+        }, 2000);
+     var submitBtn = document.getElementById('submitBtn');
+    var alertNotLoggedIn = document.getElementById('alertNotLoggedIn');
+
+    submitBtn.addEventListener('click', function() {
+        // Vérifier si la variable de session existe
+       
+        <?php if (!isset($_SESSION['username'])) : ?>
+            // Afficher l'alerte si l'utilisateur n'est pas connecté
+            alertNotLoggedIn.style.display = 'block';
+            // Empêcher l'envoi du formulaire
+            event.preventDefault();
+        <?php endif; ?>
+    });
+    </script>
+
+        <?php require "Views/view_footer.php"; ?>

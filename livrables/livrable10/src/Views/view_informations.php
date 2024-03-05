@@ -1,22 +1,35 @@
 <?php require "Views/view_navbar.php"; ?>
 
 <style>
-body {
-    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); /* Dégradé du noir (#0c0c0c) vers le blanc (#1f1f1f) */
-    margin: 0;
-    font-family: 'Calibri', sans-serif;
-    color: white;
+.middot{
+
+
+    font-size: 24px;
 }
-.container-fluid {
-    position: relative;
+.btncommentaire {
+    background-color: #FFCC00; /* Couleur de fond initiale */
+    border: 2px solid #FFCC00; /* Couleur de bordure initiale */
+    color: white;
+    border-radius: 25px;
+    padding: 15px;
 }
 
-.info-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    color: white;
-    padding: 80px;
+.btncommentaire:hover {
+    background-color: #c79f00; /* Couleur de fond au survol */
+    border: 2px solid #FFCC00; /* Couleur de bordure au survol */
+}
+
+/* Styliser spécifiquement l'état :active */
+.btncommentaire:active {
+    background-color: #c79f00; /* Couleur de fond pendant le clic */
+    border: 2px solid #FFCC00; /* Couleur de bordure pendant le clic */
+    outline: none; /* Optionnel: supprime l'outline */
+    box-shadow: none; /* Optionnel: supprime l'ombre de la boîte (si vous utilisez Bootstrap) */
+}
+.aucunparticipant{
+
+    font-size:20px;
+    margin-top:30px;
 }
 .composent-card {
     background-color: #333; /* Gris foncé */
@@ -29,6 +42,8 @@ body {
 .composent-card:hover {
     transform: scale(1.1);
     border: 2px solid #FFCC00; /* Encadrement blanc lors du survol */
+    text-decoration: none !important;
+    color: inherit !important;
 }
 
 
@@ -165,7 +180,7 @@ $url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external
 
 $response = file_get_contents($url);
 $data = json_decode($response);
-$couverture =null;
+$couverture = "./Images/cinemadepannage.jpg";
 $portrait= "./Images/depannage.jpg";
 $overview= 'Inconnu';
 
@@ -205,46 +220,47 @@ foreach ($results as $result) {
 
 ?>
  
- <div class="container-fluid position-relative px-0">
+ <div style="position: relative; margin-top:35px;">
     <div class="row">
-        <div class="col-md-12">
-        <?php if($couverture): ?>
-            <img class="img-fluid w-100" src="<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);">
-        <?php else: ?>
-            <div class="col-md-12" style="background-color: black; height: 1180px;">
-            </div>
-        <?php endif; ?>
-            <div class="info-container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <img class="mx-auto" src=<?= $portrait ?> alt="Portrait">
-                    </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-7">
-                    <h1><?= ($info[0]['primarytitle'] !== null) ? $info[0]['primarytitle'] : 'Inconnu'; ?></h1>
-                    <p style= "margin-bottom : 50px;"> <?= ($info[0]['runtimeminutes'] !== null) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'; ?> &middot; <?= ($info[0]['startyear'] !== null) ? $info[0]['startyear'] : 'Inconnu'; ?> &middot; <?= ($info[0]['genres'] !== null) ? $info[0]['genres'] : 'Inconnu'; ?></p>
-                    <h6 style= "margin-top : 50px;">Synopsis</h6>
-                    <p style="font-size: 13px;"><?= ($overview !== null) ? $overview : 'Inconnu'; ?></p>
-                    
-                    <div class= "row" style= "margin-top : 50px;">
-                    <div class= "col-md-4" >
-                    <h6> Note sur 10 </h6>
-                    <p style="font-size: 13px;"><?= ($info[0]['averagerating'] !== null) ? $info[0]['averagerating'] : 'Inconnu'; ?></p>
-                    </div>
-                    <div class= "col-md-4" >
-                    <h6>Réalisateur</h6>
-                    <?php
-                    if (is_array($realisateur) && array_key_exists('realisateur', $realisateur)) {
-                        echo '<p style="font-size: 13px;">' . ($realisateur['realisateur'] == null ? "Inconnu" : $realisateur['realisateur']) . '</p>';
-                    } else {
-                        echo '<p style="font-size: 13px;"> Inconnu </p>';
-                    }
-                    ?>
-                    </div>
+        <!-- Couverture -->
+        <div class="backdrop col-md-12" style="z-index: 1;">
+            <img class="img-fluid" src="<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">
+        </div>
+    </div>
 
-<button type="button" class="btn btn-primary col-md-2 cssmodal" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+    <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
+        <!-- Portrait à gauche -->
+        <div class="afficheportrait col-md-3 ml-3">
+            <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+        </div>
+        <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
+        <div class="col-md-7 mr-3">
+            <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
+                <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?></h1>
+                <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
+                <h6 style="margin-top: 50px;">Synopsis</h6>
+                <p><?= ($overview ?? 'Inconnu'); ?></p>
+                <div class="row" style="margin-top: 50px;margin-bottom: 50px;">
+                    <div class="col-md-4">
+                        <h6>Note sur 10</h6>
+                        <p><?= ($info[0]['averagerating'] ?? 'Inconnu'); ?></p>
                     </div>
-                    
+                    <div class="col-md-4">
+                        <h6>Réalisateur</h6>
+                        <p><?= ($realisateur['realisateur'] ?? 'Inconnu'); ?></p>
+                    </div>
+                    <div class="col-md-4 ">
+                        <h6>Type</h6>
+                        <p><?= ($info[0]['titletype'] ?? 'Inconnu'); ?></p>
+                    </div>
+                </div>
+                <button type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                
 
 
 
@@ -374,10 +390,10 @@ if (isset($_SESSION['username'])) {
 </div>
 
 <div class="container mt-4">
-    <h3 style="    border-left:2px solid #FFCC00;padding-left: 6px;"> Participants </h3>
+    <h3 style="border-left:2px solid #FFCC00;padding-left: 6px;"> Participants </h3>
     <div class="row">
     <?php if(empty($acteur)): ?>
-            <p>Aucun participant connu.</p>
+            <p class="aucunparticipant">Aucun participant connu.</p>
         <?php else: ?>
         <?php foreach($acteur as $v) : ?>
             <?php 
@@ -388,18 +404,17 @@ if (isset($_SESSION['username'])) {
                 $response = file_get_contents($url);
                 $data = json_decode($response);
                 $profilePath = null;
-                $id_api=null;
+               
                 if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
                     $profilePath = $data->person_results[0]->profile_path;
                 }
-                if (isset($data->person_results[0]->id) && $data->person_results[0]->id !== null) {
-                    $id_api = $data->person_results[0]->id;
-                }
+               
             ?>
             <div class="col-md-3 custom-card d-flex align-items-stretch"> <!-- Choisissez la classe de colonne Bootstrap en fonction de votre mise en page -->
-            <a href="?controller=home&action=information_acteur&id=<?php echo $id_acteur; ?>&id_api=<?php echo $id_api; ?>" class="card composent-card" style="width: 200px;">
+            <a href="?controller=home&action=information_acteur&id=<?php echo $id_acteur; ?>" class="card composent-card" style="width: 200px;">
             <?php $imageSrc = ($profilePath !== null) ? "https://image.tmdb.org/t/p/w500{$profilePath}" : "./Images/depannage.jpg"; ?>
-            <img src="<?php echo $imageSrc; ?>" alt="Poster" class="card-img-top">                          <div class="card-body">
+            <img src="<?php echo $imageSrc; ?>" alt="Poster" class="card-img-top">                  
+                    <div class="card-body">
                         <h2 class="card-title"><?= $v['nomacteur'] ?></h2>
                         <h3 class="card-title"><?= $v['dateacteur'] ?></h3>
                         <h4 class="card-title"><?= $v['nomdescene'] ?></h4>
