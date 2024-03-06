@@ -203,7 +203,7 @@ Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous le
                     <img class="d-block w-100 carousel-backdrop" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
                     <div class="carousel-overlay">
                         <img src="https://image.tmdb.org/t/p/w500<?= $movie['poster_path'] ?>" alt="<?= $movie['title'] ?> Poster" class="poster">
-                        <h5><?= $movie['title'] ?></h5>
+                        <h5 style="color:yellow;"><?= $movie['title'] ?></h5>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -234,8 +234,15 @@ foreach ($filmnote['results'] as $i) :
         <div class="row">
             <img class="col-md-4" src="https://image.tmdb.org/t/p/w400<?= $i['poster_path'] ?>" alt="">
             <div class="container col-md-7 mt-4">
-                <h2 class="card-1" style="font-size:15px"><?= $i['title'] ?></h2>
-                <p class="card-2" style="font-size:15px"><?= $i['release_date'] ?></p>
+                <h2 class="card-1" style="font-size:15px; color: yellow; padding-bottom: 5px"><?= $i['title'] ?></h2>
+                <?php $dateTime = new DateTime($i['release_date']);
+                    $formattedDate = $dateTime->format('d/m/Y');
+                    ?>
+                <p class="card-2" style="pading-left: 5px; font-size:15px; border-left:2px solid #FFCC00;padding-left: 6px;"><?php $dateTime = new DateTime($i['release_date']);
+                    $formattedDate = $dateTime->format('d/m/Y');
+                    echo $formattedDate;
+                    ?></p>
+                <p class="card-2" style="font-size:15px; border-left:2px solid #FFCC00;padding-left: 6px; color: yellow;"><img style="padding-bottom: 2px; padding-right: 5px; transform: scale(1.5);"src="./images/star.png" alt="Star" class="star"><?=round($i['vote_average'], 1);?></p>
             </div>
         </div>
     </div>
@@ -247,9 +254,7 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
 ?>
 </div>
 
-
  </div>
-        
 
 <?php foreach ($filmsParGenre as $index=>$movie) : ?>
     <div class="container films-section" style="margin-top:20px;">
@@ -258,12 +263,10 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
     <div class="scrolling-wrapper">
 
     <?php foreach ($movie as $movies) : ?>
-        
-
         <a href="?controller=home&action=information_movie&id=<?= $movies['tconst'] ?>"  class="card composent-card" style="width: 200px;">
         <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movies['tconst'] ?>">
         <div class="card-body">
-        <h5 class="card-title"><?= $movies['primarytitle'] ?></h5>
+        <h5 class="card-title" style="color: yellow;"><?= $movies['primarytitle'] ?></h5>
         <h6 class="card-subtitle mb-2 mt-2 text-muted"><?= $movies['startyear'] ?></h6>
         <div class="rating">
         <img src="./images/star.png" alt="Star" class="star">

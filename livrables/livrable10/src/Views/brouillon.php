@@ -466,3 +466,17 @@ if (isset($_SESSION['username'])) {
     </script>
 
         <?php require "Views/view_footer.php"; ?>
+
+
+
+video
+ tvSpecial = episode special 
+ tvSeries=series 
+ tvShort=court metrage 
+ tvPilot= 
+ movie = film 
+ tvMovie= film de serie ( high school , camp nou)
+ short = court metrage
+ tvMiniSeries = ( mini series)
+ videoGame = jeu 
+ tvEpisode = episode 

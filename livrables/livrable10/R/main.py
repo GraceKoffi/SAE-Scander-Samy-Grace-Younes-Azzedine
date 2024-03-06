@@ -14,12 +14,12 @@ def test():
 def result():
     data = request.get_json()
     if 'nconst1' in data and 'nconst2' in data:
-        rapprochement = rapoActeur(nconstDebut=data['nconst1'], nconstFin=data['nconst2'])
+        rapprochement = rapoActeur(nconstDebut=data['nconst1'], nconstFin=data['nconst2'], mode=data["mode"])
         result = rapprochement.Start()
         return jsonify(result)
     
     elif 'tconst1' in data and 'tconst2' in data:
-        rapprochement = rapoFilm(tconstDebut=data['tconst1'], tconstFin=data['tconst2'])
+        rapprochement = rapoFilm(tconstDebut=data['tconst1'], tconstFin=data['tconst2'], mode=data["mode"])
         result = rapprochement.Start()
         return jsonify(result)
     else:

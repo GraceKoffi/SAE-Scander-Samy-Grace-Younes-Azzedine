@@ -445,7 +445,7 @@ class Model
         if ($votesMax !== null) {
             $sql .= " AND tr.numVotes <= :votesMax";
         }
-       
+
         $requete = $this->bd->prepare($sql);
     
         if ($type_rech == "similarity" || $type_rech == "like") {
@@ -681,7 +681,7 @@ class Model
 
     public function addCommentaryActor($data){
         $sql = "INSERT INTO CommentaryActor (userId, ActorID, TitreCom, Commentary, Anonyme, Rating) 
-                VALUES (:userId, :ActorID, :commentary, :anonyme, :rating)";
+                VALUES (:userId, :ActorID, :TitreCom, :commentary, :anonyme, :rating)";
         $query = $this->bd->prepare($sql);
         $userId = trim(e($data["userId"]));
         $ActorId = trim(e($data["ActorID"]));
@@ -692,7 +692,7 @@ class Model
 
         $query->bindParam(":userId", $userId, PDO::PARAM_STR);
         $query->bindParam(":ActorID", $ActorId, PDO::PARAM_INT);
-        $query->bindParam(":TitreCom", $titreCom, PDO::PARAM_STR);
+        $query->bindValue (":TitreCom", $titreCom, PDO::PARAM_STR);
         $query->bindParam(":commentary", $commentary, PDO::PARAM_STR);
         $query->bindParam(":anonyme", $anonyme, PDO::PARAM_BOOL);
         $query->bindParam(":rating", $rating, PDO::PARAM_INT);
@@ -702,7 +702,7 @@ class Model
     public function getNcont($primaryName){
         $sql = "SELECT nconst
                 FROM name_basics
-                WHERE primaryName = :primaryName";
+                WHERE lower(primaryname) = lower(:primaryName) ;";
 
         $query = $this->bd->prepare($sql);
         $PrimaryName = e($primaryName);
@@ -715,7 +715,7 @@ class Model
     public function getTconst($primaryTitle){
         $sql = "SELECT tconst
                 FROM title_basics
-                WHERE primaryTitle = :primaryTitle;
+                WHERE lower(primarytitle) = lower(:primaryTitle); 
                 ";
         $query = $this->bd->prepare($sql);
         $PrimaryTitle = e($primaryTitle);
@@ -1141,8 +1141,6 @@ class Model
             $requete->execute();
             return $requete->fetchAll(PDO::FETCH_ASSOC);
         
-        
-
 
     }
     public function getPersonnePhoto($id) {
@@ -1177,7 +1175,7 @@ class Model
             $tableau = ["movie_results", "tv_results", "tv_episode_results", "tv_season_results"];
             $posterPath = "./Images/depannage.jpg";
             foreach($tableau as $element){
-                if(isset($data[$element][0]['poster_path']) && size($data[$element]) > 0){
+                if(isset($data[$element][0]['poster_path']) && sizeof($data[$element]) > 0){
                     $posterPath .="https://image.tmdb.org/t/p/w400".$data[$element][0]['poster_path'];
                     break;
                 }
@@ -1201,4 +1199,13 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function getInfoActeur($id){
+        $sql = "SELECT * FROM name_basics WHERE nconst = :nconst";
+        $query = $this->bd->prepare($sql);
+        $query->bindParam(":nconst", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+
+    }
+
 }

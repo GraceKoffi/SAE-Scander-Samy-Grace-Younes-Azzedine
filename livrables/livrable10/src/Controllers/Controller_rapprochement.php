@@ -9,16 +9,20 @@ Class Controller_rapprochement extends Controller{
     
     public function action_rapprochement()
     {
-        if(isset($_POST['typeselection'])){
+        if(isset($_POST['typeselection']) && $_POST['typeselection'] !== "" 
+            && isset($_POST['typeselectionRapo']) && $_POST['typeselectionRapo'] !== ""){
 
             $m = Model::getModel();
             $debut = '';
             $fin = '';
             $search1 = '';
             $search2 = '';
+            $_SESSION['mode'] = $_POST['typeselectionRapo'];
             $typeSelection = $_POST['typeselection'];
             if($typeSelection == "titre" && isset($_POST['titre1']) 
                 && isset($_POST['titre2'])){
+                $debut = 'tconst1';
+                $fin = 'tconst2';
                 
                 $isMultipleTitle1 = $m->doublonFilm($_POST['titre1']);
                 $isMultipleTitle2 = $m->doublonFilm($_POST['titre2']);
@@ -34,10 +38,6 @@ Class Controller_rapprochement extends Controller{
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 }
                 
                 if ($isMultipleTitle1 == 1 && $isMultipleTitle2 == 1) {
@@ -56,11 +56,12 @@ Class Controller_rapprochement extends Controller{
             }
             else if($typeSelection == "personne" 
                     && isset($_POST['personne1']) && isset($_POST['personne2'])) {
-                    
+                $debut = 'nconst1';
+                $fin = 'nconst2';
                 $isMultipleActor1 = $m->doublonActeur($_POST['personne1']);
                 $isMultipleActor2 = $m->doublonActeur($_POST['personne2']);
-                $serach1 = $_POST['personne1'];  
-                $serach2 = $_POST['personne2'];  
+                $search1 = $_POST['personne1'];  
+                $search2 = $_POST['personne2'];  
                 if(isset($_SESSION['username'])) {
                     $data = [
                         "UserName" => $_SESSION['username'],
@@ -71,10 +72,6 @@ Class Controller_rapprochement extends Controller{
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 }
                 
                 if ($isMultipleActor1 == 1 && $isMultipleActor2 == 1) {
@@ -97,6 +94,7 @@ Class Controller_rapprochement extends Controller{
             $postData = array(
                 $debut => $val1,
                 $fin => $val2,
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" => $search1,
@@ -117,13 +115,14 @@ Class Controller_rapprochement extends Controller{
         if(isset($_POST['selectedTconst1']) && isset($_POST['selectedTconst2'])){
             $postData = array(
                 $debut => $_POST['selectedTconst1'],
-                $fin => $_POST['selectedTconst2']
+                $fin => $_POST['selectedTconst2'],
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" =>$_POST['titre1'],
                 "search2" =>$_POST['titre2']
             );
-            $this->apiCall($postData);   
+            $this->apiCall($postData, $arraySearch);   
         }
         else{
             $tab = ["tab" => "Une Erreur est survenu essayer de call"];
@@ -140,7 +139,8 @@ Class Controller_rapprochement extends Controller{
             
             $postData = array(
                 $debut => $_POST['selectednconst1'],
-                $fin => $_POST['selectednconst2']
+                $fin => $_POST['selectednconst2'],
+                "mode" => $_SESSION['mode']
             );
             $arraySearch = array(
                 "search1" =>$_POST['personne1'],

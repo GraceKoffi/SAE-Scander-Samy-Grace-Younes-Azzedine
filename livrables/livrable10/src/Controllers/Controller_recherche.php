@@ -17,10 +17,7 @@ class Controller_recherche extends Controller {
                 "MotsCles" => trim($_POST['search'])
             ];
             $result = $m->addUserRecherche($data);
-            if(!empty($result)){
-                $tab = ["tab" => $result["message"]];
-                $this->render("error", $tab);
-            }
+            
         }
 
         if ($_POST['typeselection'] == 'titre') {

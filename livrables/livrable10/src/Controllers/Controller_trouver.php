@@ -25,10 +25,6 @@ class Controller_trouver extends Controller {
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 }
                 if ($nombrededoublon1 == 1 && $nombrededoublon2 == 1) {
                     // Logique pour quand il y a exactement un doublon pour chaque titre
@@ -67,10 +63,6 @@ class Controller_trouver extends Controller {
                         ]
                     ];
                     $result = $m->addUserRecherche($data);
-                    if(!empty($result)) {
-                        $tab = ["tab" => $result["message"]];
-                        $this->render("error", $tab);
-                    }
                 
                 }
                 

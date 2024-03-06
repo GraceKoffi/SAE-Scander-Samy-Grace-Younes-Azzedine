@@ -31,6 +31,7 @@ class Controller_contact extends Controller{
             try {
                 $mail->send();
                 $tab = ["tab" => "Mail envoyer à $email regarder votre boite mail"];
+                $tab[] = ["notification" => "Mail envoyer"];
                 $this->render("error", $tab);
 
             } catch (Exception $e) {

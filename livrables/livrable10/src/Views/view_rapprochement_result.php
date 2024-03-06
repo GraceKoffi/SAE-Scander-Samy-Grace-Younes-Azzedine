@@ -37,7 +37,7 @@
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
-        <h1>Résultats entre "<?php echo $result[0]["search1"]?>" et "<?php echo $result[0]["search2"] ?> :</h1>
+        <h1>Résultats entre "<?php echo $result[0]["search1"]?>" et "<?php echo $result[0]["search2"] ?>" :</h1>
         <p><?php if(round($result["data"]["time"], 1) < 60): ?>
           <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?> s
           <?php elseif (round($result['data']['time']) > 60): ?>
@@ -61,13 +61,13 @@
 <?php
 $m = Model::getModel();
 $index = 0;
-foreach (array_unique($result['data']['path']) as $item) {
+foreach ($result['data']['path'] as $item) {
     if ($item[0] == "n") {
         $infoItem = $m->getInfoActeur($item);
         $primaryName = isset($infoItem['primaryname']) ? $infoItem['primaryname'] : 'Aucune information';
         $birthDay = isset($infoItem['birthyear']) ?  $infoItem['birthyear'] : 'Aucune information';
         $primaryProfession = isset($infoItem['primaryprofession']) ? $infoItem['primaryprofession'] : 'Aucune information';
-        $posterPath = $m->getPersonnePhoto($item);; // Supposons que getPersonnePhoto est une fonction PHP existante
+        $posterPath = $m->getPersonnePhoto($item); 
         $hrefValue = "?controller=home&action=information_acteur&id=" . $item;
         $cardContent = '<a href="' . $hrefValue . '" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
               <div class="cardrecherche item" style="cursor: pointer;">
@@ -102,7 +102,7 @@ foreach (array_unique($result['data']['path']) as $item) {
       $titleType = isset($infoItem['titletype']) ? $infoItem['titletype'] : 'Aucune information';
       $startYear = isset($infoItem['startyear']) ? $infoItem['startyear'] : 'Aucune information';
       $genres = isset($infoItem['genres']) ? $infoItem['genres'] : 'Aucune information';
-      $posterPath = $m->getFilmPhoto($item); // Supposons que getPersonnePhoto est une fonction PHP existante
+      $posterPath = $m->getFilmPhoto($item);
       $hrefValue = "?controller=home&action=information_movie&id=" . $item;
       $cardContent = '<a href="' . $hrefValue . '" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
             <div class="cardrecherche item" style="cursor: pointer;">

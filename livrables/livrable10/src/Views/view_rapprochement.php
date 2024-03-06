@@ -64,6 +64,15 @@
  .label{
     margin-bottom: 20px;
  }
+
+ .messageInfoText{
+    padding-left: 10px;
+ }
+ 
+ #messageInfo{
+    margin-top: -40px;
+    margin-bottom: 40px;
+  }
 </style>
 <div class="container-fluid">
     <div class="row align-items-center">
@@ -102,9 +111,9 @@
     <div class="row align-items-center">   
             <h1 class="titreRapprochement">Rapprochement</h1>
             
-            <p class="paragrapheRapprochement">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler
-                les connexions inattendues entre vos personnalités et titres préférés.</br>Que vous cherchiez à découvrir les projets communs
-                entre deux personnes du monde du spectacle,</br> ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
+            <p class="paragrapheRapprochement">Avec "Rapprochement" sur Findercine, explorez profondément les interconnexions des réseaux du divertissement pour mettre en lumière les liens surprenants entre vos personnalités et titres favoris. 
+                Que vous souhaitiez révéler les projets partagés entre deux acteurs, plonger dans les collaborations entre divers titres, 
+                ou dévoiler les connexions insoupçonnées dans le monde du spectacle, "Rapprochement" se présente comme l'outil idéal.</p>
         </div>    
     </div>
 </div>
@@ -132,8 +141,24 @@
                                     <select class="form-select" id="typeselection" name="typeselection" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
                                         <option value="titre">Titre</option>
                                         <option value="personne">Personne</option>
+                                        <option value="" selected></option> 
                                     </select>
                                 </div>
+
+                                <label  class="labelfiltre form-label label" for="typeselectionRapo">Type de Rapprochement</label>
+                                <div class="mb-5">
+                                    <select class="form-select" id="typeselectionRapo" name="typeselectionRapo" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
+                                        <option value="soft">Relatif</option>
+                                        <option value="hard">Approfondi</option>
+                                        <option value="" selected></option> 
+                                    </select>
+                                </div>
+                                
+                                <div id="messageInfo" class="formulaire" style="display: none;">
+                                <img style="transform: scale(0.7);" src="./images/icons8-warning-48.png">
+                                <p id="monParagraphe" class="messageInfoText"></p>
+                                </div>
+                                
 
 
                                 <div id="filter-box-titre" style="display: none;">
@@ -253,6 +278,21 @@
 
 
 <script>
+    document.getElementById("typeselectionRapo").addEventListener("change", function() {
+    var selectedOption = this.value;
+    var messageInfoDiv = document.getElementById("messageInfo");
+    var monParagraphe = document.getElementById("monParagraphe");
+    var selectOption = document.getElementById("typeselection").value;
+    
+
+    if (selectedOption === "hard" && selectOption == "personne") {
+        messageInfoDiv.style.display = "block"; 
+        monParagraphe.textContent = "Attention avec se mode nous allons approfondir le rapprochement le rendant plus précis";
+    }else {
+        messageInfoDiv.style.display = "block";
+        monParagraphe.textContent = "Dans se mode le rapprochement sera plus leger moin couteux mais moin précis";
+    } 
+});
 
 $(document).ready(function() {
     handleFormValidation();

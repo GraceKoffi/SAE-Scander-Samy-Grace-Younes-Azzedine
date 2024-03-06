@@ -17,8 +17,8 @@ class Controller_resetFinal extends Controller{
             $stock = $m->updatePassword($data);
             $m->removeToken($result["userId"][0], trim(e($_GET['token'])));
             if($stock['status'] == "OK"){
-                $tab = ["tab" => "message ok"];
-                $this->render("isreset", $tab);
+                $tab = ["tab" => "Votre mot de passe à été reinitialiser"];
+                $this->render("error", $tab);
             }
             else{
                 $tab = ["tab" => "Error dans la modification du mot de passe"];
