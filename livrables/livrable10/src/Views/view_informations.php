@@ -269,7 +269,32 @@ foreach ($results as $result) {
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
-                <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?></h1>
+                <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?>
+                <?php 
+                        if(isset($_SESSION['username'])) {
+                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+                            if($favori == 'false'){
+                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                                            color: white;
+                                                            background: none;
+                                                            border: none; 
+                                                            cursor: pointer;'>
+                                                            ★</button></a>
+                                    </span>";
+                            }
+                            else{
+                                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                        color: yellow;
+                                        background: none;
+                                        border: none; 
+                                        cursor: pointer;'>
+                                        ★</button></a>
+                                </span>";
+                            }
+                        }
+                        ?>
+
+                </h1>
                 <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
                 <h6 style="margin-top: 50px;">Synopsis</h6>
                 <p><?= ($overview ?? 'Inconnu'); ?></p>

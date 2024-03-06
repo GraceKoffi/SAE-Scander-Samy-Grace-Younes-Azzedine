@@ -267,7 +267,32 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
-                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?></h1>
+                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?>
+                <?php 
+                        if(isset($_SESSION['username'])) {
+                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+                            if($favori == 'false'){
+                                echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button style='font-size: 50px;
+                                                            color: white;
+                                                            background: none;
+                                                            border: none; 
+                                                            cursor: pointer;'>
+                                                            ★</button></a>
+                                    </span>";
+                            }
+                            else{
+                                        echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button style='font-size: 50px;
+                                        color: yellow;
+                                        background: none;
+                                        border: none; 
+                                        cursor: pointer;'>
+                                        ★</button></a>
+                                </span>";
+                            }
+                        }
+                        ?>
+
+                </h1>
                 <p>Année : <?= ($info['birthyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <?= ($info['primaryprofession'] ?? 'Inconnu'); ?></p>
                 <h6 style="margin-top: 50px;">Biographie</h6>
                 <p class="biography"><?= $bio; ?></p>
@@ -277,30 +302,6 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
     </div>
 </div>
 
-
-  
-
-
-
-
-
-
-<?php
-if (isset($_SESSION['username'])) {
-     // Récupérez la valeur de filmId depuis l'URL
-    $favori = isset( $_SESSION['favoriActeur']) ?  $_SESSION['favoriActeur'] : 'false';
-    $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
-    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
-    echo "
-    <div class='film' data-favori='$favori'>
-        <h2 id='titreFilm'>Mon Film Préféré</h2>
-        <a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'>
-            <button id='favoriButton' class='bouton-favori' style='background-color: $couleurBouton;'>$texteBouton</button>
-        </a>
-    </div>
-    ";
-}
-?>
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
