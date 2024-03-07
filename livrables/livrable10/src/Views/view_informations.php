@@ -274,21 +274,21 @@ foreach ($results as $result) {
                         if(isset($_SESSION['username'])) {
                             $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
                             if($favori == 'false'){
-                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                echo "<span><button id='favori-button' data-film-id='$id_imdb' style='font-size: 50px;
                                                             color: white;
                                                             background: none;
                                                             border: none; 
                                                             cursor: pointer;'>
-                                                            ★</button></a>
+                                                            ★</button>
                                     </span>";
                             }
                             else{
-                                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                        echo "<span><button  id='favori-button' style='font-size: 50px;
                                         color: yellow;
                                         background: none;
                                         border: none; 
                                         cursor: pointer;'>
-                                        ★</button></a>
+                                        ★</button>
                                 </span>";
                             }
                         }
@@ -494,40 +494,34 @@ foreach ($results as $result) {
 
 
 <script>
-       /*
-       $(document).ready(function() {
-            // Écouteur d'événement pour le clic sur le bouton
-            $("#favoriButton").click(function() {
-                // Récupérez l'état actuel du film (favori ou non)
-                const estFavori = $(".film").data("favori");
+    document.getElementById('favori-button').addEventListener('click', function() {
+        const filmId = this.getAttribute('data-film-id');
+        const xhr = new XMLHttpRequest();
 
-                // Effectuez l'appel Ajax ici
-                $.ajax({
-                    type: "GET", // Ou "GET" selon vos besoins
-                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
-                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
-                    success: function(response) {
-                        // Mettez à jour l'interface utilisateur en fonction de la réponse
-                        if (estFavori) {
-                            $(".film").data("favori", false);
-                            $("#favoriButton").text("+");
-                            $("#titreFilm").text("Ajouter au favori");
-                            $(".film").removeClass("favori"); // Retirez la classe "favori"
-                        } else {
-                            $(".film").data("favori", true);
-                            $("#favoriButton").text("-");
-                            $("#titreFilm").text("Favori");
-                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
-                        }
-                    },
-                    error: function() {
-                        alert("Erreur lors de la mise à jour des favoris.");
-                    }
-                });
-            });
-        });
-        */
-        var alertElement = document.getElementById('myAlert');
+        // Configurez la requête
+        xhr.open('GET', `?controller=home&action=favorie_movie&filmId=${filmId}`, true);
+
+        // Définissez le gestionnaire d'événements pour la réponse
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Traitez la réponse ici
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // L'ajout aux favoris a réussi
+                    document.getElementById('favori-button').style.color = 'yellow';
+                } else {
+                    // L'ajout aux favoris a échoué
+                    document.getElementById('favori-button').style.color = 'white';
+                }
+            }
+        };
+
+        // Envoyez la requête
+        xhr.send();
+    });
+
+
+  var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
   var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
 
