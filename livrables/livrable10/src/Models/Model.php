@@ -127,7 +127,6 @@ class Model
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
-
     public function favorieExistFilm($userId, $filmId){
         $sql = "SELECT 
                 filmId FROM FavorieFilm

@@ -13,7 +13,7 @@
         <h1>Résultats entre "<?= e($personne1) ?>" et "<?= e($personne2) ?>"</h1>
         <?php endif; ?>
         <p>
-        <a href="?controller=recherche">
+        <a href="?controller=trouver">
         <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
         </a>
         </p>
