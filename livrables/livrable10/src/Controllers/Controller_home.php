@@ -196,22 +196,26 @@ Class Controller_home extends Controller{
 
 
     }
-   /*  public function action_favorie_movie(){
-        $m = Model::getModel();
-        if(isset($_GET['filmId'])){
-            $userId = $m->getUserId($_SESSION['username'])["userid"];
-            if(empty($m->favorieExistFilm($userId, trim(e($_GET['filmId']))))){
-                $m->AddFavorieFilm($userId, trim(e($_GET['filmId'])));
-                
-            }
-            else{
-                $m->RemoveFavorieFilm($userId, trim(e($_GET['filmId'])));
-            }
-            $this->action_information_movie();
-        }
-    } */
 
     public function action_favorie_movie() {
+        if(!isset($_SESSION['username'])){
+            $this->render("connect", []);
+        }
+        else {
+            $m = Model::getModel();
+            if (isset($_GET['filmId'])) {
+                $userId = $m->getUserId($_SESSION['username'])["userid"];
+                if (empty($m->favorieExistFilm($userId, trim(e($_GET['filmId']))))) {
+                    $m->AddFavorieFilm($userId, trim(e($_GET['filmId'])));
+                } else {
+                    $m->RemoveFavorieFilm($userId, trim(e($_GET['filmId'])));
+                }
+                $this->action_information_movie();
+            }
+        }
+    }
+
+    public function action_favorie_movie_home() {
         $m = Model::getModel();
         if (isset($_GET['filmId'])) {
             $userId = $m->getUserId($_SESSION['username'])["userid"];
@@ -227,20 +231,26 @@ Class Controller_home extends Controller{
     
 
     public function action_favorie_acteur(){
-        $m = Model::getModel();
-        if(isset($_GET['acteurId'])){
-            $userId = $m->getUserId($_SESSION['username'])["userid"];
-            if(empty($m->favorieExistActeur($userId, trim(e($_GET['acteurId']))))){
-                $m->AddFavorieActeur($userId, trim(e($_GET['acteurId'])));
-                echo json_encode(['success' => true]);
+        if(!isset($_SESSION['username'])){
+            $this->render("connect", []);
+        }
+        else {
+            $m = Model::getModel();
+            if(isset($_GET['acteurId'])){
+                $userId = $m->getUserId($_SESSION['username'])["userid"];
+                if(empty($m->favorieExistActeur($userId, trim(e($_GET['acteurId']))))){
+                    $m->AddFavorieActeur($userId, trim(e($_GET['acteurId'])));
+                    
 
-            }
-            else{
-                $m->RemoveFavorieActeur($userId, trim(e($_GET['acteurId'])));
-                echo json_encode(['success' => false]);
+                }
+                else{
+                    $m->RemoveFavorieActeur($userId, trim(e($_GET['acteurId'])));
+                }
+                $this->action_information_acteur();
             }
         }
     }
+
 
     
     public function action_default(){

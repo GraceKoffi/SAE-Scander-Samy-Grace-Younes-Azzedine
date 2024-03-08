@@ -425,7 +425,7 @@ if(isset($_GET['retour'])){
 
 </div>
 
-<div id="favoris" class="container-fluid favoris">
+<div id="favoris" class="container-fluid favoris col-md-7 ">
     <div class="row align-items-center">   
             <div class="col">
             <h1 class="titreTrouver">Favoris</h1>
@@ -438,7 +438,7 @@ if(isset($_GET['retour'])){
         </div>    
     </div>
 </div>
-<div class="container-fluid colapsFavorie">
+<div class="container-fluid colapsFavorie col-md-7">
 <div class="collaps-beetwen">
 <p>
   <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseRecherche" aria-expanded="false" aria-controls="collapseExample">
@@ -462,18 +462,23 @@ if(isset($_GET['retour'])){
 
                 $id = $historique['acteurid'];
                 $data = $m->getInfoActeur($id);
-                print_r($data);
+                $primaryName = isset($data['primaryname']) && $data['primaryname'] !== '' ? $data['primaryname'] : "Aucune Information";
+                $type = isset($data['primaryprofession']) && $data['primaryprofession'] !== '' ? $data['primaryprofession'] : "Aucune Information";
+                $date = isset($data['birthyear']) && $data['birthyear'] !== '' ? $data['birthyear'] : "Aucune Information";
+            
                 
                 
 
                 echo"
-                 <div class='cardrecherche item' style='cursor: pointer;'>
+                <a href='?controller=home&action=information_acteur&id=$id' class='card-linkrecherche' style='text-decoration: none; color: inherit;'>
+                <div class='cardrecherche item' style='cursor: pointer;'>
                 <div class='card-bodyrecherche'>
-                 <h2 class='card-1recherche'>$motClee</h2>
-                 <p class='card-2recherche'>Type : ${displayValue(item.birthyear, 'Aucune information')}</p>
-                 <p class='card-3recherche'>Date : ${displayValue(item.primaryprofession, 'Aucune information')}</p>
+                 <h2 class='card-1recherche'>$primaryName</h2>
+                 <p class='card-2recherche'>Type : $type</p>
+                 <p class='card-3recherche'>Date : $date</p>
                  </div>
-                 </div>";
+                 </div>
+                 </a>";
             }
         }
         else{

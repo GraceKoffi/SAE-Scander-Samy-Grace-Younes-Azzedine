@@ -143,6 +143,21 @@ font-size: 17px;/*taille de la police*/
             color: black; /* Couleur des étoiles */
             margin-right: 5px; /* Espacement entre les étoiles */
         }
+
+        .image-container {
+            position: relative;
+        }
+
+    .overlay {
+        position: absolute;
+        top: -5px; /* Ajustez cette valeur pour la position verticale */
+        left: -5px; /* Ajustez cette valeur pour la position horizontale */
+        background-color: black; /* Couleur de fond semi-transparente */
+        opacity: 0.9;
+        border: 1px solid gold;
+        border-radius: 10px;
+        transform: scale(0.8);
+    }   
 </style>
 
 
@@ -262,37 +277,39 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
     <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
+            <div class="image-container">
             <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+            <div class="overlay">
+            <?php 
+    
+                    $favori = isset($_SESSION['favoriActeur']) ? $_SESSION['favoriActeur'] : 'false';
+                    if($favori == 'false'){
+                        echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button id='favori-button' data-film-id=$id_acteur style='font-size: 50px;
+                                                    color: white;
+                                                    background: none;
+                                                    border: none; 
+                                                    cursor: pointer;'>
+                                                    ★</button></a>
+                            </span>";
+                    }
+                    else{
+                                echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button id='favori-button' data-film-id='$id_acteur' style='font-size: 50px;
+                                color: yellow;
+                                background: none;
+                                border: none; 
+                                cursor: pointer;'>
+                                ★</button></a>
+                        </span>";
+                    }
+    
+                        ?>
+            </div>
+        </div>
         </div>
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
-                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?>
-                <?php 
-                        if(isset($_SESSION['username'])) {
-                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
-                            if($favori == 'false'){
-                                echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button style='font-size: 50px;
-                                                            color: white;
-                                                            background: none;
-                                                            border: none; 
-                                                            cursor: pointer;'>
-                                                            ★</button></a>
-                                    </span>";
-                            }
-                            else{
-                                        echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button style='font-size: 50px;
-                                        color: yellow;
-                                        background: none;
-                                        border: none; 
-                                        cursor: pointer;'>
-                                        ★</button></a>
-                                </span>";
-                            }
-                        }
-                        ?>
-
-                </h1>
+                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?></h1>
                 <p>Année : <?= ($info['birthyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <?= ($info['primaryprofession'] ?? 'Inconnu'); ?></p>
                 <h6 style="margin-top: 50px;">Biographie</h6>
                 <p class="biography"><?= $bio; ?></p>
@@ -301,7 +318,7 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
         </div>
     </div>
 </div>
-
+<?php print_r(!isset($_SESSION['username'])); ?>
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">

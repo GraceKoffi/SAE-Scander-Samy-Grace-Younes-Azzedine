@@ -163,6 +163,21 @@
             cursor: pointer;
     }
 
+    .image-container {
+        position: relative;
+    }
+
+    .overlay {
+        position: absolute;
+        top: -10px; /* Ajustez cette valeur pour la position verticale */
+        left: -10px; /* Ajustez cette valeur pour la position horizontale */
+        background-color: black; /* Couleur de fond semi-transparente */
+        opacity: 0.9;
+        border: 1px solid gold;
+        border-radius: 10px;
+        transform: scale(0.7);
+    }
+
 </style>
 
 <?php
@@ -201,6 +216,7 @@ if(isset($_GET['retour'])){
 }
 
 $id_imdb = '';
+$color = isset($_SESSION['favori']) ? 'gold' : 'white';
 if(isset($_GET['id'])){
     $id_imdb = $_GET['id'];
 } 
@@ -264,35 +280,38 @@ foreach ($results as $result) {
     <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
+            <div class="image-container">
             <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+            <div class="overlay">
+            <?php 
+                    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+                    if($favori == 'false'){
+                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button id='favori-button' style='font-size: 50px;
+                                                    color: white;
+                                                    background: none;
+                                                    border: none; 
+                                                    cursor: pointer;'>
+                                                    ★</button>
+                                                    </a>
+                            </span>";
+                    }
+                    else{
+                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button  id='favori-button' style='font-size: 50px;
+                                color: yellow;
+                                background: none;
+                                border: none; 
+                                cursor: pointer;'>
+                                ★</button></a>
+                        </span>";
+                    }
+                ?>
+            </div>
+        </div>
         </div>
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
                 <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?>
-                <?php 
-                        if(isset($_SESSION['username'])) {
-                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
-                            if($favori == 'false'){
-                                echo "<span><button id='favori-button' data-film-id='$id_imdb' style='font-size: 50px;
-                                                            color: white;
-                                                            background: none;
-                                                            border: none; 
-                                                            cursor: pointer;'>
-                                                            ★</button>
-                                    </span>";
-                            }
-                            else{
-                                        echo "<span><button  id='favori-button' style='font-size: 50px;
-                                        color: yellow;
-                                        background: none;
-                                        border: none; 
-                                        cursor: pointer;'>
-                                        ★</button>
-                                </span>";
-                            }
-                        }
-                        ?>
 
                 </h1>
                 <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
@@ -319,9 +338,6 @@ foreach ($results as $result) {
 </div>
 
                 
-
-
-
 
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -494,33 +510,6 @@ foreach ($results as $result) {
 
 
 <script>
-    document.getElementById('favori-button').addEventListener('click', function() {
-        const filmId = this.getAttribute('data-film-id');
-        const xhr = new XMLHttpRequest();
-
-        // Configurez la requête
-        xhr.open('GET', `?controller=home&action=favorie_movie&filmId=${filmId}`, true);
-
-        // Définissez le gestionnaire d'événements pour la réponse
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Traitez la réponse ici
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    // L'ajout aux favoris a réussi
-                    document.getElementById('favori-button').style.color = 'yellow';
-                } else {
-                    // L'ajout aux favoris a échoué
-                    document.getElementById('favori-button').style.color = 'white';
-                }
-            }
-        };
-
-        // Envoyez la requête
-        xhr.send();
-    });
-
-
   var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
   var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)

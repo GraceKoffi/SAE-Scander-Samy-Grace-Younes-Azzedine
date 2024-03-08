@@ -185,6 +185,27 @@ body {
 
 
 
+/* styles.css */
+.image-container {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    top: 0px; /* Ajustez cette valeur pour la position verticale */
+    left: 0px; /* Ajustez cette valeur pour la position horizontale */
+    background-color: black; /* Couleur de fond semi-transparente */
+    padding: 10px;
+    opacity: 0.9;
+    border: 1px solid gold;
+    border-radius: 10px;
+}
+
+    .favori-button {
+        transition: color 1s ease-in-out;
+    }
+
+
 </style>
 <div class="m-4">
 <h1 style="margin-top:100px">FinderCine</h1>
@@ -256,34 +277,89 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
 
  </div>
 
-<?php foreach ($filmsParGenre as $index=>$movie) : ?>
+ <?php foreach ($filmsParGenre as $index => $movieGroup) : ?>
     <div class="container films-section" style="margin-top:20px;">
-    <h5 style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top:80px;"><?= $index ?></h5>
-    <div class="scrolling-container" >
-    <div class="scrolling-wrapper">
+        <h5 style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top:80px;"><?= $index ?></h5>
+        <div class="scrolling-container">
+            <div class="scrolling-wrapper">
 
-    <?php foreach ($movie as $movies) : ?>
-        <a href="?controller=home&action=information_movie&id=<?= $movies['tconst'] ?>"  class="card composent-card" style="width: 200px;">
-        <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movies['tconst'] ?>">
-        <div class="card-body">
-        <h5 class="card-title" style="color: yellow;"><?= $movies['primarytitle'] ?></h5>
-        <h6 class="card-subtitle mb-2 mt-2 text-muted"><?= $movies['startyear'] ?></h6>
-        <div class="rating">
-        <img src="./images/star.png" alt="Star" class="star">
-        <span class="note"><?= $movies['averagerating']?></span>
+                <?php foreach ($movieGroup as $movie) : ?>
+                    <span class="card composent-card" style="width: 200px;">
+                        <div class="image-container">
+                            <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movie['tconst'] ?>">
+                            <div class="overlay">
+                                <span>
+                                    <button class='favori-button' data-film-id='<?= $movie['tconst'] ?>' style='
+                                        color: white;
+                                        background: none;
+                                        border: none; 
+                                        cursor: pointer;
+                                        transform: scale(1.5);'>
+                                        ★
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <a href="?controller=home&action=information_movie&id=<?= $movie['tconst'] ?>" style="text-decoration: none;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: yellow;"><?= $movie['primarytitle'] ?></h5>
+                                <h6 class="card-subtitle mb-2 mt-2 text-muted"><?= $movie['startyear'] ?></h6>
+                                <div class="rating">
+                                    <img src="./images/star.png" alt="Star" class="star">
+                                    <span class="note"><?= $movie['averagerating'] ?></span>
+                                </div>
+                            </div>
+                        </a>
+                    </span>
+                <?php endforeach; ?>
+
+            </div>
+            <button class="scroll-btn left"><</button>
+            <button class="scroll-btn right">></button>
         </div>
-        </div>
-        </a>
-    <?php endforeach ; ?>
-
     </div>
-    <button class="scroll-btn left"><</button>
-    <button class="scroll-btn right">></button>
-    </div>
-    </div>
-<?php endforeach ; ?>
-
-
+<?php endforeach; ?>
 
 <script src="Js/home.js"></script>
+<script>
+    document.querySelectorAll('.favori-button').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            // Empêcher la propagation de l'événement de clic
+            event.stopPropagation();
+
+            var filmId = this.getAttribute('data-film-id');
+            if (!<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>) {
+                // Rediriger vers la page souhaitée
+                window.location.href = '?controller=connect';
+                return; // Arrêter l'exécution du reste du code si la redirection est effectuée
+    }
+            
+            
+            const xhr = new XMLHttpRequest();
+
+            // Configurez la requête
+            xhr.open('GET', `?controller=home&action=favorie_movie_home&filmId=${filmId}`, true);
+
+            // Utilisez une fonction fléchée pour conserver le contexte de 'this'
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Traitez la réponse ici
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // L'ajout aux favoris a réussi
+                        this.style.color = 'gold'; // Utilisez 'this' pour faire référence au bouton actuel
+                    } else {
+                        // L'ajout aux favoris a échoué
+                        this.style.color = 'white'; // Utilisez 'this' pour faire référence au bouton actuel
+                    }
+                }
+            };
+
+            // Envoyez la requête
+            xhr.send();
+        });
+    });
+</script>
+
+
     <?php require "Views/view_footer.php"; ?>
