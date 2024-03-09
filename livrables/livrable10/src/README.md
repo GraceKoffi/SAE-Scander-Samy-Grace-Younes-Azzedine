@@ -12,11 +12,19 @@ Avant de pouvoir utiliser le site, assurez-vous d'avoir les éléments suivants 
 
 ## Configuration de la base de données
 
-1. Copiez le fichier `credential.php.example` et renommez-le en `credential.php`.
+1. Creer le fichier `credential.php`.
 
 2. Ouvrez le fichier `credential.php` dans votre éditeur de texte préféré.
 
 3. Modifiez les paramètres de connexion à la base de données (`$dsn`, `$login`, `$mdp`) avec vos propres informations.
+```php
+#exemple de credential.php
+    <?php 
+    $dsn = "driver:host=host;dbname=dbName";
+    $login = "user";
+    $mdp = "pwd";
+
+```
 
 ## Comment lancer le site
 
