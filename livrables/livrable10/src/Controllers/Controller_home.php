@@ -74,6 +74,8 @@ Class Controller_home extends Controller{
                   'commentaires'=>$tab,
                   'saison_episode'=> $m->getEpisode(trim(e($id))),
                   'nbsaison'=> $m->getNbSaison(trim(e($id))),
+                  'saisonactuel'=> $m->getSaison(trim(e($id))),
+
             
             ];
             

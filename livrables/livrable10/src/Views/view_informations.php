@@ -241,7 +241,7 @@ else if(isset($_GET['filmId'])){
     <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
-            <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+            <img class="img-fluid w-100" src="" alt="Portrait"> 
         </div>
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
@@ -298,6 +298,12 @@ else if(isset($_GET['filmId'])){
                 <div class="col-md-4">
                 <h6>Nombre de saison</h6>
                 <p><?= ($nbsaison['max'] ?? 'Inconnu'); ?></p>
+                </div>
+                <?php endif ; ?>
+                <?php if ($info[0]['titletype']=="tvEpisode" ) : ?>
+                <div class="col-md-4">
+                <h6>Saison</h6>
+                <p><?= ($saisonactuel['seasonnumber'] ?? 'Inconnu'); ?></p>
                 </div>
                 <?php endif ; ?>
                 
