@@ -39,8 +39,10 @@ def get_db_config():
 
 1. Exécutez le fichier `main.py` pour lancer le serveur Flask.
 
-    ```bash
+    ```python
     python main.py
+    #ou
+    python3 main.py
     ```
 
 2. Le serveur démarrera sur `http://localhost:5001`. Assurez-vous que le serveur Apache pour votre site de films est en cours d'exécution.
