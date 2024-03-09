@@ -63,30 +63,16 @@
  .label{
     margin-bottom: 20px;
  }
+
+ .messageInfoText{
+    padding-left: 10px;
+ }
+ 
+ #messageInfo{
+    margin-top: -40px;
+    margin-bottom: 40px;
+  }
 </style>
-<div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col">
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2000">
-                <div class="carousel-inner">
-                    <?php foreach ($caroussel['results'] as $index => $movie) : ?>
-                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <img class="d-block w-100 images" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h1>Liens</h1>
-                                <a href='#liens'>
-                                    <button id='favoriButton' class='bouton-favori boutonCarouselTitle'>
-                                        Découvrir
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div id="liens" class="container">
     <div class="row align-items-center">   
@@ -127,13 +113,26 @@
                                     </select>
                                 </div>
 
+                                <label  class="labelfiltre form-label label" for="typeselectionLiens">Type de Liens</label>
+                                <div class="mb-5">
+                                    <select class="form-select" id="typeselectionLiens" name="typeselectionLiens" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
+                                        <option value="soft">Relatif</option>
+                                        <option value="hard">Approfondi</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="messageInfo" class="formulaire" style="display: none;">
+                                <img style="transform: scale(0.7);" src="./images/icons8-warning-48.png">
+                                <p style id="monParagraphe" class="messageInfoText"><img style="transform: scale(0.7);" src="./images/icons8-warning-48.png"></p>
+                                </div>
+
 
                                 <div id="filter-box-titre" style="display: none;">
                                                 <div class="row">
                                                             <div class ="col-md-5 mx-auto">
                                                                     <label class="labelfiltre form-label label"  for="titre1">Titre n°1 : </label>
                                                                     <div class=" d-flex align-items-start">
-                                                                    <select class="custom-select" name="categorytitre1" id="categorytitre1" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                    <select id="selectOption1" class="custom-select" name="categorytitre1" id="categorytitre1" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="all">Tout</option>
                                                                                 <option value="movie">Movie</option>
                                                                                 <option value="tvSeries">TV Series</option>
@@ -158,7 +157,7 @@
                                                             <div class ="col-md-5 mx-auto">
                                                                     <label class="labelfiltre form-label label"  for="titre2">Titre n°2 : </label>
                                                                     <div class="d-flex align-items-start">
-                                                                            <select class="custom-select" name="categorytitre2" id="categorytitre2" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                                                            <select id="selectOption2" class="custom-select" name="categorytitre2" id="categorytitre2" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="all">Tout</option>
                                                                                 <option value="movie">Movie</option>
                                                                                 <option value="tvSeries">TV Series</option>
@@ -273,6 +272,24 @@
 
 
 <script>
+    document.getElementById("typeselectionLiens").addEventListener("change", function() {
+    var selectedOption = this.value;
+    var messageInfoDiv = document.getElementById("messageInfo");
+    var monParagraphe = document.getElementById("monParagraphe");
+    var selectOption = document.getElementById("typeselection").value;
+    
+
+    if (selectedOption === "hard") {
+        messageInfoDiv.style.display = "block"; 
+        monParagraphe.textContent = "Attention avec se mode nous allons approfondir le processus de recherche le rendant plus précis et plus couteux";
+        $('#selectOption1').hide();
+        $('#selectOption2').hide();
+    }else {
+        messageInfoDiv.style.display = "none"; 
+        $('#selectOption1').show();
+        $('#selectOption2').show();
+    } 
+});
 
 $(document).ready(function() {
     handleFormValidation();
