@@ -45,4 +45,6 @@ Avant de pouvoir utiliser le site, assurez-vous d'avoir les éléments suivants 
 
 Si vous souhaitez contribuer à ce projet, n'hésitez pas à créer une nouvelle branche, à effectuer vos modifications, puis à soumettre une demande de fusion.
 
+
 Merci de contribuer au développement de FinderCine!
+
