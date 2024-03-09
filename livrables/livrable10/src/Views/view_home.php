@@ -293,9 +293,32 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                         <div class="image-container">
                             <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movie['tconst'] ?>">
                             <div class="overlay">
+                            <?php
+                                if(isset($_SESSION['username'])){
+                                    $m = Model::getModel();
+                                    $userId = $m->getUserId($_SESSION['username'])["userid"];
+                                }
+                                else {
+                                    $userId = '';
+                                }
+                                ?>
                                 <span>
                                     <button class='favori-button' data-film-id='<?= $movie['tconst'] ?>' style='
-                                        color: <?php echo (empty($m->favorieExistFilm($userId, $movie['tconst']))) ? 'white' : 'yellow'; ?>;
+                                        color: <?php 
+                                        if(isset($_SESSION['username'])){
+                                            $m = Model::getModel();
+                                            $userId = $m->getUserId($_SESSION['username'])["userid"];
+                                            if(empty($m->favorieExistFilm($userId, $id_imdb))){
+                                                echo 'white';
+                                            }
+                                            else {
+                                                echo "yellow";
+                                            }
+                                        }
+                                        else {
+                                            echo 'white';
+                                        } 
+                                        ?>;
                                         background: none;
                                         border: none; 
                                         cursor: pointer;

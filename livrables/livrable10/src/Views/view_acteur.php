@@ -229,7 +229,20 @@ else if(isset($_GET['acteurId'])){
                 }
                 ?>
             <span><button id='favori-button' data-film-id=<?php echo $id_acteur; ?> style='font-size: 50px;
-                                                    color: <?php echo (empty($m->favorieExistActeur($userId, $id_acteur))) ? 'white' : 'yellow'; ?>;
+                                                    color: <?php
+                                                    if(isset($_SESSION['username'])){
+                                                        $m = Model::getModel();
+                                                        $userId = $m->getUserId($_SESSION['username'])["userid"];
+                                                        if(empty($m->favorieExistActeur($userId, $id_acteur))){
+                                                            echo "white";
+                                                        } else {
+                                                            echo "yellow";
+                                                        }
+                                                    }
+                                                    else {
+                                                        echo "white";
+                                                    } 
+                                                    ?>;
                                                     background: none;
                                                     border: none; 
                                                     cursor: pointer;'>
