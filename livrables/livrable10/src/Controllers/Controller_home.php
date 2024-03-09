@@ -245,13 +245,14 @@ Class Controller_home extends Controller{
                 $userId = $m->getUserId($_SESSION['username'])["userid"];
                 if(empty($m->favorieExistActeur($userId, trim(e($_GET['acteurId']))))){
                     $m->AddFavorieActeur($userId, trim(e($_GET['acteurId'])));
+                    echo json_encode(['success' => true]);
                     
 
                 }
                 else{
                     $m->RemoveFavorieActeur($userId, trim(e($_GET['acteurId'])));
+                    echo json_encode(['success' => false]);
                 }
-                $this->action_information_acteur();
             }
         }
     }
