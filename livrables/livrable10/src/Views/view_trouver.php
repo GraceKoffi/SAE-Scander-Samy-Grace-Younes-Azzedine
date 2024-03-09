@@ -26,7 +26,7 @@
 
  .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
  }
  
 
@@ -36,7 +36,7 @@
  }
  .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 10px 20px;
     font-size: 15px;
  }
@@ -44,7 +44,6 @@
  .carousel-text{
     margin-top : 200px;
     margin-left: 50px;
-    text-decoration: underline;
  }
 
  .images{
@@ -78,7 +77,7 @@
     <div class="row align-items-center">   
             <h1 class="titreTrouver">Liens</h1>
             
-            <p class="paragrapheTrouver">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler
+            <p class="paragrapheTrouver" style="border-left:2px solid #FFCC00;padding-left: 6px; padding-bottom : 20px">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler
                 les connexions inattendues entre vos personnalités et titres préférés.</br>Que vous cherchiez à découvrir les projets communs
                 entre deux personnes du monde du spectacle,</br> ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
         </div>    
@@ -213,7 +212,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h1 class="carousel-text">Fonctionnalite</h1>
-                <p class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
+                <p  style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
                     Comme Recherche et Rapprochement
                 </p>
             </div>

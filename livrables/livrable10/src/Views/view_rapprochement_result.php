@@ -10,7 +10,7 @@
     justify-items: center;
     margin-bottom: 50px;
     margin-top: 10px;
-    color: yellow;
+    color: #FFCC00;
   }
 
   .result{
@@ -29,7 +29,7 @@
 
 .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 5px 10px;
  }
 
@@ -50,7 +50,7 @@
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
         <h1>Résultats entre "<?php echo $result[0]["search1"]?>" et "<?php echo $result[0]["search2"] ?>" :</h1>
-        <p><?php if(round($result["data"]["time"], 1) < 60): ?>
+        <p style="border-left:2px solid #FFCC00;padding-left: 6px;"><?php if(round($result["data"]["time"], 1) < 60): ?>
           <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?> s
           <?php elseif (round($result['data']['time']) > 60): ?>
           <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?>  m

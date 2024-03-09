@@ -12,7 +12,7 @@
  }
  .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 10px 20px;
     font-size: 15px;
  }
@@ -20,7 +20,6 @@
  .carousel-text{
     margin-top : 200px;
     margin-left: 50px;
-    text-decoration: underline;
  }
  
  .paragrapheRecherche{
@@ -51,7 +50,7 @@
 <div id="recherche" class="container">
     <div class="row align-items-center">   
         <h1 class="titreRecherche">Recherche Avancée</h1>
-        <p class="paragrapheRecherche">Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers 
+        <p  style="border-left:2px solid #FFCC00;padding-left: 6px; padding-bottom : 20px" class="paragrapheRecherche">Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers 
             riche et varié de divertissement...</p>
     </div>
 </div>
@@ -272,7 +271,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h1 class="carousel-text">Fonctionnalite</h1>
-                <p class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
+                <p style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
                     Comme Rapprochement et Lien
                 </p>
             </div>

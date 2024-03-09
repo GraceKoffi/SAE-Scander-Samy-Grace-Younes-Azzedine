@@ -85,7 +85,7 @@ async function displayMovies() {
         paginationContainer1.style.display = 'flex';
         for (const item of paginatedMovies1) {
             let posterPath = await getFilmPhoto(item.tconst);
-            let isSelected = item.tconst === selectedTconst1 ? 'style="background-color: yellow;"' : '';
+            let isSelected = item.tconst === selectedTconst1 ? 'style="background-color: #FFCC00;"' : '';
             let cardContent = `<div class="cardrecherche" data-tconst="${item.tconst}" ${isSelected} style="cursor: pointer;">
                                     <img src="${posterPath}" alt="">
                                     <div class="card-bodyrecherche">
@@ -108,7 +108,7 @@ async function displayMovies() {
         paginationContainer2.style.display = 'flex';
         for (const item of paginatedMovies2) {
             let posterPath = await getFilmPhoto(item.tconst);
-            let isSelected = item.tconst === selectedTconst2 ? 'style="background-color: yellow;"' : '';
+            let isSelected = item.tconst === selectedTconst2 ? 'style="background-color: #FFCC00;"' : '';
             let cardContent = `<div class="cardrecherche" data-tconst="${item.tconst}" ${isSelected} style="cursor: pointer;">
                                     <img src="${posterPath}" alt="">
                                     <div class="card-bodyrecherche">
@@ -131,7 +131,7 @@ function selectMovie(listId, tconst) {
   const cards = document.querySelectorAll(`#${listId} .cardrecherche`);
   cards.forEach(card => {
       if (card.getAttribute('data-tconst') === tconst) {
-          card.style.backgroundColor = 'yellow'; // Sélectionné
+          card.style.backgroundColor = '#FFCC00'; // Sélectionné
       } else {
           card.style.backgroundColor = ''; // Non sélectionné
       }

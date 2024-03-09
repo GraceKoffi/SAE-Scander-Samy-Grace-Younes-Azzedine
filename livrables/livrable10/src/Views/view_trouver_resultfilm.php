@@ -3,7 +3,7 @@
 
 .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 5px 10px;
  }
 </style>

@@ -2,8 +2,6 @@
 <style>
 
 ..middot{
-
-
 font-size: 24px;
 }
 .btncommentaire {
@@ -72,7 +70,7 @@ font-size: 17px;/*taille de la police*/
             color: black;
         }
         .comment-bubble {
-            background-color: yellow;
+            background-color: #FFCC00;
             color: black;
             padding: 10px;
             margin-bottom: 10px;
@@ -294,7 +292,7 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
                     }
                     else{
                                 echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button id='favori-button' data-film-id='$id_acteur' style='font-size: 50px;
-                                color: yellow;
+                                color: #FFCC00;
                                 background: none;
                                 border: none; 
                                 cursor: pointer;'>
@@ -325,8 +323,8 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
     <div class="modal-content">
             <!-- En-tête de la modal -->
             <div class="modal-header">
-                <h5 class="modal-title titre" style="color: yellow; margin-top: 5px">Commentaires <img style="transform: scale(0.9);"src="./images/icons8-message-48.png" alt="Star" class="star"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: yellow;">
+                <h5 class="modal-title titre" style="color: #FFCC00; margin-top: 5px">Commentaires <img style="transform: scale(0.9);"src="./images/icons8-message-48.png" alt="Star" class="star"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #FFCC00;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
