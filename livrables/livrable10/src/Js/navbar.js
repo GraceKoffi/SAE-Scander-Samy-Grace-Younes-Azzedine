@@ -19,10 +19,15 @@ function getImageTitleBasics(idImdb) {
                 for (var result of results) {
                     if (result && result.poster_path) {
                         imagePath = `https://image.tmdb.org/t/p/w400${result.poster_path}`;
-                        break; // Sortez dès qu'une image est trouvée
+                        break;
                     }
                 }
-
+                for (var result of results) {
+                    if (result && result.still_path) {
+                        imagePath = `https://image.tmdb.org/t/p/w400${result.still_path}`;
+                        break;
+                    }
+                }
                 resolve(imagePath); // Retourne le chemin de l'image trouvé ou l'image par défaut
             },
             error: function(error) {

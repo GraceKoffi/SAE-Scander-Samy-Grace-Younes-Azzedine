@@ -286,7 +286,20 @@ else if(isset($_GET['filmId'])){
                 <div class="col-md-4">
                 <button type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
                 </div>
+                <?php if ($info[0]['titletype']=="tvEpisode" ) : ?>
+                <div class="col-md-4">
+                <h6>Episode</h6>
+                <p><?= ($saisonactuel['episodenumber'] ?? 'Inconnu'); ?></p>
+                </div>
+                <?php elseif($info[0]['titletype']=="tvSeries" || $info[0]['titletype']=="tvMiniSeries" ) : ?>
+                <div class="col-md-4">
+                <h6>Nombre d'épisode</h6>
+                <p><?= ($nbepisode['count'] ?? 'Inconnu'); ?></p>
+                </div>
+                <?php else : ?>
                 <div class="col-md-4"></div>
+                <?php endif ; ?>
+
                 <?php if ($info[0]['titletype']=="tvSeries" || $info[0]['titletype']=="tvMiniSeries" ) : ?>
                 <div class="col-md-4">
                 <h6>Nombre de saison</h6>
