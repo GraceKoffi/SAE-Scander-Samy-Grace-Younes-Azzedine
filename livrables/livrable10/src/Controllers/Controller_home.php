@@ -210,10 +210,12 @@ Class Controller_home extends Controller{
                 $userId = $m->getUserId($_SESSION['username'])["userid"];
                 if (empty($m->favorieExistFilm($userId, trim(e($_GET['filmId']))))) {
                     $m->AddFavorieFilm($userId, trim(e($_GET['filmId'])));
+                    echo json_encode(['success' => true]);
                 } else {
                     $m->RemoveFavorieFilm($userId, trim(e($_GET['filmId'])));
+                    echo json_encode(['success' => false]);
+                    
                 }
-                $this->action_information_movie();
             }
         }
     }
