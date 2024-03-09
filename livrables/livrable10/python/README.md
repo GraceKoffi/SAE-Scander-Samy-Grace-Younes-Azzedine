@@ -59,4 +59,6 @@ def get_db_config():
 
 - **/trouver (POST) :** Endpoint pour la recherche. Envoyez un JSON avec les éléments à rechercher.
 
+
 N'oubliez pas de personnaliser les informations selon les besoins spécifiques de votre projet, y compris le fichier de configuration `config.py` et les détails de votre base de données.
+
