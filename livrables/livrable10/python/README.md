@@ -9,13 +9,17 @@ Assurez-vous d'avoir les éléments suivants installés sur votre machine :
 - **Python :** Le backend est écrit en Python. Vous pouvez télécharger Python sur [le site officiel](https://www.python.org/downloads/).
 
 - **Flask :** Utilisez la commande suivante pour installer Flask :
-    ```bash
+    ```python
     pip install Flask
+    #ou
+    pip3 install Flask
     ```
 
 - **Psycopg2 :** Psycopg2 est utilisé pour la connexion à la base de données PostgreSQL. Vous pouvez l'installer avec :
-    ```bash
+    ```python
     pip install psycopg2
+    #ou
+    pip3 install psycopg2
     ```
 
 ## Configuration
