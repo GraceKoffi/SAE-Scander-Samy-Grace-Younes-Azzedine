@@ -1,9 +1,9 @@
 
 def get_db_config():
     db_config = {
-        'host': "",
-        'user': "",
-        'password': "",
-        'database': ""
+        'host': "localhost",
+        'user': "postgres",
+        'password': "root",
+        'database': "sae"
     }
     return db_config

@@ -308,7 +308,7 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                                         if(isset($_SESSION['username'])){
                                             $m = Model::getModel();
                                             $userId = $m->getUserId($_SESSION['username'])["userid"];
-                                            if(empty($m->favorieExistFilm($userId, $id_imdb))){
+                                            if(empty($m->favorieExistFilm($userId, $movie['tconst']))){
                                                 echo 'white';
                                             }
                                             else {
