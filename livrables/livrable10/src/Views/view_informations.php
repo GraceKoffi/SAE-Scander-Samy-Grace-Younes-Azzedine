@@ -469,39 +469,134 @@ else if(isset($_GET['filmId'])){
 
 <script src="Js/function.js"></script>
 <script>
-       /*
-       $(document).ready(function() {
-            // Écouteur d'événement pour le clic sur le bouton
-            $("#favoriButton").click(function() {
-                // Récupérez l'état actuel du film (favori ou non)
-                const estFavori = $(".film").data("favori");
 
-                // Effectuez l'appel Ajax ici
-                $.ajax({
-                    type: "GET", // Ou "GET" selon vos besoins
-                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
-                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
-                    success: function(response) {
-                        // Mettez à jour l'interface utilisateur en fonction de la réponse
-                        if (estFavori) {
-                            $(".film").data("favori", false);
-                            $("#favoriButton").text("+");
-                            $("#titreFilm").text("Ajouter au favori");
-                            $(".film").removeClass("favori"); // Retirez la classe "favori"
-                        } else {
-                            $(".film").data("favori", true);
-                            $("#favoriButton").text("-");
-                            $("#titreFilm").text("Favori");
-                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
-                        }
-                    },
-                    error: function() {
-                        alert("Erreur lors de la mise à jour des favoris.");
+
+        let titleType = <?php echo json_encode($info[0]['titletype']); ?>;
+    let episodes = <?php echo json_encode($saison_episode); ?>;
+
+function filterEpisodesBySeason() {
+    const selectedSeason = document.getElementById("season-selector").value;
+    const filteredEpisodes = episodes.filter(episode => episode.seasonnumber == selectedSeason);
+    displayMovies(filteredEpisodes);
+}
+
+
+    async function displayMovies(episode) {
+    const list = document.getElementById("movie-list");
+    list.innerHTML = ""; 
+
+    for (const item of episode) {
+        let posterPath = await getFilmPhoto(item.tconst);
+        let hrefValue = `?controller=home&action=information_movie&id=${item.tconst}`;
+        let cardContent = `<a href="${hrefValue}" class="card-linkrecherche" style="text-decoration: none; color: inherit;">
+            <div class="cardrecherche" style="cursor: pointer;">
+                <img src="${posterPath}" alt="${item.tconst}">
+                <div class="card-bodyrecherche">`;
+
+
+            cardContent += `
+                <h2 class="card-1recherche">Episode ${displayValue(item.episodenumber, 'Aucune information')}</h2>
+                <p class="card-2recherche">Titre : ${displayValue(item.primarytitle, 'Aucune information')}</p>
+                <p class="card-3recherche">Date : ${displayValue(item.startyear, 'Aucune information')}</p>
+                </div>
+                    </div>
+                </a>`;
+
+
+
+        list.innerHTML += cardContent;
+    }
+
+
+}
+
+       function loadMovieDetails(id_imdb) {
+
+            const api_key = "9e1d1a23472226616cfee404c0fd33c1";
+            const url = `https://api.themoviedb.org/3/find/${id_imdb}?api_key=${api_key}&external_source=imdb_id&language=fr`;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let couverture = "./Images/cinemadepannage.jpg";
+                let portrait = "./Images/depannage.jpg";
+                let overview = 'Inconnu';
+
+                const results = [...data.movie_results, ...data.tv_results, ...data.tv_episode_results, ...data.tv_season_results];
+
+                for (let result of results) {
+                    if (result.backdrop_path || result.still_path) {
+                        couverture = `https://image.tmdb.org/t/p/w1280${result.backdrop_path || result.still_path}`;
+
                     }
-                });
-            });
-        });
-        */
+                }
+
+                for (let result of results) {
+                    if (result.poster_path || result.still_path) {
+                        portrait = `https://image.tmdb.org/t/p/w400${result.poster_path || result.still_path}`;
+
+                    }
+                }
+
+                for (let result of results) {
+                    if (result.overview) {
+                        overview = result.overview;
+
+                    }
+                }
+                document.querySelector('.img-fluid').src = couverture;
+                document.querySelectorAll('.img-fluid.w-100').forEach(img => img.src = portrait);
+                document.querySelector('.synopsie').textContent = overview;
+       })};
+            
+
+
+
+
+       document.addEventListener('DOMContentLoaded', function() {
+
+if (titleType === 'tvSeries' || titleType === 'tvMiniSeries') {
+filterEpisodesBySeason();
+}
+
+
+
+const acteurs = <?php echo json_encode($acteur); ?>;
+const apiUrlBase = 'https://api.themoviedb.org/3/find/';
+const apiKey = '9e1d1a23472226616cfee404c0fd33c1';
+const id_imdb = "<?php echo $_GET['id'] ?>"; // Mettez l'ID IMDb ici
+loadMovieDetails(id_imdb);
+
+
+if (acteurs.length === 0) {
+document.getElementById('listeParticipants').innerHTML = '<p class="aucunparticipant">Aucun participant connu.</p>';
+} else {
+document.getElementById('listeParticipants').innerHTML = ''; // Vider la section pour le contenu dynamique
+acteurs.forEach(function(acteur) {
+    fetch(`${apiUrlBase}${acteur.nconst}?api_key=${apiKey}&external_source=imdb_id`)
+        .then(response => response.json())
+        .then(data => {
+            const profilePath = data.person_results[0]?.profile_path;
+            const imageSrc = profilePath ? `https://image.tmdb.org/t/p/w500${profilePath}` : "./Images/depannage.jpg";
+
+            const cardHTML = `
+                <div class="col-md-3 custom-card d-flex align-items-stretch">
+                    <a href="?controller=home&action=information_acteur&id=${acteur.nconst}" class="card composent-card" style="width: 200px;">
+                        <img src="${imageSrc}" alt="Poster" class="card-img-top">
+                        <div class="card-body">
+                            <h2 class="card-title">${acteur.nomacteur}</h2>
+                            <h3 class="card-title">${acteur.dateacteur}</h3>
+                            <h4 class="card-title">${acteur.nomdescene}</h4>
+                        </div>
+                    </a>
+                </div>
+            `;
+            document.getElementById('listeParticipants').insertAdjacentHTML('beforeend', cardHTML);
+        })
+        .catch(error => console.error('Erreur lors de la récupération des données:', error));
+    })}
+});
+
         var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
   var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
@@ -551,57 +646,12 @@ else if(isset($_GET['filmId'])){
     });
 
     
-    
-    
-    });
+
         
        
        
        
-       
- 
-       
-       
-       
-       
-       
-       
-       
-       /*
-       $(document).ready(function() {
-            // Écouteur d'événement pour le clic sur le bouton
-            $("#favoriButton").click(function() {
-                // Récupérez l'état actuel du film (favori ou non)
-                const estFavori = $(".film").data("favori");
-
-                // Effectuez l'appel Ajax ici
-                $.ajax({
-                    type: "GET", // Ou "GET" selon vos besoins
-                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
-                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
-                    success: function(response) {
-                        // Mettez à jour l'interface utilisateur en fonction de la réponse
-                        if (estFavori) {
-                            $(".film").data("favori", false);
-                            $("#favoriButton").text("+");
-                            $("#titreFilm").text("Ajouter au favori");
-                            $(".film").removeClass("favori"); // Retirez la classe "favori"
-                        } else {
-                            $(".film").data("favori", true);
-                            $("#favoriButton").text("-");
-                            $("#titreFilm").text("Favori");
-                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
-                        }
-                    },
-                    error: function() {
-                        alert("Erreur lors de la mise à jour des favoris.");
-                    }
-                });
-            });
-        });
-        */
-     
-  
+    
 
     </script>
 
