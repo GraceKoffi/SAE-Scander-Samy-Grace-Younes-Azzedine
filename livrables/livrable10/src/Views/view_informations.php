@@ -241,36 +241,23 @@ else if(isset($_GET['filmId'])){
     <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
-            <img class="img-fluid w-100" src="" alt="Portrait"> 
+            <div class="image-container">
+            <img id="portrait" class="img-fluid w-100" src="" alt="Portrait"> 
+            <div class="overlay">
+            <span><button id='favori-button' data-film-id="<?php echo $id_imdb; ?>" style='font-size: 50px;
+                                                    color: <?php echo (isset($_SESSION['favori'])) ? 'yellow' : 'white'; ?>;
+                                                    background: none;
+                                                    border: none; 
+                                                    cursor: pointer;'>
+                                                    ★</button>
+                            </span>
+            </div>
+        </div>
         </div>
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
                 <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?>
-                <?php 
-                        if(isset($_SESSION['username'])) {
-                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
-                            if($favori == 'false'){
-                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
-                                                            color: white;
-                                                            background: none;
-                                                            border: none; 
-                                                            cursor: pointer;'>
-                                                            ★</button></a>
-                                    </span>";
-                            }
-                            else{
-                                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
-                                        color: #FFCC00;
-                                        background: none;
-                                        border: none; 
-                                        cursor: pointer;'>
-                                        ★</button></a>
-                                </span>";
-                            }
-                        }
-                        ?>
-
                 </h1>
                 <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
                 <h6  style="margin-top: 50px;">Synopsis</h6>
@@ -475,6 +462,40 @@ else if(isset($_GET['filmId'])){
 
 <script src="Js/function.js"></script>
 <script>
+document.querySelector('#favori-button').addEventListener('click', function (event) {
+    // Empêcher la propagation de l'événement de clic
+    event.stopPropagation();
+
+    var filmId = this.getAttribute('data-film-id');
+    if (!<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>) {
+        // Rediriger vers la page souhaitée
+        window.location.href = '?controller=connect';
+        return; // Arrêter l'exécution du reste du code si la redirection est effectuée
+    }
+
+    const xhr = new XMLHttpRequest();
+
+    // Configurez la requête
+    xhr.open('GET', `?controller=home&action=favorie_movie&filmId=${filmId}`, true);
+
+    // Utilisez une fonction fléchée pour conserver le contexte de 'this'
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Traitez la réponse ici
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                // L'ajout aux favoris a réussi
+                this.style.color = 'gold'; // Utilisez 'this' pour faire référence au bouton actuel
+            } else {
+                // L'ajout aux favoris a échoué
+                this.style.color = 'white'; // Utilisez 'this' pour faire référence au bouton actuel
+            }
+        }
+    };
+
+    // Envoyez la requête
+    xhr.send();
+});
 
 
         let titleType = <?php echo json_encode($info[0]['titletype']); ?>;
@@ -649,11 +670,13 @@ acteurs.forEach(function(acteur) {
             // Empêcher l'envoi du formulaire
             event.preventDefault();
         <?php endif; ?>
-    });
 
     
+    
+    
+    });
 
-        
+
        
        
        
