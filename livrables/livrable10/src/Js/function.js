@@ -294,11 +294,18 @@ async function getFilmPhoto(id) {
       const resultCategories = ["movie_results", "tv_results", "tv_episode_results", "tv_season_results"];
 
       for (const category of resultCategories) {
-          if (data[category].length > 0 && data[category][0].poster_path) {
-              // Retourne le premier poster trouvé
-              return `https://image.tmdb.org/t/p/w400${data[category][0].poster_path}`;
-          }
-      }
+        if (data[category].length > 0) {
+            // Vérifie si poster_path est disponible
+            if (data[category][0].poster_path) {
+                return `https://image.tmdb.org/t/p/w400${data[category][0].poster_path}`;
+            } 
+            // Sinon, vérifie si still_path est disponible
+            else if (data[category][0].still_path) {
+                return `https://image.tmdb.org/t/p/w400${data[category][0].still_path}`;
+            }
+        }
+    }
+    
 
       // Si aucun poster n'est trouvé dans aucune catégorie
       return "./Images/depannage.jpg";
