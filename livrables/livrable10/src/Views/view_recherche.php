@@ -50,7 +50,7 @@
 <div id="recherche" class="container">
     <div class="row align-items-center">   
         <h1 class="titreRecherche">Recherche Avancée</h1>
-        <p  style="border-left:2px solid #FFCC00;padding-left: 6px; padding-bottom : 20px" class="paragrapheRecherche">Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers 
+        <p  style="padding-left: 6px; padding-bottom : 20px;font-size:20px;" class="paragrapheRecherche">Bienvenue sur Findercine, où chaque recherche est une porte ouverte vers un univers 
             riche et varié de divertissement...</p>
     </div>
 </div>

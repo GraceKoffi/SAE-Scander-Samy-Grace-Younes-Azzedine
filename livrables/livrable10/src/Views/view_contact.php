@@ -32,7 +32,7 @@
     </div>
 </div>
 
-   <div class="container bottom-form"> 
+   <div class="container-fluid bottom-form"> 
         <div class="d-flex align-items-center">
             <div class="row align-items-center">
                 <div class="mx-auto col">
@@ -76,7 +76,7 @@
                             </div>
                             <div class="row mx-auto">
                                 <div class="col">
-                                <textarea id="message" name="message" rows="4" required></textarea>
+                                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                                 </div>
                             </div>
                         </div>
