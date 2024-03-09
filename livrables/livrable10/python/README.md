@@ -1,4 +1,4 @@
-# FinderCine Python Backend
+# FinderCine Python Api
 
 Bienvenue sur le backend de FinderCine, responsable des fonctionnalités de rapprochement et de recherche via une API en utilisant Flask et une base de données PostgreSQL.
 
@@ -6,7 +6,7 @@ Bienvenue sur le backend de FinderCine, responsable des fonctionnalités de rapp
 
 Assurez-vous d'avoir les éléments suivants installés sur votre machine :
 
-- **Python :** Le backend est écrit en Python. Vous pouvez télécharger Python sur [le site officiel](https://www.python.org/downloads/).
+- **Python :** certaines fonctionnalités sont écrit en Python. Vous pouvez télécharger Python sur [le site officiel](https://www.python.org/downloads/).
 
 - **Flask :** Utilisez la commande suivante pour installer Flask :
     ```python
