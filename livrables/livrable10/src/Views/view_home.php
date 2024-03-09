@@ -276,7 +276,12 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
 </div>
 
  </div>
-
+<?php
+    if(isset($_SESSION['username'])){
+        $m = Model::getModel();
+        $userId = $m->getUserId($_SESSION['username'])["userid"];
+    }
+?>
  <?php foreach ($filmsParGenre as $index => $movieGroup) : ?>
     <div class="container films-section" style="margin-top:20px;">
         <h5 style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top:80px;"><?= $index ?></h5>
@@ -290,7 +295,7 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                             <div class="overlay">
                                 <span>
                                     <button class='favori-button' data-film-id='<?= $movie['tconst'] ?>' style='
-                                        color: white;
+                                        color: <?php echo (empty($m->favorieExistFilm($userId, $movie['tconst']))) ? 'white' : 'yellow'; ?>;
                                         background: none;
                                         border: none; 
                                         cursor: pointer;
