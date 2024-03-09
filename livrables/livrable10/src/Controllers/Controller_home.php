@@ -75,7 +75,7 @@ Class Controller_home extends Controller{
                   'saison_episode'=> $m->getEpisode(trim(e($id))),
                   'nbsaison'=> $m->getNbSaison(trim(e($id))),
                   'saisonactuel'=> $m->getSaison(trim(e($id))),
-
+                  'nbepisode'=> $m->getNbEpisode(trim(e($id))),
             
             ];
             

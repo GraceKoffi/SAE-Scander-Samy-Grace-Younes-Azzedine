@@ -251,9 +251,7 @@ else if(isset($_GET['acteurId'])){
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
-                <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?></h1>
-                <p>Année : <?= ($info['birthyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <?= ($info['primaryprofession'] ?? 'Inconnu'); ?></p>
-                <h1 class="nom">Inconnu
+                 <h1 class="nom">Inconnu
                 </h1>
                 <p>Année : <span class="annee" > Inconnu</span> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <span class="metier" > Inconnu</span></p>
                 <h6 style="margin-top: 50px;">Biographie</h6>

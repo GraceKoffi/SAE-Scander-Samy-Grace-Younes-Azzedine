@@ -137,7 +137,7 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     public function getSaison($id){
-        $sql = "SELECT  seasonnumber
+        $sql = "SELECT  seasonnumber,episodenumber
         FROM title_episode 
         WHERE tconst = :id ; ";
        
@@ -147,6 +147,17 @@ class Model
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getNbEpisode($id){
+        $sql = "SELECT COUNT(*) 
+        FROM title_episode te 
+        JOIN title_basics tb ON te.tconst=tb.tconst 
+         WHERE parenttconst = :id ; ";
+       
+       $query = $this->bd->prepare($sql);
+        $query->bindValue(":id", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
     public function favorieExistActeur($userId, $acteurId){
         $sql = "SELECT 
                 acteurId FROM FavorieActeur
