@@ -46,7 +46,7 @@ if(isset($_GET['retour'])){
 
     .buttonLarge{
         height: 80px;
-        background-color: yellow !important;
+        background-color: #FFCC00 !important;
         color: black !important;
     }
 
@@ -67,7 +67,7 @@ if(isset($_GET['retour'])){
 
   .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 10px 20px;
     font-size: 15px;
  }

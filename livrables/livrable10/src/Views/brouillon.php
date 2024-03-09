@@ -41,7 +41,7 @@
 
 .film.favori {
     /* Styles spécifiques pour les films favoris */
-    background-color: yellow; /* Couleur de fond jaune */
+    background-color: #FFCC00; /* Couleur de fond jaune */
     color: black; /* Texte en noir */
 }
 
@@ -61,7 +61,7 @@
             color: black;
         }
         .comment-bubble {
-            background-color: yellow;
+            background-color: #FFCC00;
             color: black;
             padding: 10px;
             margin-bottom: 10px;
@@ -249,7 +249,7 @@ if (isset($_SESSION['username'])) {
     $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
     $texteBouton = ($favori === 'true') ? 'Retirer Favori' : 'Ajouter Favori';
     $titre = ($favori === 'true') ? 'Retirer ce film des favoris' : 'Ajouter ce film aux favoris';
-    $couleurBouton = ($favori === 'true') ? 'yellow' : 'white';
+    $couleurBouton = ($favori === 'true') ? '#FFCC00' : 'white';
     echo "
     <div class='film' data-favori='$favori'>
         <h2 id='titreFilm'>$titre</h2>

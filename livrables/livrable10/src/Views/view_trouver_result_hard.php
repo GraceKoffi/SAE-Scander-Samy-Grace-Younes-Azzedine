@@ -10,7 +10,7 @@
     justify-items: center;
     margin-bottom: 50px;
     margin-top: 10px;
-    color: yellow;
+    color: #FFCC00;
   }
 
   .result{
@@ -20,7 +20,7 @@
 
 .bouton-favori{
     border-radius: 10px 5%;
-    background-color: yellow;
+    background-color: #FFCC00;
     padding: 5px 10px;
  }
 
