@@ -71,12 +71,13 @@ Class Controller_home extends Controller{
         $tab = [ 'info' => $m->getInformationsMovie(trim(e($id))),
                   'realisateur'=>$m->getInformationsDirector(trim(e($id))),
                   'acteur'=>$m->getInformationsActeurParticipant(trim(e($id))),
-                  'commentaires'=>$tab
+                  'commentaires'=>$tab,
+                  'saison_episode'=> $m->getEpisode(trim(e($id))),
+                  'nbsaison'=> $m->getNbSaison(trim(e($id))),
             
             ];
             
             $this->render("informations", $tab);
-        
 
 
     }
