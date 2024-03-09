@@ -261,7 +261,7 @@ else if(isset($_GET['filmId'])){
                             }
                             else{
                                         echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
-                                        color: yellow;
+                                        color: #FFCC00;
                                         background: none;
                                         border: none; 
                                         cursor: pointer;'>

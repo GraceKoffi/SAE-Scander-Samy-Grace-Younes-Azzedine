@@ -91,8 +91,8 @@ class rapoActeur:
                 for valeur in valeur_branch_dicDebut:
                     if(valeur in self.dic_debut[indexDicDebut][key]):
                         tab.append(key)
-                        #self.chemin_debut.append(key)
                         self.chemin_debut.append(valeur)
+                        self.chemin_debut.append(key)
             valeur_branch_dicDebut = []
             for e in tab:
                 for v in self.dic_debut[indexDicDebut][e] :
@@ -113,7 +113,7 @@ class rapoActeur:
                     if(valeur in self.dic_fin[indexDicFin][key]):
                         tab.append(key)
                         self.chemin_fin.append(valeur)
-                        #self.chemin_fin.append(key)
+                        self.chemin_fin.append(key)
             valeur_branch_dicFin = []
             for e in tab:
                 for v in self.dic_fin[indexDicFin][e] :
