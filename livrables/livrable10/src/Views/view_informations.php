@@ -244,8 +244,14 @@ else if(isset($_GET['filmId'])){
             <div class="image-container">
             <img id="portrait" class="img-fluid w-100" src="" alt="Portrait"> 
             <div class="overlay">
+                <?php
+                if(isset($_SESSION['username'])){
+                    $m = Model::getModel();
+                    $userId = $m->getUserId($_SESSION['username'])["userid"];
+                }
+                ?>
             <span><button id='favori-button' data-film-id="<?php echo $id_imdb; ?>" style='font-size: 50px;
-                                                    color: <?php echo (isset($_SESSION['favori'])) ? 'yellow' : 'white'; ?>;
+                                                    color:<?php echo (empty($m->favorieExistFilm($userId, $id_imdb))) ? 'white' : 'yellow'; ?>;
                                                     background: none;
                                                     border: none; 
                                                     cursor: pointer;'>

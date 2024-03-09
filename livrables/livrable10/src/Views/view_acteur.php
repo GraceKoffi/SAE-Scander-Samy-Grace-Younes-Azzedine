@@ -222,29 +222,19 @@ else if(isset($_GET['acteurId'])){
             <div class="image-container">
             <img id="portrait" class="img-fluid w-100" src="" alt="Portrait"> 
             <div class="overlay">
-            <?php 
-    
-                    $favori = isset($_SESSION['favoriActeur']) ? $_SESSION['favoriActeur'] : 'false';
-                    if($favori == 'false'){
-                        echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button id='favori-button' data-film-id=$id_acteur style='font-size: 50px;
-                                                    color: white;
+            <?php
+                if(isset($_SESSION['username'])){
+                    $m = Model::getModel();
+                    $userId = $m->getUserId($_SESSION['username'])["userid"];
+                }
+                ?>
+            <span><button id='favori-button' data-film-id=<?php echo $id_acteur; ?> style='font-size: 50px;
+                                                    color: <?php echo (empty($m->favorieExistActeur($userId, $id_acteur))) ? 'white' : 'yellow'; ?>;
                                                     background: none;
                                                     border: none; 
                                                     cursor: pointer;'>
-                                                    ★</button></a>
-                            </span>";
-                    }
-                    else{
-                                echo "<span><a href='?controller=home&action=favorie_acteur&acteurId=$id_acteur'><button id='favori-button' data-film-id='$id_acteur' style='font-size: 50px;
-                                color: #FFCC00;
-                                background: none;
-                                border: none; 
-                                cursor: pointer;'>
-                                ★</button></a>
-                        </span>";
-                    }
-    
-                        ?>
+                                                    ★</button>
+            </span>
             </div>
         </div>
         </div>
@@ -263,7 +253,6 @@ else if(isset($_GET['acteurId'])){
         </div>
     </div>
 </div>
-<?php print_r(!isset($_SESSION['username'])); ?>
 <!-- La modal -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -392,6 +381,41 @@ else if(isset($_GET['acteurId'])){
 
 
 <script>
+
+document.querySelector('#favori-button').addEventListener('click', function (event) {
+    // Empêcher la propagation de l'événement de clic
+    event.stopPropagation();
+
+    var acteurId = this.getAttribute('data-film-id');
+    if (!<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>) {
+        // Rediriger vers la page souhaitée
+        window.location.href = '?controller=connect';
+        return; // Arrêter l'exécution du reste du code si la redirection est effectuée
+    }
+
+    const xhr = new XMLHttpRequest();
+
+    // Configurez la requête
+    xhr.open('GET', `?controller=home&action=favorie_acteur&acteurId=${acteurId}`, true);
+
+    // Utilisez une fonction fléchée pour conserver le contexte de 'this'
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Traitez la réponse ici
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                // L'ajout aux favoris a réussi
+                this.style.color = 'gold'; // Utilisez 'this' pour faire référence au bouton actuel
+            } else {
+                // L'ajout aux favoris a échoué
+                this.style.color = 'white'; // Utilisez 'this' pour faire référence au bouton actuel
+            }
+        }
+    };
+
+    // Envoyez la requête
+    xhr.send();
+});
 document.addEventListener('DOMContentLoaded', () => {
     const api_key = "9e1d1a23472226616cfee404c0fd33c1";
 
