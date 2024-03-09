@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from rapoActeur import rapoActeur
 from rapoFilm import rapoFilm
+from trouver import trouver
 from config import get_db_config
 
 app = Flask(__name__)
@@ -26,6 +27,19 @@ def result():
     else:
         result = {'status': 'Erreur', 'message': 'Données manquantes ou erronées'}
         return jsonify(result), 400  
+
+@app.route('/trouver', methods=['POST'])
+def resultTrouver():
+    dbConfig = get_db_config()
+    data = request.get_json()
+    if data['element1'] and data['element2']:
+        trouverObject = trouver(element1=data['element1'], element2=data['element2'], config=dbConfig)
+        result = trouverObject.main()
+        return jsonify(result)
+    else :
+        result = {'status': 'Erreur', 'message': 'Données manquantes ou erronées'}
+        return jsonify(result), 400
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

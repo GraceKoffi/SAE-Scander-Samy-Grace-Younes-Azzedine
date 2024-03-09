@@ -74,30 +74,6 @@
     margin-bottom: 40px;
   }
 </style>
-<div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col">
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2000">
-                <div class="carousel-inner">
-                    <?php foreach ($caroussel['results'] as $index => $movie) : ?>
-                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <img class="d-block w-100 images" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h1>Rapprochement</h1>
-                                <a href='#rapprochement'>
-                                    <button id='favoriButton' class='bouton-favori boutonCarouselTitle'>
-                                        Découvrir
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <!-- <div id="rapprochement" class="container">
     <div class="row align-items-center">   
@@ -141,7 +117,6 @@
                                     <select class="form-select" id="typeselection" name="typeselection" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
                                         <option value="titre">Titre</option>
                                         <option value="personne">Personne</option>
-                                        <option value="" selected></option> 
                                     </select>
                                 </div>
 
@@ -285,13 +260,13 @@
     var selectOption = document.getElementById("typeselection").value;
     
 
-    if (selectedOption === "hard" && selectOption == "personne") {
+    if (selectedOption === "hard") {
         messageInfoDiv.style.display = "block"; 
-        monParagraphe.textContent = "Attention avec se mode nous allons approfondir le rapprochement le rendant plus précis";
-    }else {
-        messageInfoDiv.style.display = "block";
-        monParagraphe.textContent = "Dans se mode le rapprochement sera plus leger moin couteux mais moin précis";
-    } 
+        monParagraphe.textContent = "Attention avec se mode nous allons approfondir le rapprochement le rendant plus précis et plus couteux";
+    }
+    else {
+     messageInfoDiv.style.display = "none";   
+    }        
 });
 
 $(document).ready(function() {

@@ -149,7 +149,7 @@ Class Controller_rapprochement extends Controller{
             $this->apiCall($postData, $arraySearch);
         }
         else{
-            $tab = ["tab" => "Une Erreur est survenu essayer de call"];
+            $tab = ["tab" => "Une Erreur est survenu"];
             $this->render("error", $tab);
         }
     }

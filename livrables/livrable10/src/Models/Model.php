@@ -1175,7 +1175,7 @@ class Model
             $posterPath = "./Images/depannage.jpg";
             foreach($tableau as $element){
                 if(isset($data[$element][0]['poster_path']) && sizeof($data[$element]) > 0){
-                    $posterPath .="https://image.tmdb.org/t/p/w400".$data[$element][0]['poster_path'];
+                    $posterPath ="https://image.tmdb.org/t/p/w400".$data[$element][0]['poster_path'];
                     break;
                 }
             }
