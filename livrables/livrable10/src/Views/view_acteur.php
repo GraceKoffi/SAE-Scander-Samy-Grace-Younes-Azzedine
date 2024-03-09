@@ -15,6 +15,7 @@ padding: 15px;
     max-height: 195px; /* Ajustez en fonction de l'espace disponible */
     overflow-y: scroll;
 }
+
 .btncommentaire:hover {
 background-color: #c79f00; /* Couleur de fond au survol */
 border: 2px solid #FFCC00; /* Couleur de bordure au survol */
@@ -192,7 +193,6 @@ if(isset($_GET['retour'])){
     }
     
 }
-$api_key = "9e1d1a23472226616cfee404c0fd33c1";
 $id_acteur = '';
 if(isset($_GET['id'])){
     $id_acteur = $_GET['id'];
@@ -200,62 +200,6 @@ if(isset($_GET['id'])){
 else if(isset($_GET['acteurId'])){
     $id_acteur = $_GET['acteurId'];
 }
-
-$couvertures = []; 
-foreach ($titre as $id_f){
-    $tconst= $id_f['tconst'];
-    $url = "https://api.themoviedb.org/3/find/{$tconst}?api_key={$api_key}&external_source=imdb_id";
-    $response = file_get_contents($url);
-    $data = json_decode($response, true); // true pour obtenir le résultat en array
-
-    // Fusionner tous les résultats possibles
-    $results = array_merge($data['movie_results'], $data['tv_results'], $data['tv_episode_results'], $data['tv_season_results']);
-
-    
-    foreach ($results as $result) {
-        if (isset($result['backdrop_path']) && $result['backdrop_path'] !== null) {
-            $couvertures[] = "https://image.tmdb.org/t/p/w1280" . $result['backdrop_path'];
-          
-            break; // Sortir de la boucle dès qu'une couverture est trouvée
-        }
-    }
-    
-
-}
-
-if (empty($couvertures)) { // Si aucune couverture n'est trouvée, utiliser une image de dépannage
-    $couvertures[] = "./Images/cinemadepannage.jpg";
-}
-
-$url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
-
-$response = file_get_contents($url);
-$data = json_decode($response);
-$portrait= "./Images/depannage.jpg";
-$id_tmdb= null;
-$bio= "Inconnu";
-if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
-    $portrait = "https://image.tmdb.org/t/p/w400" . $data->person_results[0]->profile_path;
-}
-if (isset($data->person_results[0]->id) && $data->person_results[0]->id !== null) {
-    $id_tmdb = $data->person_results[0]->id;
-$url2 = "https://api.themoviedb.org/3/person/{$id_tmdb}?api_key={$api_key}&language=fr";
-
-$response2 = file_get_contents($url2);
-$data2 = json_decode($response2);
-if (isset($data2->biography) && $data2->biography !== null && $data2->biography !== "") {
-    $bio = $data2->biography;
-}
-    
-}
-
-
-
-
-
-
-
-
   ?>  
     
     
@@ -264,7 +208,7 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
     <div class="row">
         <!-- Couverture -->
         <div class="backdrop col-md-12" style="z-index: 1;">
-        <img id="imageCourante" class="img-fluid" src="<?= $couvertures[0]; ?>"  alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">        
+        <img id="imageCourante" class="img-fluid" src=""  alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">        
     </div>
     </div>
 
@@ -276,7 +220,7 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
             <div class="image-container">
-            <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
+            <img id="portrait" class="img-fluid w-100" src="" alt="Portrait"> 
             <div class="overlay">
             <?php 
     
@@ -309,8 +253,11 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
                 <h1><?= ($info['primaryname'] ?? 'Inconnu'); ?></h1>
                 <p>Année : <?= ($info['birthyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <?= ($info['primaryprofession'] ?? 'Inconnu'); ?></p>
+                <h1 class="nom">Inconnu
+                </h1>
+                <p>Année : <span class="annee" > Inconnu</span> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Métier : <span class="metier" > Inconnu</span></p>
                 <h6 style="margin-top: 50px;">Biographie</h6>
-                <p class="biography"><?= $bio; ?></p>
+                <p id="biography" class="biography">Inconnu</p>
                 <button style="margin-top: 30px;" type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
             </div>
         </div>
@@ -438,47 +385,149 @@ if (isset($data2->biography) && $data2->biography !== null && $data2->biography 
 </div>
 <div style="margin-top: 100px"></div>
 <div class="container mt-4">
-<h3 style="    border-left:2px solid #FFCC00;padding-left: 6px;">Connu pour : </h3>
-    <div class="row">
-    <?php if(empty($titre)): ?>
-            <p class="aucunparticipant">Aucun titre.</p>
-        <?php else: ?>
-        <?php foreach($titre as $v) : ?>
-            <?php 
-                $id_film = $v['tconst'];
-                $url = "https://api.themoviedb.org/3/find/{$id_film}?api_key={$api_key}&external_source=imdb_id";
-
-            
-                $response = file_get_contents($url);
-                $data = json_decode($response);
-                $portrait_film = "./Images/depannage.jpg";
-                $results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
-
-                foreach ($results as $result) {
-                    if (isset($result->poster_path) && $result->poster_path!== null) {
-                        $portrait_film = "https://image.tmdb.org/t/p/w500" . $result->poster_path;
-                        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-                    }
-                }
-               
-            ?>
-            <div class="col-md-3 custom-card d-flex align-items-stretch"> <!-- Choisissez la classe de colonne Bootstrap en fonction de votre mise en page -->
-            <a href="?controller=home&action=information_movie&id=<?php echo $id_film; ?>" class="card composent-card" style="width: 200px;">
-                    <img src=<?= $portrait_film ?> alt="Poster" class="card-img-top">
-                    <div class="card-body">
-                        <h2 class="card-title"><?= $v['primarytitle'] ?></h2>
-                        <h3 class="card-title"><?= $v['startyear'] ?></h3>
-                       
-                    </div>
-                </a>
-            </div>
-        <?php endforeach; ?>
-        <?php endif; ?>
+    <h3 style="border-left:2px solid #FFCC00;padding-left: 6px;">Connu pour :</h3>
+    <div class="row" id="movieContainer">
     </div>
 </div>
 
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const api_key = "9e1d1a23472226616cfee404c0fd33c1";
+
+    const queryParams = new URLSearchParams(window.location.search);
+    id_acteur = queryParams.get('id') || queryParams.get('acteurId');
+
+
+    const urlFind = `https://api.themoviedb.org/3/find/${id_acteur}?api_key=${api_key}&external_source=imdb_id`;
+
+    fetch(urlFind)
+    .then(response => response.json())
+    .then(data => {
+        let portrait = "./Images/depannage.jpg";
+        let id_tmdb = null;
+
+        if (data.person_results && data.person_results[0]) {
+            if (data.person_results[0].profile_path !== null) {
+                portrait = `https://image.tmdb.org/t/p/w400${data.person_results[0].profile_path}`;
+                document.getElementById('portrait').src = portrait;
+            }
+            if (data.person_results[0].id !== null) {
+                id_tmdb = data.person_results[0].id;
+
+                // Maintenant, récupérer plus d'infos comme la biographie
+                const urlPerson = `https://api.themoviedb.org/3/person/${id_tmdb}?api_key=${api_key}&language=fr`;
+
+                fetch(urlPerson)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.biography !== null && data.biography !== "") {
+                        document.getElementById('biography').textContent  = data.biography;
+                    }
+                   
+                })
+                .catch(error => console.error("Erreur lors de la récupération de la biographie :", error));
+            }
+        }
+    })
+    .catch(error => console.error("Erreur lors de la récupération des informations de l'acteur :", error));
+});
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const api_key = '9e1d1a23472226616cfee404c0fd33c1';
+    const titres = <?php echo json_encode($titre); ?>;
+    let imageback = document.getElementById("imageCourante");
+    let couvertures = [];
+    const acteur = <?php echo json_encode($info); ?>;
+    document.querySelector('.nom').textContent = acteur.primaryname;
+    document.querySelector('.annee').textContent = acteur.birthyear;
+    document.querySelector('.metier').textContent = acteur.primaryprofession;
+
+
+
+    const promises = titres.map(titre => {
+        const url = `https://api.themoviedb.org/3/find/${titre.tconst}?api_key=${api_key}&external_source=imdb_id`;
+        return fetch(url).then(response => response.json());
+    });
+
+    Promise.all(promises).then(results => {
+        const movieContainer = document.getElementById('movieContainer');
+        results.forEach((result, index) => {
+            const titre = titres[index];
+            const data = result;
+            let portrait_film = "./Images/depannage.jpg";
+
+            [...data.movie_results, ...data.tv_results, ...data.tv_episode_results, ...data.tv_season_results].forEach(result => {
+              
+                if (result.poster_path) {
+                    portrait_film = `https://image.tmdb.org/t/p/w500${result.poster_path}`;
+                  
+                }
+                if (result.backdrop_path) {
+                    couvertures.push(`https://image.tmdb.org/t/p/w1280${result.backdrop_path}`);
+                   
+                }
+            });
+
+            const movieElement = `
+                <div class="col-md-3 custom-card d-flex align-items-stretch">
+                    <a href="?controller=home&action=information_movie&id=${titre.tconst}" class="card composent-card" style="width: 200px;">
+                        <img src="${portrait_film}" alt="Poster" class="card-img-top">
+                        <div class="card-body">
+                            <h2 class="card-title">${titre.primarytitle}</h2>
+                            <h3 class="card-title">${titre.startyear}</h3>
+                        </div>
+                    </a>
+                </div>
+            `;
+
+            movieContainer.innerHTML += movieElement;
+        });
+
+        // Vérifier si 'couvertures' a des images; sinon, utiliser une image de dépannage
+        if (couvertures.length === 0) {
+            couvertures.push("./Images/cinemadepannage.jpg");
+        }
+
+        // Maintenant que 'couvertures' est garanti d'avoir au moins une image, définissez 'src' pour 'imageCourante'
+        imageback.src = couvertures[0];
+        startImageRotation(couvertures);
+    }).catch(error => console.error('Erreur lors de la récupération des films :', error));
+
+
+    
+
+});
+
+
+function startImageRotation(couvertures) {
+    if (couvertures.length > 1) {
+        let indexCourant = 0;
+        setInterval(() => {
+            indexCourant = (indexCourant + 1) % couvertures.length;
+            let imageSuivante = couvertures[indexCourant];
+
+            // Ici, nous utilisons jQuery pour créer un nouvel élément img et charger l'image suivante
+            const img = new Image();
+            img.onload = function() {
+                $('#imageCourante').fadeOut(2000, function() {
+                    $(this).attr('src', imageSuivante).fadeIn(2000);
+                });
+            };
+            img.src = imageSuivante;
+        }, 3000);
+    }
+}
+
+
+
+
+
 var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
   var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
@@ -518,18 +567,7 @@ var alertElement = document.getElementById('myAlert');
 
 
 
-    $(document).ready(function() {
-    var couvertures = <?php echo json_encode($couvertures); ?>;
-    var indexCourant = 0;
 
-    // Vérifie si le tableau des couvertures contient plus d'une image
-    if(couvertures.length > 1) {
-        setInterval(function() {
-            indexCourant = (indexCourant + 1) % couvertures.length;
-            $('#imageCourante').attr('src', couvertures[indexCourant]);
-        }, 3000);
-    }
-});
 </script>
 
 

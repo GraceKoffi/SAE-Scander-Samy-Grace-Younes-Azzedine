@@ -113,6 +113,30 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getEpisode($id){
+        $sql = "SELECT * 
+        FROM title_episode te 
+        JOIN title_basics tb ON te.tconst=tb.tconst  
+        WHERE parenttconst = :id 
+        ORDER BY te.seasonnumber , te.episodenumber ;";
+       
+       $query = $this->bd->prepare($sql);
+        $query->bindValue(":id", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getNbSaison($id){
+        $sql = "SELECT  max(seasonnumber) 
+        FROM title_episode 
+        WHERE parenttconst = :id ; ";
+       
+       $query = $this->bd->prepare($sql);
+        $query->bindValue(":id", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
 
     public function favorieExistActeur($userId, $acteurId){
         $sql = "SELECT 

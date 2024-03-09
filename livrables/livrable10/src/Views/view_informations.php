@@ -18,7 +18,10 @@
     background-color: #c79f00; /* Couleur de fond au survol */
     border: 2px solid #FFCC00; /* Couleur de bordure au survol */
 }
-
+.synopsie {
+    max-height: 195px; /* Ajustez en fonction de l'espace disponible */
+    overflow-y: scroll;
+}
 /* Styliser spécifiquement l'état :active */
 .btncommentaire:active {
     background-color: #c79f00; /* Couleur de fond pendant le clic */
@@ -224,48 +227,6 @@ else if(isset($_GET['filmId'])){
     $id_imdb = $_GET['filmId'];
 }
 
-$api_key = "9e1d1a23472226616cfee404c0fd33c1";
-$url = "https://api.themoviedb.org/3/find/{$id_imdb}?api_key={$api_key}&external_source=imdb_id&language=fr";
-
-$response = file_get_contents($url);
-$data = json_decode($response);
-$couverture = "./Images/cinemadepannage.jpg";
-$portrait= "./Images/depannage.jpg";
-$overview= 'Inconnu';
-
-
-
-// Créez un tableau avec tous les résultats que vous voulez vérifier
-$results = array_merge($data->movie_results, $data->tv_results, $data->tv_episode_results, $data->tv_season_results);
-
-foreach ($results as $result) {
-    if (isset($result->backdrop_path) && $result->backdrop_path !== null) {
-        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->backdrop_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-    if (isset($result->still_path) && $result->still_path!== null) {
-        $couverture = "https://image.tmdb.org/t/p/w1280" . $result->still_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-}
-foreach ($results as $result) {
-    if (isset($result->poster_path) && $result->poster_path!== null) {
-        $portrait = "https://image.tmdb.org/t/p/w400" . $result->poster_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-    if (isset($result->still_path) && $result->still_path!== null) {
-        $portrait = "https://image.tmdb.org/t/p/w400" . $result->still_path;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-}
-
-foreach ($results as $result) {
-    if (isset($result->overview) && $result->overview !== null) {
-        $overview = $result->overview;
-        break;  // Sortir de la boucle dès qu'une valeur est trouvée
-    }
-}
-
 
 ?>
  
@@ -273,50 +234,47 @@ foreach ($results as $result) {
     <div class="row">
         <!-- Couverture -->
         <div class="backdrop col-md-12" style="z-index: 1;">
-            <img class="img-fluid" src="<?= $couverture ?>" alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">
+            <img class="img-fluid" src="" alt="Couverture" style="filter: opacity(70%) brightness(15%);width: 12800px;height: 800px;">
         </div>
     </div>
 
     <div class="row" style="position: absolute; top: 100px; left: 100px; width: 100%; margin-top: 35px; z-index: 2;"> <!-- Superpose sur la couverture -->
         <!-- Portrait à gauche -->
         <div class="afficheportrait col-md-3 ml-3">
-            <div class="image-container">
             <img class="img-fluid w-100" src="<?= $portrait ?>" alt="Portrait"> 
-            <div class="overlay">
-            <?php 
-                    $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
-                    if($favori == 'false'){
-                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button id='favori-button' style='font-size: 50px;
-                                                    color: white;
-                                                    background: none;
-                                                    border: none; 
-                                                    cursor: pointer;'>
-                                                    ★</button>
-                                                    </a>
-                            </span>";
-                    }
-                    else{
-                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button  id='favori-button' style='font-size: 50px;
-                                color: #FFCC00;
-                                background: none;
-                                border: none; 
-                                cursor: pointer;'>
-                                ★</button></a>
-                        </span>";
-                    }
-                ?>
-            </div>
-        </div>
         </div>
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
                 <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?>
+                <?php 
+                        if(isset($_SESSION['username'])) {
+                            $favori = isset($_SESSION['favori']) ? $_SESSION['favori'] : 'false';
+                            if($favori == 'false'){
+                                echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                                            color: white;
+                                                            background: none;
+                                                            border: none; 
+                                                            cursor: pointer;'>
+                                                            ★</button></a>
+                                    </span>";
+                            }
+                            else{
+                                        echo "<span><a href='?controller=home&action=favorie_movie&filmId=$id_imdb'><button style='font-size: 50px;
+                                        color: #FFCC00;
+                                        background: none;
+                                        border: none; 
+                                        cursor: pointer;'>
+                                        ★</button></a>
+                                </span>";
+                            }
+                        }
+                        ?>
 
                 </h1>
                 <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
-                <h6 style="margin-top: 50px;">Synopsis</h6>
-                <p><?= ($overview ?? 'Inconnu'); ?></p>
+                <h6  style="margin-top: 50px;">Synopsis</h6>
+                <p class="synopsie"></p>
                 <div class="row" style="margin-top: 50px;margin-bottom: 50px;">
                     <div class="col-md-4">
                         <h6>Note sur 10</h6>
@@ -331,7 +289,19 @@ foreach ($results as $result) {
                         <p><?= ($info[0]['titletype'] ?? 'Inconnu'); ?></p>
                     </div>
                 </div>
+                <div class="row">
+                <div class="col-md-4">
                 <button type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+                </div>
+                <div class="col-md-4"></div>
+                <?php if ($info[0]['titletype']=="tvSeries" || $info[0]['titletype']=="tvMiniSeries" ) : ?>
+                <div class="col-md-4">
+                <h6>Nombre de saison</h6>
+                <p><?= ($nbsaison['max'] ?? 'Inconnu'); ?></p>
+                </div>
+                <?php endif ; ?>
+                
+            </div>        
             </div>
         </div>
     </div>
@@ -467,55 +437,77 @@ foreach ($results as $result) {
         </div>
     </div>
 </div>
-
+<?php if ($info[0]['titletype']=="tvSeries" || $info[0]['titletype']=="tvMiniSeries" ) : ?>
 <div class="container mt-4">
-    <h3 style="border-left:2px solid #FFCC00;padding-left: 6px;"> Participants </h3>
-    <div class="row">
-    <?php if(empty($acteur)): ?>
-            <p class="aucunparticipant">Aucun participant connu.</p>
-        <?php else: ?>
-        <?php foreach($acteur as $v) : ?>
-            <?php 
-                $id_acteur = $v['nconst'];
-                $url = "https://api.themoviedb.org/3/find/{$id_acteur}?api_key={$api_key}&external_source=imdb_id";
-
-
-                $response = file_get_contents($url);
-                $data = json_decode($response);
-                $profilePath = null;
-               
-                if (isset($data->person_results[0]->profile_path) && $data->person_results[0]->profile_path !== null) {
-                    $profilePath = $data->person_results[0]->profile_path;
-                }
-               
-            ?>
-            <div class="col-md-3 custom-card d-flex align-items-stretch"> <!-- Choisissez la classe de colonne Bootstrap en fonction de votre mise en page -->
-            <a href="?controller=home&action=information_acteur&id=<?php echo $id_acteur; ?>" class="card composent-card" style="width: 200px;">
-            <?php $imageSrc = ($profilePath !== null) ? "https://image.tmdb.org/t/p/w500{$profilePath}" : "./Images/depannage.jpg"; ?>
-            <img src="<?php echo $imageSrc; ?>" alt="Poster" class="card-img-top">                  
-                    <div class="card-body">
-                        <h2 class="card-title"><?= $v['nomacteur'] ?></h2>
-                        <h3 class="card-title"><?= $v['dateacteur'] ?></h3>
-                        <h4 class="card-title"><?= $v['nomdescene'] ?></h4>
-                    </div>
-                </a>
-            </div>
-        <?php endforeach; ?>
-        <?php endif; ?>
+    <h3 style="border-left:2px solid #FFCC00;padding-left: 6px;">Episodes</h3>
+<div class="row">
+<div class="col-md-2 m-5">
+    <div id="season-selector-container">
+        <label for="season-selector" style="border-left:2px solid #FFCC00; padding-left: 6px;">Saison</label>
+        <select id="season-selector" class="form-control" onchange="filterEpisodesBySeason()">
+            <?php for($i = 1; $i <= $nbsaison['max']; $i++): ?>
+                <option value="<?= $i ?>">Saison <?= $i ?></option>
+            <?php endfor; ?>
+        </select>
     </div>
 </div>
 
 
-<script src="Js/informations.js"></script>
+</div>
+<div class = "col-md-9 mx-auto" id="movie-list"></div>
+</div>
+<?php endif ; ?>
+
+<div class="container mt-4">
+    <h3 style="border-left:2px solid #FFCC00;padding-left: 6px;">Participants</h3>
+    <div class="row" id="listeParticipants">
+        
+    </div>
+</div>
 
 
+
+<script src="Js/function.js"></script>
 <script>
-  var alertElement = document.getElementById('myAlert');
+       /*
+       $(document).ready(function() {
+            // Écouteur d'événement pour le clic sur le bouton
+            $("#favoriButton").click(function() {
+                // Récupérez l'état actuel du film (favori ou non)
+                const estFavori = $(".film").data("favori");
+
+                // Effectuez l'appel Ajax ici
+                $.ajax({
+                    type: "GET", // Ou "GET" selon vos besoins
+                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
+                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
+                    success: function(response) {
+                        // Mettez à jour l'interface utilisateur en fonction de la réponse
+                        if (estFavori) {
+                            $(".film").data("favori", false);
+                            $("#favoriButton").text("+");
+                            $("#titreFilm").text("Ajouter au favori");
+                            $(".film").removeClass("favori"); // Retirez la classe "favori"
+                        } else {
+                            $(".film").data("favori", true);
+                            $("#favoriButton").text("-");
+                            $("#titreFilm").text("Favori");
+                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
+                        }
+                    },
+                    error: function() {
+                        alert("Erreur lors de la mise à jour des favoris.");
+                    }
+                });
+            });
+        });
+        */
+        var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
   var fadeDuration = 5000; // Durée du fondu en millisecondes (2 secondes)
 
 // Fonction pour réduire l'opacité progressivement
-var alertElement = document.getElementById('myAlert');
+
     alertElement.style.opacity = 1; // Afficher l'alerte
 
     // Faire disparaître l'alerte après 2 secondes avec un effet de fondu et un flou
@@ -557,6 +549,60 @@ var alertElement = document.getElementById('myAlert');
             event.preventDefault();
         <?php endif; ?>
     });
+
+    
+    
+    
+    });
+        
+       
+       
+       
+       
+ 
+       
+       
+       
+       
+       
+       
+       
+       /*
+       $(document).ready(function() {
+            // Écouteur d'événement pour le clic sur le bouton
+            $("#favoriButton").click(function() {
+                // Récupérez l'état actuel du film (favori ou non)
+                const estFavori = $(".film").data("favori");
+
+                // Effectuez l'appel Ajax ici
+                $.ajax({
+                    type: "GET", // Ou "GET" selon vos besoins
+                    url: "?controller=home&action=favorie_movie&filmId=<?php echo $id_imdb;?>", // Remplacez par votre URL
+                    data: { action: estFavori ? "supprimer" : "ajouter" }, // Données à envoyer au serveur
+                    success: function(response) {
+                        // Mettez à jour l'interface utilisateur en fonction de la réponse
+                        if (estFavori) {
+                            $(".film").data("favori", false);
+                            $("#favoriButton").text("+");
+                            $("#titreFilm").text("Ajouter au favori");
+                            $(".film").removeClass("favori"); // Retirez la classe "favori"
+                        } else {
+                            $(".film").data("favori", true);
+                            $("#favoriButton").text("-");
+                            $("#titreFilm").text("Favori");
+                            $(".film").addClass("favori"); // Ajoutez la classe "favori"
+                        }
+                    },
+                    error: function() {
+                        alert("Erreur lors de la mise à jour des favoris.");
+                    }
+                });
+            });
+        });
+        */
+     
+  
+
     </script>
 
         <?php require "Views/view_footer.php"; ?>
