@@ -1,7 +1,7 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
     .titleContact{
-    margin-top:100px
+    margin-top:200px
  }
  .paragrapheTrouver{
     padding-top: 20px;
@@ -25,18 +25,12 @@
  }
  
 </style>    
-<div id="liens" class="container bottom top">
-    <div class="row align-items-center">   
-            <h1 class="titleContact">Contactez-nous</h1>
-            
-    </div>
-</div>
-
-   <div class="container-fluid bottom-form"> 
-        <div class="d-flex align-items-center">
-            <div class="row align-items-center">
-                <div class="mx-auto col">
-                    <form action="?controller=contact&action=send" method="post">
+   <div class="container bottom-form titleContact"> 
+        <div class="row">
+            <div class="mx-auto col-md formulaire">
+                <div class="d-flex align-items-center">
+                <h1 style="border-left: 2px solid yellow; padding-left: 6px;"class="titleContact m-5">Contactez-nous</h1>    
+                    <form action="?controller=contact&action=send" method="post" class="m-5">
                         <?php
                             if(isset($tab)){
                                 $email = $tab[0];
@@ -51,7 +45,8 @@
                             </div>
                             <div class="row mx-auto">
                                 <div class="col">
-                                    <input type="text" id="nom" name="nom" value="<?php echo $name[0] ?? ''; ?>" required>
+                                    <input type="text" id="nom" name="nom" value="<?php echo $name[0] ?? ''; ?>" class="form-control">
+                                    <div id="nom-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +59,8 @@
                             </div>
                             <div class="row mx-auto">
                                 <div class="col">
-                                    <input type="email" id="email" name="email" value="<?php echo $email[0] ?? ''; ?>" required>
+                                    <input type="text" id="email" name="email" value="<?php echo $email[0] ?? ''; ?>" class="form-control">
+                                    <div id="email-error" style="display: none; color: red;">Veuillez saisir une adresse mail correcte</div>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +72,8 @@
                             </div>
                             <div class="row mx-auto">
                                 <div class="col">
-                                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                                <textarea id="message" name="message" rows="4" class="form-control"></textarea>
+                                <div id="message-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
                                 </div>
                             </div>
                         </div>
@@ -88,10 +85,65 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
+    
+</div></div>
+
+
+<script>
+    $(document).ready(function() {
+    handleFormValidation();
+});
+
+
+    function handleFormValidation() {
+    $('form').submit(function(e) {
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var searchInput = $('#nom').val().trim();
+        var emailInput = $('#email').val().trim();
+        var comInput = $('#message').val().trim();
 
 
 
+        // Valide chaque champ selon les critères spécifiques
+        if (!searchInput) {
+            $('#nom').addClass('is-invalid');
+            $('#nom-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        // Validation des années de sortie
+        if (!emailInput || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(emailInput)) {
+            $('#email').addClass('is-invalid');
+            $('#email-error').show();
+            isValid = false;
+        }
+
+        if (!comInput) {
+            $('#message').addClass('is-invalid');
+            $('#message-error').show();
+            isValid = false; // Formulaire invalide
+        }
+        
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#nom, #email, #message').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+    });
+}
+</script>
 
 
 

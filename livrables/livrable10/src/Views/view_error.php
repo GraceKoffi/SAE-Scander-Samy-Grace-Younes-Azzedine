@@ -40,7 +40,7 @@ require "Views/view_navbar.php"; ?>
     }
 
     else {
-        $titre = "Une erreur est survenue";
+        $titre = $tab;
     }
 
     $paragraphe = $tab;

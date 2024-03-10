@@ -72,6 +72,10 @@
     margin-top: -40px;
     margin-bottom: 40px;
   }
+
+  .rapprochement{
+    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
+  }
 </style>
 
 <!-- <div id="rapprochement" class="container">
@@ -94,8 +98,8 @@
 </div>
 <div class="container">
 <div class="row align-items-center">
-    <a href='#fonctionalite'>
-        <button id='favoriButton' class='bouton-favori boutonFonctionnalite'>
+    <a href='#fonctionalite' style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
             Fonctionnalite
         </button>
     </a>
@@ -104,7 +108,7 @@
 </div>
 <div class="container">
     <div class="row">
-<div class="formulaire mx-auto col-md">
+<div class="formulaire mx-auto col-md rapprochement">
         <div class="d-flex align-items-center">
         <img id="imageRapprochement" src="./images/data1.png" alt="Filtre">
         <h3 class="m-5">Rapprochement</h3>
@@ -124,7 +128,6 @@
                                     <select class="form-select" id="typeselectionRapo" name="typeselectionRapo" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
                                         <option value="soft">Relatif</option>
                                         <option value="hard">Approfondi</option>
-                                        <option value="" selected></option> 
                                     </select>
                                 </div>
                                 
@@ -208,11 +211,10 @@
                     <img class="d-block w-100" src="Images/recherche.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>Recherche</h2>
-                                <a href='?controller=recherche'>
-                                    <button id='favoriButton' class='bouton-favori'>
-                                        Decouvrir
-                                        Recherche
-                                        </button>
+                                <a href='?controller=recherche' style="text-decoration: none;">
+                                    <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
+                                        Decouvrir Recherche
+                                    </button>
                                 </a>
                             </div>
                     </div>
@@ -220,10 +222,9 @@
                         <img class="d-block w-100" src="Images/link.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>Liens</h2>
-                                <a href='?controller=trouver'>
-                                    <button id='favoriButton' class='bouton-favori'>
-                                    Decouvrir
-                                    Liens
+                                <a href='?controller=trouver' style="text-decoration: none;">
+                                    <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
+                                        Decouvrir Liens
                                     </button>
                                 </a>
                             </div>

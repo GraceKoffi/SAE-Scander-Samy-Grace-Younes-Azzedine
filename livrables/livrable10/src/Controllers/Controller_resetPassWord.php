@@ -8,6 +8,23 @@ class Controller_resetPassWord extends Controller{
     public function action_resetEtape1(){
         if(isset($_POST['username'])) {
             $m = Model::getModel();
+            if(isset($_POST['cancel'])){
+                $caroussel = $m->filmpopulaire();
+                $filmnote = $m->filmmieuxnote();
+            
+                // Préparer les films par genre
+                $filmsParGenre = [
+                    'Action' => $m->listhome('Action'),
+                    'Science-Fiction' => $m->listhome('Sci-Fi'),
+                    'Drame' => $m->listhome('Drama'),
+                    'Jeunesse' => $m->listhome('Animation'),
+                    'Crime'=>$m->listhome('Crime'),
+                    'Horreur'=>$m->listhome('Horror'),
+                ];
+            
+                // Passer les films populaires et les films par genre à la vue
+                $this->render("home", ['caroussel' => $caroussel, 'filmsParGenre' => $filmsParGenre, 'filmnote' => $filmnote]);
+            }
             if($m->userExist(trim(e($_POST['username'])))["exists"] == true) {
                 $_SESSION['usernameResetPass'] = trim(e($_POST['username']));
                 $email = $m->emailExist(trim(e($_POST['username'])));
@@ -42,6 +59,9 @@ class Controller_resetPassWord extends Controller{
 
     public function action_resetEtape2(){
         if(isset($_SESSION['usernameResetPass'])){
+                if(isset($_POST['roleBack'])){
+                    $this->action_default();
+                }
                 $m = Model::getModel();
                 $result = $m->CreateToken($_SESSION['usernameResetPass']);
                 if($result['status'] == "OK"){

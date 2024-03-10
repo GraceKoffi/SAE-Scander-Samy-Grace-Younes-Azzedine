@@ -21,7 +21,7 @@ class Controller_resetFinal extends Controller{
                 $this->render("error", $tab);
             }
             else{
-                $tab = ["tab" => "Error dans la modification du mot de passe"];
+                $tab = ["tab" => "Erreur dans la modification du mot de passe"];
                 $this->render("error", $tab);
             }
         }

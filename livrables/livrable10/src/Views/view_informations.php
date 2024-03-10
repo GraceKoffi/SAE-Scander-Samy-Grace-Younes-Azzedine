@@ -141,7 +141,7 @@
         }
 
         .modal-content{
-            background-color: black;
+            background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
         }
 
         .star-container {
@@ -293,7 +293,7 @@ else if(isset($_GET['filmId'])){
                 </div>
                 <div class="row">
                 <div class="col-md-4">
-                <button type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
+                <button id="buttonCommentaire" type="button" class=" btncommentaire" data-toggle="modal" data-target=".bd-example-modal-lg">Commentaire</button>
                 </div>
                 <?php if ($info[0]['titletype']=="tvEpisode" ) : ?>
                 <div class="col-md-4">
@@ -403,7 +403,7 @@ else if(isset($_GET['filmId'])){
                                         
                                         <label class="custom-form-label" style="padding-left: 10px; margin-top: 20px; color: white;">Anonyme :</label>
                                         <div class="form-check">
-                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
+                                        <select class="custom-select" name="anonymous" id="anonymous" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="0">Oui</option>
                                                                                 <option value="1" selected>Non</option>
                                                                             </select>
@@ -411,13 +411,14 @@ else if(isset($_GET['filmId'])){
                                     </div>
                                     <div class="form-group">
                                         <label for="commentTitle" class="custom-form-label" style="margin-top: 20px; color: white;">Titre du commentaire :</label>
-                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" required placeholder="Titre" required>
+                                        <input type="text" class="form-control" id="commentTitle" name="commentTitle" placeholder="Titre">
+                                        <div id="commentTitle-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
                                     </div>
                                     <div class="form-group">
                                         <label for="commentNote" class="custom-form-label" style="margin-top: 20px; color: white;">Note :</label>
                                         <!-- Fil des notes -->
                                         <div class="form-check">
-                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;" required>
+                                        <select class="custom-select" name="commentNote" id="commentNote" style="max-width: 120px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                                                                                 <option value="0" selected>0</option>
                                                                                 <option value="1">1</option>
                                                                                 <option value="2">2</option>
@@ -434,13 +435,13 @@ else if(isset($_GET['filmId'])){
                                     </div>
                                     <div class="form-group">
                                         <label for="commentInput" class="custom-form-label" style="margin-top: 20px; color: white;">Ajouter un commentaire :</label>
-                                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" required placeholder="Commentaire"></textarea>
+                                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3" style="color: black;" placeholder="Commentaire"></textarea>
+                                        <div id="commentInput-error" style="display: none; color: red;">Veuillez entrer au moins un caractère.</div>
                                     </div>
-                                    <div class="alert alert-danger" role="alert" id="alertNotLoggedIn" style="display: none;">
-                                        Vous devez être connecté pour envoyer un commentaire.
-                                    </div>
+                                    
 
-                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block; padding-bottom: 5px;" >Envoyer</button>
+                                    <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block; margin-bottom: 10px;" >Envoyer</button>
+                                    <div id="submit-error" style="display: none; color: red; margin-left: 225px; margin-bottom: 10px;">Veuillez vous connectez à un compte.</div>
                             </form>
                         </div>
                     </div>
@@ -490,6 +491,58 @@ else if(isset($_GET['filmId'])){
 
 <script src="Js/function.js"></script>
 <script>
+
+document.querySelector('#buttonCommentaire').addEventListener('click', ()=>{
+    handleFormValidation();
+})
+
+
+    function handleFormValidation() {
+    $('form').submit(function(e) {
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var searchInput = $('#commentTitle').val().trim();
+        var commentInput = $('#commentInput').val().trim();
+
+
+
+        // Valide chaque champ selon les critères spécifiques
+        if (!searchInput) {
+            $('#commentTitle').addClass('is-invalid');
+            $('#commentTitle-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if (!commentInput) {
+            $('#commentInput').addClass('is-invalid');
+            $('#commentInput-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if(!<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>){
+            $("#submit-error").show();
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#commentTitle, #commentInput').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+    });
+}
+
+
 document.querySelector('#favori-button').addEventListener('click', function (event) {
     // Empêcher la propagation de l'événement de clic
     event.stopPropagation();
@@ -686,26 +739,6 @@ acteurs.forEach(function(acteur) {
             }
         }, interval);
     }
-     var submitBtn = document.getElementById('submitBtn');
-    var alertNotLoggedIn = document.getElementById('alertNotLoggedIn');
-
-    submitBtn.addEventListener('click', function() {
-        // Vérifier si la variable de session existe
-       
-        <?php if (!isset($_SESSION['username'])) : ?>
-            // Afficher l'alerte si l'utilisateur n'est pas connecté
-            alertNotLoggedIn.style.display = 'block';
-            // Empêcher l'envoi du formulaire
-            event.preventDefault();
-        <?php endif; ?>
-
-    
-    
-    
-    });
-
-
-       
        
        
     

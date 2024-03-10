@@ -33,8 +33,8 @@
     opacity: 0.3;
  }
  .boutonFonctionnalite{
-    margin-top: -10px;
-    margin-bottom: 20px
+    margin-top: -20px;
+    margin-bottom: 20px;
  }
  
  .label{
@@ -43,6 +43,10 @@
 
  .carousel-textLabel{
     margin-left: 50px;
+ }
+
+ .recherche{
+    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
  }
 
 </style>
@@ -57,8 +61,8 @@
 
 <div class="container">
 <div class="row align-items-center">
-    <a href='#fonctionalite'>
-        <button id='favoriButton' class='bouton-favori boutonFonctionnalite'>
+    <a href='#fonctionalite' style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
             Fonctionnalite
         </button>
     </a>
@@ -69,7 +73,7 @@
 
 <div class="container">
 <div class="row">
-<div class="formulaire mx-auto col-md">
+<div class="formulaire mx-auto col-md recherche">
         <div class="d-flex align-items-center">
         <img src="./Images/searchjaune.png" alt="Filtre" style="margin-right: -37px;">
         <h3 class="m-5">Recherche Avancée</h3>
@@ -286,11 +290,10 @@
                     <img class="d-block w-100" src="Images/link.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>Liens</h2>
-                                <a href='?controller=trouver'>
-                                    <button id='favoriButton' class='bouton-favori'>
-                                        Decouvrir
-                                        Liens
-                                        </button>
+                                <a href='?controller=trouver' style="text-decoration: none;">
+                                    <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
+                                        Decouvrir Liens
+                                    </button>
                                 </a>
                             </div>
                     </div>
@@ -298,10 +301,9 @@
                         <img class="d-block w-100" src="Images/rapprochement.jpeg" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>Rapprochement</h2>
-                                <a href='?controller=rapprochement'>
-                                    <button id='favoriButton' class='bouton-favori'>
-                                    Decouvrir
-                                    Rapprochement
+                                <a href='?controller=rapprochement' style="text-decoration: none;">
+                                    <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
+                                        Decouvrir Rapprochement
                                     </button>
                                 </a>
                             </div>

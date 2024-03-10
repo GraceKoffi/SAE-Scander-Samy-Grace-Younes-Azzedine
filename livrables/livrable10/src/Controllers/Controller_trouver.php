@@ -70,7 +70,7 @@ class Controller_trouver extends Controller {
                             $this->render("trouver_result_hard", $tab);
                         }
                         else{
-                            $tab = ["tab" => $array];
+                            $tab = ["tab" => "Une Erreur est survenu"];
                             $this->render("error", $tab);
                         }
                     
@@ -150,7 +150,7 @@ class Controller_trouver extends Controller {
                             $this->render("trouver_result_hard", $tab);
                         }
                         else{
-                            $tab = ["tab" => $array];
+                            $tab = ["tab" => "Une Erreur est survenu"];
                             $this->render("error", $tab);
                         }
                     
@@ -186,6 +186,7 @@ class Controller_trouver extends Controller {
 
 
     public function action_acteurcommun(){
+        $apiUrl = "http://127.0.0.1:5001/trouver";
         $m = Model::getModel();
         if(isset($_POST['selectedTconst1']) && isset($_POST['selectedTconst2'])){
             if($_SESSION['typeSelectionLiens'] == "soft") {
@@ -226,7 +227,7 @@ class Controller_trouver extends Controller {
                     $this->render("trouver_result_hard", $tab);
                 }
                 else{
-                    $tab = ["tab" => $array];
+                    $tab = ["tab" => "Une Erreur est survenu"];
                     $this->render("error", $tab);
                 }
             }
@@ -235,6 +236,7 @@ class Controller_trouver extends Controller {
     }
 
     public function action_titrecommun(){
+        $apiUrl = "http://127.0.0.1:5001/trouver";
         $m = Model::getModel();
         if(isset($_POST['selectednconst1']) && isset($_POST['selectednconst2'])){
             if($_SESSION['typeSelectionLiens'] == "soft"){
@@ -275,7 +277,7 @@ class Controller_trouver extends Controller {
                     $this->render("trouver_result_hard", $tab);
                 }
                 else{
-                    $tab = ["tab" => $array];
+                    $tab = ["tab" => "Une Erreur est survenu"];
                     $this->render("error", $tab);
                 }
             }
