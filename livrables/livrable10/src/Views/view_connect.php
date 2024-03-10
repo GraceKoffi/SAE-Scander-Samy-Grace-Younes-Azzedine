@@ -113,6 +113,9 @@ body{
 .mdp{
   margin-bottom: 20px;
 }
+.connect{
+  background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
+}
 
   
 </style>
@@ -161,43 +164,57 @@ body{
         }
     }
     ?> 
-<div class="container formulaire">
+<div class="container formulaire connect">
     <input type="checkbox" id="check">
     <div class="login form">
-        <h1>Connection</h1>
+        <h1 style="padding-bottom: 10px;">Connection</h1>
         <form id="loginForm" action="?controller=connect&action=login" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
-            <input type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control" required>
-            <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
-            <input type="password" placeholder="Entrer votre mot de passe" name="passWord" class="form-control" required>
+            <input id="userNameLogin"type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control">
+            <div id="userNameLogin-error"class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Veuillez entrer un nom d'utilisateur.</div>
+            <input id="passWordLogin"type="password" placeholder="Entrer votre mot de passe" name="passWord" class="form-control">
+            <div id="passWordLogin-error" class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Veuillez entrer votre mot de passe.</div>
             <div class="mdp">
             <a href="?controller=resetPassWord">Mot de passe oublier ?</a>
             </div>
-            <input type="submit" class="btn btn-primary submit-btn" value="Connection">
+            <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Connexion</button>
         </form>
         <div class="signup">
-            <span class="signup">Pas de compte ?
+            <span class="signup">
              <label for="check">Creer un compte</label>
+            </span>
+        </div>
+        <div style="margin-top: 10px">
+            <span class="signup">
+             <label for="check"><a href="?controller=contact">Contactez nous</a></label>
             </span>
         </div>
     </div>
     <div class="registration form">
-        <h1>Creer un compte</h1>
+        <h1 style="padding-bottom: 10px;">Creer un compte</h1>
         <form id="signupForm" action="?controller=connect&action=signup" method="post">
           <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
-            <input type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control" required>
-            <div class="invalid-feedback">Veuillez créer un mot de passe.</div>
-            <input type="password" id="signupPassword" placeholder="Créer un mot de passe" name="passWord" class="form-control" required>
-            <div class="invalid-feedback">Veuillez confirmer votre mot de passe.</div>
-            <input type="password" id="confirmPassword" placeholder="Confirmer votre mot de passe" class="form-control" name="secondPassword" required>
-            <input type="submit" class="btn btn-primary submit-btn" value="Creer un compte">
+            <input id="userNameLogin2" type="text" placeholder="Entrer votre nom d'utilisateur" name="userName" class="form-control">
+            <div id="userNameLogin2-error"class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Veuillez saisir un mot de passe.</div>
+            <input id="passWordLogin2" type="password" id="signupPassword" placeholder="Créer un mot de passe" name="passWord" class="form-control">
+            <div id="passWordLogin2-error"class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Veuillez confirmer votre mot de passe.</div>
+            <input id="passWordLoginConfirm" type="password" id="confirmPassword" placeholder="Confirmer votre mot de passe" class="form-control" name="secondPassword">
+            <div id="passWordLoginConfirm-error"class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Veuillez confirmer votre mot de passe.</div>
+            <div id="passWordLoginConfirm-error2"class="invalid-feedback" style="display: none; color: red; padding-bottom: 10px;">Ce mot de passe ne correspond pas</div>
+            <button type="submit" id="buttontrouver" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Créer un compte</button>
         </form>
-      
-        <div class="signup">
-            <span class="signup">Vous avez un compte
+            <div class ="signup">
+            <span class="signup">
              <label for="check">Connection</label>
             </span>
+          </div>
+        <div style="margin-top: 10px">
+            <span class="signup">
+             <label for="check"><a href="?controller=contact">Contactez nous</a></label>
+            </span>
         </div>
+    </div>
+        
       </div>
     </div>
 </div>
@@ -205,6 +222,107 @@ body{
 
 
 <script>
+   $(document).ready(function() {
+    handleFormValidationFomLogin();
+    handleFormValidationFomLogin2();
+});
+
+
+    function handleFormValidationFomLogin() {
+    $('#loginForm').submit(function(e) {
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var userNameLoginInput = $('#userNameLogin').val().trim();
+        var passWordLoginInput = $('#passWordLogin').val().trim();
+        
+        var isEmptyRegex = /^\s*$/;
+
+
+        // Valide chaque champ selon les critères spécifiques
+        if (isEmptyRegex.test(userNameLoginInput)) {
+            $('#userNameLogin').addClass('is-invalid');
+            $('#userNameLogin-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if (isEmptyRegex.test(passWordLoginInput)) {
+            $('#passWordLogin').addClass('is-invalid');
+            $('#passWordLogin-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#userNameLogin, #passWordLogin').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+    });
+}
+
+
+function handleFormValidationFomLogin2() {
+    $('#signupForm').submit(function(e) {
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var userNameLogin2Input = $('#userNameLogin2').val().trim();
+        var passWordLogin2Input = $('#passWordLogin2').val().trim();
+        var passWordLoginConfirmInput = $('#passWordLoginConfirm').val().trim();
+        
+        var isEmptyRegex = /^\s*$/;
+
+
+        // Valide chaque champ selon les critères spécifiques
+        if (isEmptyRegex.test(userNameLogin2Input)) {
+            $('#userNameLogin2').addClass('is-invalid');
+            $('#userNameLogin2-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if (isEmptyRegex.test(passWordLogin2Input)) {
+            $('#passWordLogin2').addClass('is-invalid');
+            $('#passWordLogin2-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if (isEmptyRegex.test(passWordLoginConfirmInput)) {
+            $('#passWordLoginConfirm').addClass('is-invalid');
+            $('#passWordLoginConfirm-error').show();
+            isValid = false; // Formulaire invalide
+        }
+        if (passWordLogin2Input !== passWordLoginConfirmInput) {
+            $('#passWordLoginConfirm').addClass('is-invalid');
+            $('#passWordLoginConfirm-error2').show();
+            isValid = false; // Formulaire invalide
+        } 
+
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#userNameLogin2, #passWordLogin2, #passWordLoginConfirm').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $('#passWordLogin2-error2').hide();
+        $(errorId).hide();
+    });
+}
 // JavaScript pour valider le formulaire
    // Supposons que l'ID de votre alerte est 'myAlert'
    var alertElement = document.getElementById('myAlert');
@@ -241,18 +359,6 @@ var alertElement = document.getElementById('myAlert');
             }
         }, interval);
     }
-
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    var inputs = this.getElementsByTagName('input');
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].value == '') {
-            inputs[i].classList.add('is-invalid');
-            event.preventDefault();
-        } else {
-            inputs[i].classList.remove('is-invalid');
-        }
-    }
-});
 
 
 </script>

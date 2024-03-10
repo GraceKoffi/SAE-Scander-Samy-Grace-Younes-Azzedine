@@ -12,6 +12,27 @@
     .buttonAnuler{
         color: white !important;
     }
+
+
+    .reset{
+        margin-top: 100px;
+    }
+
+    .inputReset{
+        margin-top: 20px;
+    }
+
+    .labelReset{
+        margin-top:10px;
+    }
+
+    .resetForm{
+        margin-left: 10px;
+    }
+
+    .reset3{
+        background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
+    }
 </style>
 <body>
 <?php
@@ -82,75 +103,184 @@ if(isset($tab)){
     $email = "";
 }
 
-
-
-echo "<div class='conatiner top left'>";
-    echo "<div class='row'";
-
-    echo "
-        <div class='col'>
-    ";
-    if(isset($_GET['etape'])){
-        if($_GET['etape'] == 1){
-            echo "
-            <form action='?controller=resetPassWord&action=resetEtape1' method='post'>
-                <div class='form-group'>
-                    <h2>Veuillez saisir un utilisateur</h2>
-                    <label for='username'>Nom d'utilisateur</label>
-                        <input type='text' class='form-control' id='username' name='username' required>
-                        <input type='submit' class='bouton btn btn-primary submit-btn' value='Passer prochaine etape'>
-                        <a href='?' class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Annuler</a>
-                </div>
-            </form>
-            ";
-        }
-        if($_GET['etape'] == 2){
-            echo "
-            <form action='?controller=resetPassWord&action=resetEtape2' method='post'>
-                <div class='form-group'>";
-                    if($type == 1){
-                         echo "
-                            <h2>$message  $username</h2>
-                                <label for='email'>Saisir une adresse mail</label>
-                                    <input type='email' class='form-control' id='email' name='email' required>
-                                        <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
-                                        <button type='submit' class='btn' id='save-changes'>
-                                            <a href='?controller=resetPassWord&action=resetEtape1' 
-                                            class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Revenir en arriére</a>
-                                        </button>
-                                        </div>
-                                    </form>
-                            ";
-                    }
-                    else{
-                        
-                        echo "
-
-                            <h2>$message  $username</h2>
-                                <label for='email'>Adresse e-mail</label>
-                                    <input type='email' class='form-control' id='email' name='email' value='$email' required disabled>
-                                    <button type='button' class'btn btn-outline-secondary' id='edit-email'>Edit</button>
-                                    <input type='submit' class='btn btn-primary submit-btn' value='Passer prochaine etape'>
-                                        <button type='submit' class='bouton btn' id='save-changes'>
-                                         <a href='?controller=resetPassWord&action=resetEtape1' 
-                                    class='bouton btn btn-default buttonAnuler' id='cancel-changes'>Revenir en arriére</a>
-                                </button>
-                            </div>
-                        </form>
-                        ";
-                    }
-        }
-    }   
-            echo "</div>";
-        echo "</div>";
-    echo "</div>";
-echo "</div>";
 ?>
-    <!-- Inclure Bootstrap JS (facultatif) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<?php
+if (isset($_GET['etape'])) :
+    if ($_GET['etape'] == 1) :
+?>
+        <div class="container reset">
+    <div class="row mx-auto align-items-center">
+        <div class="col">
+            <h1 class="titleError">Reinitilisation du mot de passe</h1>
+        </div>
+    </div>
+    <div class="container resetForm">
+        <div class="row align-items-center">
+            <div class="formulaire mx-auto col-md reset3">
+                <form id='formEtape1' action='?controller=resetPassWord&action=resetEtape1' method='post'> 
+                    <div class='form-group'>
+                            <label for='username' class="labelReset">Saisir nom d'utilisateur</label>
+                                <div class="inputReset">
+                                    <input id="username" type='text' class='form-control' name='username'>
+                                    <div id="username-error" style="display: none; color: red;">Veuillez saisir un nom d'utilisateur</div>
+                                </div>
+                                
+                                <div class="inputReset">
+                                    <input id="annuler" type='submit' class='btn btn-primary submit-btn button' name='cancel' value='Annuler'>
+                                    <input id="submitEtape1" type='submit'style='margin-left: 10px' class='btn btn-primary submit-btn button' value='Etape suivante'>
+                                </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+    elseif ($_GET['etape'] == 2) :
+?>
+ <div class="container reset">
+    <div class="row mx-auto align-items-center">
+        <div class="col">
+            <h1 class="titleError">Reinitilisation du mot de passe</h1>
+        </div>
+    </div>
+    <div class="container resetForm">
+        <div class="row align-items-center">
+            <div class="formulaire mx-auto col-md reset3">
+                <form id='formEtape2' action='?controller=resetPassWord&action=resetEtape2' method='post'> 
+                    <div class='form-group'>
+                            <label for='token' class="labelReset"><?= $message . ' ' .$username ?></label>
+                                <div class="inputReset">
+                                    <?php if($type == 1) : ?>
+                                    <input id="email" name="email" type='text' class='form-control'>
+                                    <?php else : ?>
+                                    <input type='email' class='form-control' id='email' name='email' value='<?= $email ?>' disabled>
+                                    <?php endif; ?>
+                                    <div id="email-error" style="display: none; color: red;">Veuillez une adresse mail</div>
+                                    <div id="email-error2" style="display: none; color: red;">Veuillez une adresse mail valide</div>
+                                </div>
+                                
+                                <div class="inputReset">
+                                    <input id="roleBack" type='submit' class='btn btn-primary submit-btn button' name='roleBack' value='Revenir Etape 1'>
+                                    <input id="Etape2" type='submit' style='margin-left: 10px' class='btn btn-primary submit-btn button' value='Etape suivante'>
+                                </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+    endif;
+endif;
+?>
+</div>
+</div>
+</div>
+</div>
+
     <script>
+
+    if(<?php echo ($_GET['etape'] == 1) ? 'true' : 'false'; ?>){
+        document.querySelector("#submitEtape1").addEventListener('click', ()=>{
+            handleFormValidationEtape1();
+        });
+
+        document.querySelector("#annuler").addEventListener('click', ()=>{
+            $('#username-error').hide();
+            window.location.href = '?controller=home';
+            return;
+        });
+    }
+    else {
+        document.querySelector("#Etape2").addEventListener('click', ()=>{
+            handleFormValidationEtape2();
+        });
+
+        document.querySelector("#roleBack").addEventListener('click', ()=>{
+            $('#email-error').hide();
+            $('#email-error2').hide();
+            window.location.href = '?controller=resetPassWord';
+            return;
+        });
+    }
+
+    function handleFormValidationEtape1() {
+    $('#formEtape1').submit(function(e) {
+
+        
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var searchInput = $('#username').val().trim();
+
+        // Valide chaque champ selon les critères spécifiques
+        if (!searchInput) {
+            $('#username').addClass('is-invalid');
+            $('#username-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        // Validation des années de sortie
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#username').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+    });
+}
+
+function handleFormValidationEtape2() {
+    $('#formEtape2').submit(function(e) {
+        var isValid = true; // Initialise un indicateur de validité du formulaire
+        // Cache tous les messages d'erreur
+        $('.error').hide();
+
+        // Récupère et nettoie les valeurs des champs
+        var searchInput = $('#email').val().trim();
+
+        // Valide chaque champ selon les critères spécifiques
+        if (!searchInput) {
+            $('#email').addClass('is-invalid');
+            $('#email-error').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        if(searchInput && !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(searchInput)){
+            $('#email').addClass('is-invalid');
+            $('#email-error2').show();
+            isValid = false; // Formulaire invalide
+        }
+
+        // Validation des années de sortie
+        console.log(isValid);
+        if (!isValid) {
+            e.preventDefault(); // Empêche la soumission du formulaire si invalide
+        }
+    });
+
+    // Cache les messages d'erreur lors de la correction des champs
+    $('#email').on('input', function() {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        var errorId2 = '#' + $(this).attr('id') + '-error2';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+        $(errorId2).hide();
+    });
+}
     // Supposons que l'ID de votre alerte est 'myAlert'
     var alertElement = document.getElementById('myAlert');
   var initialOpacity = 1; // Opacité initiale (complètement visible)
