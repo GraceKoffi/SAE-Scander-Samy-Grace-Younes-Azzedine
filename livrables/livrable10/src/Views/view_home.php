@@ -208,9 +208,7 @@ body {
 
 </style>
 <div class="m-4">
-<h1 style="margin-top:100px">FinderCine</h1>
-<p style="border-left:2px solid #FFCC00;padding-left: 6px;"> 
-Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous les cinéphiles ! Tout comme IMDB, FinderCine vous propose un univers complet dédié au cinéma et à la télévision, où vous pouvez explorer une base de données exhaustive de films, séries TV, acteurs, réalisateurs, et bien plus encore. Que vous cherchiez à découvrir les dernières sorties, à vous plonger dans les critiques des œuvres ou à trouver des recommandations personnalisées selon vos goûts, FinderCine est l'outil parfait pour satisfaire votre passion pour le septième art. Avec une interface conviviale et des fonctionnalités innovantes, nous vous offrons une expérience immersive et enrichissante, vous permettant de rester au courant des tendances actuelles, de participer à des discussions animées avec une communauté de passionnés, et de suivre vos créateurs favoris. Rejoignez-nous sur FinderCine et commencez dès aujourd'hui votre voyage cinématographique !</p>
+<h1 style="margin-top:100px;">Bienvenue dans FinderCine</h1>
 </div>
 <div class="row m-2">
 
@@ -224,7 +222,7 @@ Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous le
                     <img class="d-block w-100 carousel-backdrop" src="https://image.tmdb.org/t/p/w1280<?= $movie['backdrop_path'] ?>" alt="Slide <?= $index + 1 ?>">
                     <div class="carousel-overlay">
                         <img src="https://image.tmdb.org/t/p/w500<?= $movie['poster_path'] ?>" alt="<?= $movie['title'] ?> Poster" class="poster">
-                        <h5 style="color:#FFCC00;"><?= $movie['title'] ?></h5>
+                        <h5 style="color:#FFCC00;font-size:25px;"><?= $movie['title'] ?></h5>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -241,7 +239,7 @@ Bienvenue sur FinderCine, votre nouvelle destination incontournable pour tous le
 </div>
 
 <div class="col-3">
-<h3 class="mr-4 mt-4 mb-4" style="border-left:2px solid #FFCC00;padding-left: 6px;">Films les mieux notés</h3>
+<h3 class="mr-4 mt-4 mb-4" style="border-left:2px solid #FFCC00;padding-left: 6px;">Les grands classiques</h3>
 
 <?php 
 $index = 0;
@@ -257,13 +255,15 @@ foreach ($filmnote['results'] as $i) :
             <div class="container col-md-7 mt-4">
                 <h2 class="card-1" style="font-size:15px; color: #FFCC00; padding-bottom: 5px"><?= $i['title'] ?></h2>
                 <?php $dateTime = new DateTime($i['release_date']);
-                    $formattedDate = $dateTime->format('d/m/Y');
+                    $formattedDate = $dateTime->format('Y');
                     ?>
-                <p class="card-2" style="pading-left: 5px; font-size:15px; border-left:2px solid #FFCC00;padding-left: 6px;"><?php $dateTime = new DateTime($i['release_date']);
-                    $formattedDate = $dateTime->format('d/m/Y');
+                 <div class="row">   
+                <p class="card-2 " style="padding-left: 15px; font-size:15px; "><?php $dateTime = new DateTime($i['release_date']);
+                    $formattedDate = $dateTime->format('Y');
                     echo $formattedDate;
                     ?></p>
-                <p class="card-2" style="font-size:15px; border-left:2px solid #FFCC00;padding-left: 6px; color: #FFCC00;"><img style="padding-bottom: 2px; padding-right: 5px; transform: scale(1.5);"src="./images/star.png" alt="Star" class="star"><?=round($i['vote_average'], 1);?></p>
+                <p class="card-2" style="font-size:15px; margin-left: 30px; color: #FFCC00;"><img style="padding-bottom: 2px; padding-right: 5px; transform: scale(1.5);"src="./images/star.png" alt="Star" class="star"><?=round($i['vote_average'], 1);?></p>
+        </div>
             </div>
         </div>
     </div>
