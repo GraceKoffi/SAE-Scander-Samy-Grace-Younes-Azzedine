@@ -291,8 +291,10 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                 <?php foreach ($movieGroup as $movie) : ?>
                     <span class="card composent-card" style="width: 200px;">
                         <div class="image-container">
-                            <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movie['tconst'] ?>">
-                            <div class="overlay">
+                        <a href="?controller=home&action=information_movie&id=<?= $movie['tconst'] ?>" style="text-decoration: none;">    
+                        <img src="" alt="Poster" class="card-img-top" data-tconst="<?= $movie['tconst'] ?>">
+                        </a>    
+                        <div class="overlay">
                             <?php
                                 if(isset($_SESSION['username'])){
                                     $m = Model::getModel();
@@ -332,13 +334,27 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                             <div class="card-body">
                                 <h5 class="card-title" style="color: #FFCC00;"><?= $movie['primarytitle'] ?></h5>
                                 <h6 class="card-subtitle mb-2 mt-2 text-muted"><?= $movie['startyear'] ?></h6>
-                                <div class="rating">
+                                <div class="rating" style="margin-bottom: 9px;">
                                     <img src="./images/star.png" alt="Star" class="star">
                                     <span class="note"><?= $movie['averagerating'] ?></span>
                                 </div>
+                                <a href="#" class="openModal" data-tconst="<?= $movie['tconst'] ?>">
+                                    <img src="./Images/playwhite.png" alt="Icône Bande-annonce" style="height: 20px; margin-right: 5px; vertical-align: middle;">
+                                    Bande-annonce
+                                </a>
+
+                                <!-- La popup modale pour la vidéo -->
+                                
                             </div>
                         </a>
                     </span>
+
+                    <div id="videoModal" style="display:none;">
+                                <span id="closeModal">&times;</span>
+                                <div id="modalContent">
+                                    <iframe id="videoFrame" width="660"  data-tconst="<?= $movie['tconst'] ?>" height="415" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                                </div>
+                                </div>
                 <?php endforeach; ?>
 
             </div>
@@ -350,6 +366,8 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
 
 <script src="Js/home.js"></script>
 <script>
+
+    
     document.querySelectorAll('.favori-button').forEach(function (button) {
         button.addEventListener('click', function (event) {
             // Empêcher la propagation de l'événement de clic
