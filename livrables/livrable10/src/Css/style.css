@@ -396,3 +396,45 @@ h1{
   border-color: #FFCC00;
 
 }
+/******************************************/
+/* ACCUEIL BANDE ANNONCE*/
+/******************************************/
+#videoModal {
+  display: none;
+  position: fixed; /* Position fixed par rapport au viewport */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* Centrer la modale */
+  z-index: 1000; /* S'assurer qu'elle est au-dessus des autres éléments */
+  background-color: red; /* Ou toute autre couleur de fond */
+  padding: 30px;
+}
+
+
+#modalContent {
+  position: relative; /* Pour positionner les éléments fils comme le bouton de fermeture */
+}
+#closeModal {
+  cursor: pointer;
+  position: absolute;
+  top: -8px;
+  right: 3px;
+  font-size: 24px; /* Ajustez la taille comme nécessaire */
+  color: #FFCC00; /* Ou toute autre couleur */
+}
+
+body.hovering-over-video .composent-card:hover {
+  transform: none;
+  border: none;
+  text-decoration: none;
+  color: inherit;
+}
+.openModal {
+  color: white; /* Couleur du texte du lien */
+  text-decoration: none; /* Retire le soulignement par défaut des liens */
+}
+
+.openModal:hover {
+  text-decoration: none; /* Assure qu'il n'y a pas de soulignement au survol */
+  color: white;
+}

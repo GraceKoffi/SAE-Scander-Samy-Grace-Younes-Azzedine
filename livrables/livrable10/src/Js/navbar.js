@@ -97,10 +97,21 @@ $(document).ready(function() {
                         var titreOuNom = suggestion.nom;
                         var annee = suggestion.annee || 'Inconnu';
                         var details = suggestion.details || 'Inconnu';
-                        var link = category === 'personne' ?
-                            `?controller=home&action=information_acteur&id=${suggestion.id}` :
-                            `?controller=home&action=information_movie&id=${suggestion.id}`;
+                        var link;
 
+                        if (category === 'tout') {
+                            if (suggestion.id.startsWith('n')) {
+                                link = `?controller=home&action=information_acteur&id=${suggestion.id}`;
+                            } else if (suggestion.id.startsWith('t')) {
+                                link = `?controller=home&action=information_movie&id=${suggestion.id}`;
+                            }
+                        } else {
+                            link = category === 'personne' ?
+                                `?controller=home&action=information_acteur&id=${suggestion.id}` :
+                                `?controller=home&action=information_movie&id=${suggestion.id}`;
+                        }
+
+                        
                         suggestionsList += `
                             <li class="list-group-item">
                                 <a href="${link}" class="list-group-item list-group-item-action">

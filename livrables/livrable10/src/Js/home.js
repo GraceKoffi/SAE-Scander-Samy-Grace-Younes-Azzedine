@@ -59,9 +59,68 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Erreur lors de la récupération des images:', error);
                 img.src = './images/depannage.jpg';
             });
+            
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const apiKey = '9e1d1a23472226616cfee404c0fd33c1';
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('videoFrame');
+
+    document.addEventListener('click', function(event) {
+        // Vérifier si le clic n'est pas sur la modale et que la modale est affichée
+        if (!modal.contains(event.target) && modal.style.display === 'block') {
+            modal.style.display = 'none'; // Cacher la modale
+            iframe.src = ''; // Réinitialiser la source de l'iframe pour arrêter la vidéo
+        }
+    });
+    // Attacher des événements click aux liens "Bande-annonce"
+    document.querySelectorAll('.openModal').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const tconst = this.getAttribute('data-tconst');
+            const url = `https://api.themoviedb.org/3/movie/${tconst}/videos?api_key=${apiKey}&language=fr`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length > 0) {
+                        // Essayer de trouver une vidéo de type "Trailer" en premier
+                        let trailer = data.results.find(video => video.type.toLowerCase() === "trailer" && video.site.toLowerCase() === "youtube");
+                        // Si aucun trailer n'est trouvé, utiliser la première vidéo disponible
+                        let videoData = trailer || data.results[0];
+
+                        if (videoData && videoData.site.toLowerCase() === 'youtube') {
+                            const videoUrl = `https://www.youtube.com/embed/${videoData.key}?autoplay=1`;
+                            document.getElementById('videoFrame').src = videoUrl;
+                            document.getElementById('videoModal').style.display = 'block';
+                        }
+                    }
+                })
+                .catch(error => console.log(error));
+        });
+    });
+
+
+
+    // Fermer la modal
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('videoModal').style.display = "none";
+        document.getElementById('videoFrame').src = ""; // Arrête la vidéo
     });
 });
 
 
+
+// Lorsque la souris entre sur la vidéo
+document.getElementById('videoModal').addEventListener('mouseenter', function() {
+    document.body.classList.add('hovering-over-video');
+});
+
+// Lorsque la souris quitte la vidéo
+document.getElementById('videoModal').addEventListener('mouseleave', function() {
+    document.body.classList.remove('hovering-over-video');
+});
 
 
