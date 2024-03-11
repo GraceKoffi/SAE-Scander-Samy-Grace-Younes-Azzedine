@@ -5,7 +5,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
 }
 body{
   min-height: 100vh;
@@ -59,11 +58,14 @@ body{
  }
 .form a{
   font-size: 16px;
-  color: #009579;
+  color: #FFCC00;
   text-decoration: none;
 }
 .form a:hover{
   text-decoration: underline;
+}
+a{
+  text-decoration: none;
 }
 .form input.button{
   color: #fff;
@@ -84,7 +86,7 @@ body{
   margin-right: 500px;
 }
 .signup label{
-  color: #009579;
+  color: #FFCC00;
   cursor: pointer;
 }
 .signup label:hover{

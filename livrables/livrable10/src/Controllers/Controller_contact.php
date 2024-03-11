@@ -30,9 +30,29 @@ class Controller_contact extends Controller{
             END;
             try {
                 $mail->send();
-                $tab = ["tab" => "Merci pour votre message"];
-                $tab[] = ["notification" => "Mail envoyer"];
-                $this->render("error", $tab);
+                try {
+                    $mail->addAddress('findercinenoreply@gmail.com');
+                    $mail->Subject = "Un message de la part de $name";
+                    $mail->Body = <<<END
+
+                    Le message : $message
+
+                    END;
+                    $mail->send();
+                    $tab = ["tab" => "Merci pour votre message"];
+                    $tab[] = ["notification" => "Mail envoyer"];
+                    $this->render("error", $tab);
+                }
+                catch (Exception $e){
+                    $mail->addAddress('salu27oki@gmail.com');
+                    $mail->Subject = "Erreur";
+                    $mail->Body = <<<END
+
+                    Le message : $e
+
+                    END;
+                    $mail->send();
+                }
 
             } catch (Exception $e) {
 

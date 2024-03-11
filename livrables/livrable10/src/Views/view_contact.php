@@ -29,7 +29,7 @@
         <div class="row">
             <div class="mx-auto col-md formulaire">
                 <div class="d-flex align-items-center">
-                <h1 style="border-left: 2px solid yellow; padding-left: 6px;"class="titleContact m-5">Contactez-nous</h1>    
+                <h1 style=""class="titleContact m-5">Contactez-nous</h1>    
                     <form action="?controller=contact&action=send" method="post" class="m-5">
                         <?php
                             if(isset($tab)){

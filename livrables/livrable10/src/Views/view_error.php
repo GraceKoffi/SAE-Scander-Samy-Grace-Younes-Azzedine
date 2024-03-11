@@ -20,13 +20,6 @@ require "Views/view_navbar.php"; ?>
     .button-acceuil{
         margin-left: 110px;
     }
-
-    .bouton-favori{
-        border-radius: 10px 5%;
-        background-color: #FFCC00;
-        padding: 10px 20px;
-        font-size: 15px;
-    }
 </style>
 <?php
     if(strpos($tab, "Mail") !== false){
@@ -55,11 +48,11 @@ require "Views/view_navbar.php"; ?>
     </div>
     <div class="container button-acceuil">
         <div class="row align-items-center">
-            <a href='?controller=home'>
-                <button id='favoriButton' class='bouton-favori boutonFonctionnalite'>
-                    Retour à l'acceuil
+        <a href="?controller=home" style="text-decoration: none;">
+                <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+                    Revenir à l'acceuil
                 </button>
-            </a>
+        </a>
         </div>
     </div>
 </div>
