@@ -53,13 +53,16 @@
         <p style="border-left:2px solid #FFCC00;padding-left: 6px;"><?php if(round($result["data"]["time"], 1) < 60): ?>
           <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?> s
           <?php elseif (round($result['data']['time']) > 60): ?>
-          <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?>  m
+          <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3)/60 ?>  m
           <?php else: ?>
-          <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3) ?>  h
+          <?php echo "Voici le chemin le plus court trouver entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["data"]["time"], 3)/3600 ?>  h
           <?php endif; ?>
           <p>
-          <a href="?controller=rapprochement">
-          <button id='favoriButton' class='bouton-favori'> &#8592; Realiser un nouveau rapprochement</button>
+          <a href="?controller=rapprochement" style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+            &#8592; Realiser une nouvelle recherche
+        </button>
+        </a>
           </a>
         </p>  
         </p>

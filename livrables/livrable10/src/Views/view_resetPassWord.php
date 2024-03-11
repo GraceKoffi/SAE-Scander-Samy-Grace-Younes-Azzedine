@@ -13,6 +13,12 @@
         color: white !important;
     }
 
+    .button{
+        background-color: #FFCC00 !important;
+        border-color: #FFCC00 !important;
+        color: black !important;
+
+    }
 
     .reset{
         margin-top: 100px;
@@ -127,6 +133,7 @@ if (isset($_GET['etape'])) :
                                 </div>
                                 
                                 <div class="inputReset">
+                    
                                     <input id="annuler" type='submit' class='btn btn-primary submit-btn button' name='cancel' value='Annuler'>
                                     <input id="submitEtape1" type='submit'style='margin-left: 10px' class='btn btn-primary submit-btn button' value='Etape suivante'>
                                 </div>
@@ -163,7 +170,7 @@ if (isset($_GET['etape'])) :
                                 </div>
                                 
                                 <div class="inputReset">
-                                    <input id="roleBack" type='submit' class='btn btn-primary submit-btn button' name='roleBack' value='Revenir Etape 1'>
+                                    <input id="roleBack" type='submit' class='btn btn-primary submit-btn button' name='roleBack' value='&#8592; Revenir Etape 1'>
                                     <input id="Etape2" type='submit' style='margin-left: 10px' class='btn btn-primary submit-btn button' value='Etape suivante'>
                                 </div>
                     </div>

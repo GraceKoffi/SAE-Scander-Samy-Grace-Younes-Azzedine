@@ -116,13 +116,6 @@
                                     </select>
                                 </div>
 
-                                <label  class="labelfiltre form-label label" for="typeselectionLiens">Type de Liens</label>
-                                <div class="mb-5">
-                                    <select class="form-select" id="typeselectionLiens" name="typeselectionLiens" style="border-radius: 10px 10px 10px 10px; width: 146px;height: 40px;text-align: center;">
-                                        <option value="soft">Relatif</option>
-                                        <option value="hard">Approfondi</option>
-                                    </select>
-                                </div>
                                 
                                 <div id="messageInfo" class="formulaire" style="display: none;">
                                 <img style="transform: scale(0.7);" src="./images/icons8-warning-48.png">
@@ -273,24 +266,6 @@
 
 
 <script>
-    document.getElementById("typeselectionLiens").addEventListener("change", function() {
-    var selectedOption = this.value;
-    var messageInfoDiv = document.getElementById("messageInfo");
-    var monParagraphe = document.getElementById("monParagraphe");
-    var selectOption = document.getElementById("typeselection").value;
-    
-
-    if (selectedOption === "hard") {
-        messageInfoDiv.style.display = "block"; 
-        monParagraphe.textContent = "Attention avec se mode nous allons approfondir le processus de recherche le rendant plus précis et plus couteux";
-        $('#selectOption1').hide();
-        $('#selectOption2').hide();
-    }else {
-        messageInfoDiv.style.display = "none"; 
-        $('#selectOption1').show();
-        $('#selectOption2').show();
-    } 
-});
 
 $(document).ready(function() {
     handleFormValidation();

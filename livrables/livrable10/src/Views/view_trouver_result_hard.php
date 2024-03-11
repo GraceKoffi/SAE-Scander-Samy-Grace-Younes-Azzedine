@@ -49,9 +49,11 @@
           <?php echo "Voici la reslation entre ".$result[0]['search1']." et ".$result[0]["search2"]." en ". round($result["time"], 3) ?>  h
           <?php endif; ?>
           <p>
-          <a href="?controller=trouver">
-          <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
-          </a>
+          <a href="?controller=trouver" style="text-decoration: none;">
+          <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+              &#8592; Realiser une nouvelle recherche
+          </button>
+        </a>
         </p>  
         </p>
 

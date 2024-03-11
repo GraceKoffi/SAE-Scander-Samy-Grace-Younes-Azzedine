@@ -1,11 +1,5 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
-
-.bouton-favori{
-    border-radius: 10px 5%;
-    background-color: #FFCC00;
-    padding: 5px 10px;
- }
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
@@ -13,8 +7,10 @@
         <h1>Résultats entre "<?= e($personne1) ?>" et "<?= e($personne2) ?>"</h1>
         <?php endif; ?>
         <p>
-        <a href="?controller=trouver">
-        <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
+        <a href="?controller=trouver" style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+            &#8592; Realiser une nouvelle recherche
+        </button>
         </a>
         </p>
     </div>
@@ -60,6 +56,19 @@
                 
         
             <div class = "col-md-9 mx-auto" id="movie-list"></div>
+            <?php 
+              if(sizeof($result) == 0){
+                echo "<div class=' col-md-5 mx-auto m-5 alert alert-warning' role='alert' style='background-color:#FFCC00; color:white;'>
+                          <a href='?controller=trouver&action=trouverAprofondiActeur&nconst1=$nconst1&nconst2=$nconst2' style='text-decoration: none;'>
+                          <button type='submit' id='favoriButton' class='btn  mx-auto boutonFonctionnalite' style ='background: linear-gradient(to bottom, #0c0c0c, #1f1f1f); color: white;display: block; border: 2px solid linear-gradient(to bottom, #0c0c0c, #1f1f1f) !important;' >
+                              Aucun résultat trouver essayer une recherche approfondi 
+                            </button>
+                          </a>
+                      </div>
+
+                  ";
+              }
+            ?>
             
             <div class ="m-5" style ="border-left:2px solid #FFCC00; padding-left: 6px;" id="count"></div>
             <div id="pagination-container" style="display: flex; justify-content: center;">
