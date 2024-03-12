@@ -1,5 +1,5 @@
 <?php require "Views/view_navbar.php"; ?>
-<div class="container mt-5">
+<div class="container mt-5" style="margin-bottom: 200px;">
 <h1 style="margin-top:100px;">Qui sommes-nous ?</h1>
         <p style="margin-top:35px;">Nous sommes une équipe composée de Scander, Samy, Azzedine, Younes et Grace, nous suivons le parcours BUT informatique, en deuxième année à l'IUT de Villetaneuse.</p>
 
