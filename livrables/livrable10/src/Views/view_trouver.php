@@ -208,9 +208,8 @@
     <div id="fonctionalite" class="container">
         <div class="row">
             <div class="col-md-4">
-                <h1 class="carousel-text">Fonctionnalite</h1>
-                <p  style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
-                    Comme Recherche et Rapprochement
+                <h1 class="carousel-text">Fonctionnalité</h1>
+                <p  style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Découvrez toutes nos fonctionnalités, telles que la recherche et le rapprochement.
                 </p>
             </div>
                 <div class="mx-auto col-md-7">
@@ -237,7 +236,7 @@
                                 <h2>Rapprochement</h2>
                                 <a href='?controller=rapprochement' style="text-decoration: none;">
                                     <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
-                                        Decouvrir Rapprochement
+                                        Decouvrir Chemin le plus court
                                     </button>
                                 </a>
                             </div>

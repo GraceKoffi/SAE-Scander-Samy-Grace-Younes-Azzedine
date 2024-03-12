@@ -187,14 +187,6 @@
                                                             <div id="noteRange-error" style="display: none; color: red;">La note minimale doit être inférieure à la note maximale et ne pas être égaux.</div>
                                                     </div>
 
-                                                    <label class="labelfiltre form-label label">Nombre de votes</label>
-                                                    <div class="mb-5">
-                                                            <input type="text" class="mb-1 form-control filter-input" id="votesMin" name="votesMin" placeholder="Nombre de votes minimale">
-                                                            <div id="votesMin-error" style="display: none; color: red;">Veuillez entrer un nombre valide (min 0 - max 10000000)</div>
-                                                            <input type="text" class="form-control filter-input" id="votesMax" name="votesMax" placeholder="Nombre de votes maximale">
-                                                            <div id="votesMax-error" style="display: none; color: red;">Veuillez entrer un nombre valide (min 0 - max 10000000)</div>
-                                                            <div id="votesRange-error" style="display: none; color: red;">La nombre de votes minimale doit être inférieure au nombre de votes maximale et ne pas être égaux.</div>
-                                                    </div>
 
 
                                 </div><!-- filtre titre -->
@@ -274,9 +266,8 @@
     <div id="fonctionalite" class="container carousel">
         <div class="row">
             <div class="col-md-4">
-                <h1 class="carousel-text">Fonctionnalite</h1>
-                <p style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Decouvrir toutes nos fonctionnalite.
-                    Comme Rapprochement et Lien
+                <h1 class="carousel-text">Fonctionnalité</h1>
+                <p style="border-left:2px solid #FFCC00;padding-left: 6px;" class="carousel-textLabel">Découvrez toutes nos fonctionnalités, telles que le rapprochement et le lien
                 </p>
             </div>
                 <div class="mx-auto col-md-7">
@@ -303,7 +294,7 @@
                                 <h2>Rapprochement</h2>
                                 <a href='?controller=rapprochement' style="text-decoration: none;">
                                     <button type="submit" id="favoriButton" class="btn btn-warning mx-auto" style ="color: black ;display: block; margin-top: 10px;" >
-                                        Decouvrir Rapprochement
+                                        Decouvrir Chemin le plus court
                                     </button>
                                 </a>
                             </div>
