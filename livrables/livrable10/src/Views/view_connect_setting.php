@@ -1,24 +1,35 @@
-<!--Website: wwww.codingdung.com-->
 <?php
+require "Views/view_navbar.php";
 $connectionTime = $tab["connectiontime"];
 $formattedDateTime = date("d/m/Y H:i", strtotime($connectionTime));
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodingDung | Profile Template</title>
-    <link rel="stylesheet" href="style.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
 
-<body>
-    <style>
-        body {
-    background: #f5f5f5;
-    margin-top: 20px;
+<style>
+.settings{
+    background: linear-gradient(to bottom, #0c0c0c, #1f1f1f);
+    margin-bottom: 300px;
+}
+
+.settingsTitle{
+    margin-top: 100px;
+}
+
+.buttonValid{
+        background-color: #FFCC00 !important;
+        border-color: #FFCC00 !important;
+        color : black !important
+    }
+
+.buttonCancel{
+    color: #FFCC00 !important;
+}
+
+.buttonSettings {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    color: gold !important;
+    border-color: gold !important;
 }
 
 .ui-w-80 {
@@ -84,7 +95,8 @@ label.btn {
 }
 
 html:not(.dark-style) .account-settings-links .list-group-item.active {
-    background: transparent !important;
+    /* background: transparent !important; */
+    background: gold !important;
 }
 
 .account-settings-multiselect~.select2-container {
@@ -97,16 +109,18 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 }
 
 .light-style .account-settings-links .list-group-item.active {
-    color: #4e5155 !important;
+   /*  color: #4e5155 !important; */
+   color: gold !important;
 }
 
 .material-style .account-settings-links .list-group-item {
     padding     : 0.85rem 1.5rem;
     border-color: rgba(24, 28, 33, 0.03) !important;
+    color: #4e5155 !important;
 }
 
 .material-style .account-settings-links .list-group-item.active {
-    color: #4e5155 !important;
+    color: gold !important;
 }
 
 .dark-style .account-settings-links .list-group-item {
@@ -129,28 +143,18 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     </style>
 
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodingDung | Profile Template</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <div class="container light-style flex-grow-1 container-p-y settingsTitle">
+        <h1 class="font-weight-bold py-3 mb-4">
+            Parametre du compte
+        </h1>
 
-<body class="bg-light mt-5">
-
-    <div class="container light-style flex-grow-1 container-p-y">
-        <h4 class="font-weight-bold py-3 mb-4">
-            Account settings
-        </h4>
-
-        <div class="card overflow-hidden">
+        <div class="card overflow-hidden settings formulaire">
             <div class="row no-gutters row-bordered row-border-light">
                 <div class="col-md-3 pt-0">
                     <div class="list-group list-group-flush account-settings-links">
-                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Info</a>
+                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">Général</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Changer le mot de passe</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information supplémentaire</a>
                     </div>
                 </div>
 
@@ -160,37 +164,39 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                         <div class="tab-content">
                             <!-- General Tab -->
                             <div class="tab-pane fade active show" id="account-general">
-                                <hr class="border-light m-0">
                                 <div class="card-body">
                                     <!-- Username -->
                                     <div class="form-group">
-                                        <label class="form-label">Username</label>
+                                        <label class="form-label">Nom d'utilisateur</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control mb-1" value="<?php echo $_SESSION['username']; ?>" id="username" name="username" disabled>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-secondary" id="edit-username">Edit</button>
+                                                <button type="button" class="btn btn-outline-secondary buttonSettings" id="edit-username">Edit</button>
                                             </div>
                                         </div>
+                                        <div id="username-error" style="display: none; color: red;">Veuillez saisir un username correcte </div>
                                     </div>
                                     <!-- Name -->
                                     <div class="form-group">
-                                        <label class="form-label">Name</label>
+                                        <label class="form-label">Nom</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="<?php echo $tab["name"]; ?>" id="Name" name="Name" disabled>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-secondary" id="edit-name">Edit</button>
+                                                <button type="button" class="btn btn-outline-secondary buttonSettings" id="edit-name">Edit</button>
                                             </div>
                                         </div>
+                                        <div id="Name-error" style="display: none; color: red;">Veuillez saisir un nom correcte </div>
                                     </div>
                                     <!-- E-mail -->
                                     <div class="form-group">
                                         <label class="form-label">E-mail</label>
                                         <div class="input-group">
-                                            <input type="email" class="form-control mb-1" value="<?php echo $tab["email"]; ?>" id="email" name="email" disabled>
+                                            <input type="text" class="form-control mb-1" value="<?php echo $tab["email"]; ?>" id="email" name="email" disabled>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-secondary" id="edit-email">Edit</button>
+                                                <button type="button" class="btn btn-outline-secondary buttonSettings" id="edit-email">Edit</button>
                                             </div>
                                         </div>
+                                        <div id="email-error" style="display: none; color: red;">Veuillez saisir une adresse mail correcte</div>
                                     </div>
                                 </div>
                             </div>
@@ -200,18 +206,18 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <div class="card-body pb-2">
                                     <!-- Current Password -->
                                     <div class="form-group">
-                                        <label class="form-label">Current password</label>
+                                        <label class="form-label">Mot de passe actuel</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="<?php echo $_SESSION['password']; ?>" id="password" disabled>
                                         </div>
                                     </div>
                                     <!-- New Password -->
                                     <div class="form-group">
-                                        <label class="form-label">New password</label>
+                                        <label class="form-label">Nouveau mot de passe</label>
                                         <div class="input-group">
                                             <input type="password" class="form-control" name="newPassword" id="newPassword" name="newPassword" disabled>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-secondary" id="edit-new-password">Edit</button>
+                                                <button type="button" class="btn btn-outline-secondary buttonSettings" id="edit-new-password">Edit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -223,38 +229,36 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <div class="card-body pb-2">
                                     <!-- Country -->
                                     <div class="form-group">
-                                        <label class="form-label">Country</label>
+                                        <label class="form-label">Pays</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="<?php echo $tab["country"] ?>" id="country" name="country" disabled>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-secondary" id="edit-country">Edit</button>
+                                                <button type="button" class="btn btn-outline-secondary buttonSettings" id="edit-country">Edit</button>
                                             </div>
                                         </div>
+                                        <div id="country-error" style="display: none; color: red;">Veuillez saisir un pays correcte</div>
                                     </div>
                                     <!-- Last Connection -->
                                     <div class="form-group">
-                                        <label class="form-label">Last Connection</label>
+                                        <label class="form-label">Derniére connection</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="<?php echo $formattedDateTime; ?>" id="last-connection" disabled>
-                                            <span class="input-group-addon">
-                                                <i class="far fa-calendar"></i>
-                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="text-right mt-3">
-                            <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>&nbsp;
-                            <a href="?controller=connect" class="btn btn-default" id="cancel-changes">Cancel</a>
+                        <div style="margin-bottom: 10px"class="text-right mt-3">
+                            <button type="submit" class="btn btn-primary buttonValid" id="save-changes">Sauvegarder</button>&nbsp;
+                            <a href="?controller=connect" class="btn btn-default buttonCancel" id="cancel-changes">Annuler</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+<?php require "Views/view_footer.php"; ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function toggleFieldAndHideButton(editBtn, inputField) {
@@ -294,12 +298,60 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                 toggleFieldAndHideButton(editCountryBtn, countryInput);
             });
         });
+
+        $(document).ready(function(){
+            handleFormValidation();
+        });
+
+        function handleFormValidation() {
+    $('form').submit(function (e) {
+        var isValid = true;
+
+        // Check only enabled input fields
+        $('input:enabled').each(function () {
+            var field = $(this);
+            var value = field.val().trim();
+
+            // Add your validation logic here
+            // Example validation: check if email is valid
+            if (field.attr('id') === 'email' && !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+                field.addClass('is-invalid');
+                $('#email-error').show();
+                isValid = false;
+            }
+
+            if(field.attr('id') === 'username' && !/^[a-zA-Z]+$/.test(value)){
+                field.addClass('is-invalid');
+                $('#username-error').show();
+                isValid = false;
+            }
+
+            if(field.attr('id') === 'Name' && !/^[a-zA-Z]+$/.test(value)){
+                field.addClass('is-invalid');
+                $('#Name-error').show();
+                isValid = false;
+            }
+
+            if(field.attr('id') === 'country' && !/^[a-zA-Z]+$/.test(value)){
+                field.addClass('is-invalid');
+                $('#country-error').show();
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault(); // Prevent form submission if invalid
+        }
+    });
+
+    $('input').on('input', function () {
+        var elementId = '#' + $(this).attr('id');
+        var errorId = '#' + $(this).attr('id') + '-error';
+        $(elementId).removeClass('is-invalid');
+        $(errorId).hide();
+    });
+}
+
+
+
     </script>
-
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-
-</html>
