@@ -24,9 +24,11 @@ overflow : hidden;
         <h1>Résultats "<?= e($titre) ?>" dans "<?= e($category) ?>"  </h1>
         <?php endif; ?>
         <p>
-        <a href="?controller=recherche">
-        <button type="submit" id="favoriButton" class="bouton-favori" style =" color: white;display: block;" >&#8592; Realiser une nouvelle recherche</button>
-
+         
+        <a href="?controller=recherche" style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+            &#8592; Realiser une nouvelle recherche
+        </button>
         </a>
         </p>
     </div>

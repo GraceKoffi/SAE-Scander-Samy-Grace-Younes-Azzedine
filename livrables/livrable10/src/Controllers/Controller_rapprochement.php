@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 1000); 
 Class Controller_rapprochement extends Controller{
     public function action_fom_rapprochement()
     {
@@ -155,40 +156,52 @@ Class Controller_rapprochement extends Controller{
     }
 
     public function apiCall($array, $arraySearch){
-
         $jsonData = json_encode($array);
-    
+        
         // URL de l'API
         $apiUrl = 'http://127.0.0.1:5001/result';
+        
+        // Initialiser cURL
+        $ch = curl_init($apiUrl);
     
         // Configuration des options pour la requête HTTP POST
         $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json",
-                'method'  => 'POST',
-                'content' => $jsonData
-            ),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $jsonData,
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+            CURLOPT_TIMEOUT => 1000, // Temps d'attente en secondes
         );
     
-        // Créer un contexte pour la requête HTTP POST
-        $context  = stream_context_create($options);
+        // Appliquer les options à cURL
+        curl_setopt_array($ch, $options);
+    
+       
     
         // Exécuter la requête HTTP POST et récupérer la réponse
-        $apiResponse = @file_get_contents($apiUrl, false, $context); // Utilisation de @ pour supprimer les avertissements
+        $apiResponse = curl_exec($ch);
     
-        if ($apiResponse !== false) {
+
+    
+        // Vérifier s'il y a des erreurs
+        if (curl_errno($ch)) {
+
+            $tab = ["tab" => "Une Erreur est survenue"];
+            $this->render("error", $tab);
+        } else {
             // Traiter la réponse de l'API (la réponse est généralement en format JSON)
             $result = json_decode($apiResponse, true);
+    
             // Faire quelque chose avec le résultat
             $result[] = $arraySearch;
             $tab = ["result" => $result];
             $this->render("rapprochement_result", $tab);
         }
-        else{
-            $tab = ["tab" => "Une Erreur est survenu"];
-            $this->render("error", $tab);
-        }
+    
+        // Fermer la session cURL
+        curl_close($ch);
     }
+    
 
     public function action_default()
     {

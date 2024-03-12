@@ -18,9 +18,11 @@
         <h1>Résultats "<?= e($titre) ?>"</h1>
         <?php endif; ?>
         <p>
-          <a href="?controller=recherche">
-          <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
-          </a>
+        <a href="?controller=recherche" style="text-decoration: none;">
+        <button type="submit" id="favoriButton" class="btn btn-warning boutonFonctionnalite" style =" color: white;display: block;" >
+            &#8592; Realiser une nouvelle recherche
+        </button>
+        </a>
           </p>
     </div>
 </div>

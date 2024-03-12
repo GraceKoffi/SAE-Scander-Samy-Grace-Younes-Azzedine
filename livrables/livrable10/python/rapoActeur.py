@@ -14,6 +14,7 @@ class rapoActeur:
     modeSql: list = field(default_factory=lambda: [])
     resultQueue : queue.Queue = field(default_factory=queue.Queue)
     resultPath: queue.Queue = field(default_factory=queue.Queue)
+    multiPathForMultiMatch: queue.Queue = field(default_factory=queue.Queue)
     condition : threading.Condition = field(default_factory=threading.Condition)
     traitementAccepter: bool = field(default_factory=lambda: False)
     cheminF: tuple = field(default_factory=lambda: ())
@@ -24,7 +25,10 @@ class rapoActeur:
     chemin_fin: list = field(default_factory=lambda: [])
     con: psycopg2.extensions.connection = field(init=False) 
     branchTraiteThreadDebut: dict = field(default_factory=lambda: {}) 
-    branchTraiteThreadFin: dict = field(default_factory=lambda: {}) 
+    branchTraiteThreadFin: dict = field(default_factory=lambda: {})
+    listeForGetNextBegin: list = field(default_factory=lambda: [])
+    listeForGetNextEnd: list = field(default_factory=lambda: [])
+     
 
 
     def __post_init__(self):
@@ -77,52 +81,125 @@ class rapoActeur:
         else :
             self.branchTraiteThreadFin[branch] = self.i
             return True
-            
+    
+    def findKeyFromSpecificDict(self, dic: dict, val: str):
+        return [key for key, value in dic.items() if val in value]
+        
+    def findKeysWithValueBegin(self, val: str):
+        resultForBegin: list = []
+        for global_key, inner_dict in self.dic_debut.items():
+            for local_key, value_list in inner_dict.items():
+                if val in value_list:
+                    resultForBegin.append([global_key, local_key, val])
+        return resultForBegin
+    
+    def findKeysWithValueEnd(self, val: str):
+        resultForEnd: list = []
+        for global_key, inner_dict in self.dic_fin.items():
+            for local_key, value_list in inner_dict.items():
+                if val in value_list:
+                    resultForEnd.append([global_key, local_key, val])
+        return resultForEnd
+    
+    def getNextIndexBegin(self, vals: list):
+        for val in vals :
+            result: int = self.findKeysWithValueBegin(val)
+            if len(result) > 1 :
+                if not min(result) in self.listeForGetNextBegin:
+                    self.listeForGetNextBegin.append(min(result))
+        
+        result = min(self.listeForGetNextBegin)
+        index = result[0]
+        self.chemin_debut.append(result[2])
+        self.chemin_debut.append(result[1])
+        return [index, result[1]]
+    
+    def getNextIndexEnd(self, vals: list):
+        for val in vals :
+            result: int = self.findKeysWithValueEnd(val)
+            if len(result) > 1 :
+                if not min(result) in self.listeForGetNextEnd:
+                    self.listeForGetNextEnd.append(min(result))
+        
+        result = min(self.listeForGetNextEnd)
+        index = result[0]
+        self.chemin_fin.append(result[2])
+        self.chemin_fin.append(result[1])
+        return [index, result[1]]
 
+
+    def MultiMatchPath(self, indexDicDebut : int, indexDicFin: int, valeur_branch_dicDebut : list, valeur_branch_dicFin: list) -> list :
+        path: list = []
+        while indexDicDebut > 0 :
+            key: list = self.getNextIndexBegin(valeur_branch_dicDebut)
+            indexDicDebut: int = key[0]
+            valeur_branch_dicDebut: list = self.dic_debut[indexDicDebut][key[1]]
+        
+        while indexDicFin > 0 :
+            key = self.getNextIndexEnd(valeur_branch_dicFin)
+            indexDicFin = key[0]
+            valeur_branch_dicFin = self.dic_fin[indexDicFin][key[1]]
+        
+        self.chemin_debut.append(self.nconstDebut)
+        self.chemin_debut = self.chemin_debut[::-1]
+        
+        for element in self.chemin_debut :
+            if self.chemin_debut.count(element) > 1:
+                self.chemin_debut.remove(element)
+        for element in self.chemin_fin:
+            if self.chemin_fin.count(element) > 1:
+                self.chemin_fin.remove(element)
+        
+        
+        for e in self.chemin_debut:
+            path.append(e)
+        for e in self.chemin_fin:
+            path.append(e)
+        path.append(self.nconstFin)
+        self.listeForGetNextBegin = []
+        self.listeForGetNextEnd = []
+        return path
+    
+    def getAccuracyOfPath(self, path: list) -> int :
+        fautes = 0
+        referentiel = path[0][0]
+        for i in range(1, len(path)):
+            if referentiel == path[i][0]:
+                fautes += 1
+            referentiel = path[i][0]
+        return fautes
+
+    def selectorBestPath(self, listPath: list) -> list :
+        pathSelected: any = ''
+        size: int = len(listPath[0])
+        accuracy: int = self.getAccuracyOfPath(listPath[0])
+        for path in listPath:
+            if len(path) <= size and self.getAccuracyOfPath(path) <= accuracy:
+                pathSelected = path
+        return pathSelected
+        
 
     def threadPathBegin(self, indexDicDebut : int, valeur_branch_dicDebut: list) -> None:
         
         dic = {"type" : "debut"}
-        indexDicDebut-=1
-        while indexDicDebut >=0:
-            tab = []
-            keys = list(self.dic_debut[indexDicDebut].keys())
-            for key in keys :
-                for valeur in valeur_branch_dicDebut:
-                    if(valeur in self.dic_debut[indexDicDebut][key]):
-                        tab.append(key)
-                        self.chemin_debut.append(valeur)
-                        self.chemin_debut.append(key)
-            valeur_branch_dicDebut = []
-            for e in tab:
-                for v in self.dic_debut[indexDicDebut][e] :
-                    valeur_branch_dicDebut.append(v)
-            indexDicDebut-=1
+        while indexDicDebut > 0 :
+            key: list = self.getNextIndexBegin(valeur_branch_dicDebut)
+            indexDicDebut: int = key[0]
+            valeur_branch_dicDebut: list = self.dic_debut[indexDicDebut][key[1]]
+        
         dic["result"] = self.chemin_debut
         self.resultPath.put(dic)
     
     def threadPathEnd(self, indexDicFin : int, valeur_branch_dicFin: list) -> None:
     
         dic = {"type" : "fin"}
-        indexDicFin-=1
-        while indexDicFin >= 0:
-            tab = []
-            keys = list(self.dic_fin[indexDicFin].keys())
-            for key in keys :
-                for valeur in valeur_branch_dicFin:
-                    if(valeur in self.dic_fin[indexDicFin][key]):
-                        tab.append(key)
-                        self.chemin_fin.append(valeur)
-                        self.chemin_fin.append(key)
-            valeur_branch_dicFin = []
-            for e in tab:
-                for v in self.dic_fin[indexDicFin][e] :
-                    valeur_branch_dicFin.append(v)
-            indexDicFin-=1
+        while indexDicFin > 0 :
+            key = self.getNextIndexEnd(valeur_branch_dicFin)
+            indexDicFin = key[0]
+            valeur_branch_dicFin = self.dic_fin[indexDicFin][key[1]]
+        
         dic["result"] = self.chemin_fin
         self.resultPath.put(dic)
-
-
 
 
     def path(self, branchCommunDetected={}, nodeCommunDetected=[]) -> list:
@@ -141,19 +218,70 @@ class rapoActeur:
                 ]
 
         if nodeCommunDetected :
-            valeur_branch_dicDebut = self.dic_debut[indexDicDebut][nodeCommunDetected[0]]
-            valeur_branch_dicFin = self.dic_fin[indexDicFin][nodeCommunDetected[0]]
-            self.chemin_debut.append(nodeCommunDetected[0])
+            if len(nodeCommunDetected) > 0 :
+                nbPossibility: int = len(nodeCommunDetected)
+                result_paths: list = []
+                for i in range (0, nbPossibility):
+                    valeur_branch_dicDebut = self.dic_debut[indexDicDebut][nodeCommunDetected[i]]
+                    valeur_branch_dicFin = self.dic_fin[indexDicFin][nodeCommunDetected[i]]
+                    self.chemin_debut.append(nodeCommunDetected[i])
+                    path = self.MultiMatchPath(indexDicDebut, indexDicFin, valeur_branch_dicDebut, valeur_branch_dicFin)
+                    result_paths.append(path)
+                    self.chemin_debut = []
+                
+                return self.selectorBestPath(result_paths)
+
+            else :
+                valeur_branch_dicDebut = self.dic_debut[indexDicDebut][nodeCommunDetected[0]]
+                valeur_branch_dicFin = self.dic_fin[indexDicFin][nodeCommunDetected[0]]
+                self.chemin_debut.append(nodeCommunDetected[0])
+        
         elif branchCommunDetected :
-            key_debut = list(branchCommunDetected['debut'].keys())
-            key_fin = list(branchCommunDetected['fin'].keys())
-            valeur_branch_dicDebut = self.dic_debut[indexDicDebut][key_debut[0]]
-            valeur_branch_dicFin = self.dic_fin[indexDicFin][key_fin[0]]
-            self.chemin_fin.append(branchCommunDetected['commun'][0])
-            self.chemin_fin.append(key_fin[0])
-            self.chemin_debut.append(key_debut[0])
-            self.chemin_debut.append(branchCommunDetected['commun'][0])
-            #self.chemin_debut.append(self.nconstDebut)
+            if len(branchCommunDetected['commun']) > 0:
+                nbThread: int = len(branchCommunDetected['commun'])
+                threads: list = []
+                #key_debut = list(branchCommunDetected['debut'].keys())
+                #key_fin = list(branchCommunDetected['fin'].keys())
+                #valeur_branch_dicDebut = self.dic_debut[indexDicDebut][random.choice(key_debut)]
+                #valeur_branch_dicFin = self.dic_fin[indexDicFin][random.choice(key_fin)]
+
+                result_paths: list = []
+                for i in range (0, nbThread):
+                    key_debut = self.findKeyFromSpecificDict(branchCommunDetected['debut'], branchCommunDetected['commun'][i])
+                    key_fin = self.findKeyFromSpecificDict(branchCommunDetected['fin'], branchCommunDetected['commun'][i])
+                    if len(key_debut) - i != -1 and len(key_fin) - i != -1 :
+                        valeur_branch_dicDebut = self.dic_debut[indexDicDebut][key_debut[i]]
+                        valeur_branch_dicFin = self.dic_debut[indexDicFin][key_fin[i]]
+                    else :
+                        valeur_branch_dicDebut = self.dic_debut[indexDicDebut][key_debut[len(key_debut) - 1]]
+                        valeur_branch_dicFin = self.dic_debut[indexDicFin][key_fin[len(key_fin) - 1]]
+
+                    #self.chemin_fin.append(branchCommunDetected['commun'][i])
+                    if len(key_debut) - i != -1 and len(key_fin) - i != -1 :
+                        #self.chemin_fin.append((key_fin[i]))
+                        self.chemin_debut.append(key_debut[i])
+                    else :
+                        #self.chemin_fin.append((key_fin[len(key_fin) - 1]))
+                        self.chemin_debut.append(key_debut[len(key_debut) - 1])
+                        
+                    path = self.MultiMatchPath(indexDicDebut, indexDicFin, valeur_branch_dicDebut, valeur_branch_dicFin)
+                    result_paths.append(path)
+                    self.chemin_debut = []
+                    self.chemin_fin = []
+                
+                return self.selectorBestPath(result_paths)
+
+            
+            else :
+                key_debut = self.findKeyFromSpecificDict(branchCommunDetected['debut'], branchCommunDetected['commun'][0])
+                key_fin = self.findKeyFromSpecificDict(branchCommunDetected['fin'], branchCommunDetected['commun'][0])
+                valeur_branch_dicDebut = self.dic_debut[indexDicDebut][key_debut[0]]
+                valeur_branch_dicFin = self.dic_fin[indexDicFin][key_fin[0]]
+                #self.chemin_fin.append(branchCommunDetected['commun'][0])
+                #self.chemin_fin.append(key_fin[0])
+                self.chemin_debut.append(key_debut[0])
+                #self.chemin_debut.append(branchCommunDetected['commun'][0])
+                #self.chemin_debut.append(self.nconstDebut)
         #S'attaque sur le dic d'en dessous, attention mets la relation X à participé à Y
         path = []
           
@@ -326,7 +454,7 @@ class rapoActeur:
                 #result = []
                 nodeCommunDetected = self.communNode()
                 branchCommunDetected = self.communBranch()
-                if nodeCommunDetected:
+                if nodeCommunDetected:  
                     self.cheminF = self.path({}, nodeCommunDetected)
                     self.traitementAccepter = True
                     self.condition.notify_all()
@@ -370,7 +498,6 @@ class rapoActeur:
         # Attente de la fin des threads de création
         thread_de_recherche_debut.join()
         thread_de_recherche_fin.join()
-
         # Attente de la fin du thread de traitement
         thread_de_validation.join()
         tac = time.time()
