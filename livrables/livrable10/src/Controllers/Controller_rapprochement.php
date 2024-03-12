@@ -170,7 +170,7 @@ Class Controller_rapprochement extends Controller{
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $jsonData,
             CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
-            CURLOPT_TIMEOUT => 1000, // Temps d'attente en secondes
+            CURLOPT_TIMEOUT => 10000, // Temps d'attente en secondes
         );
     
         // Appliquer les options à cURL
