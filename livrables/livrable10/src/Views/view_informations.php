@@ -180,7 +180,10 @@
         border-radius: 10px;
         transform: scale(0.7);
     }
+    .no-scroll{
 
+overflow : hidden;
+}
 </style>
 
 <?php
@@ -502,9 +505,26 @@ else if(isset($_GET['filmId'])){
     </div>
 </div>
 
+
+
+
+<div id="loadingOverlay">
+    <div class="loader"></div>
+</div>
+
 <script src="Js/function.js"></script>
 <script>
 
+function showLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+  window.scrollTo(0, 0);
+  document.body.classList.add("no-scroll"); // Empêche le défilement
+}
+
+function hideLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "none";
+  document.body.classList.remove("no-scroll"); // Réactive le défilement
+}
 
 
 
@@ -607,6 +627,7 @@ function filterEpisodesBySeason() {
 
 
     async function displayMovies(episode) {
+        showLoadingOverlay();
     const list = document.getElementById("movie-list");
     list.innerHTML = ""; 
 
@@ -632,7 +653,7 @@ function filterEpisodesBySeason() {
         list.innerHTML += cardContent;
     }
 
-
+    hideLoadingOverlay();
 }
 
 function loadMovieDetails(id_imdb) {
