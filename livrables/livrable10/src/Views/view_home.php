@@ -276,6 +276,63 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
 </div>
 
  </div>
+ <h3 class="m-5" style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top: 200px !important;"> Fonctionnalités </h3>
+
+<div class="feature-container" style="margin-bottom: 200px;">
+  <div class="feature-box">
+    <img src="./Images/searchjaune.png" alt="Recherche Avancée" class="feature-icon">
+    <div class="feature-text">
+      
+      <p style="margin: 50px;">
+      Explorez l'univers envoûtant de FinderCine, où notre fonctionnalité de recherche avancée ouvre les portes d'un vaste océan de divertissement. Que votre curiosité vous guide vers des chefs-d'œuvre cinématographiques ou des perles méconnues, notre plateforme vous accompagne à chaque étape de votre exploration, vous offrant une expérience cinématographique sur mesure.
+
+
+
+
+</p>
+<a href='?controller=recherche' style="text-decoration: none;">     
+<button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+      Recherche Avancée
+        </button>
+    </a>
+    </div>
+  </div>
+  <div class="feature-box">
+    <img src="./Images/lienjaune.png" alt="Liens" class="feature-icon">
+    <div class="feature-text">
+    <p style="margin: 50px;">
+Explorez le réseau fascinant des collaborations artistiques et découvrez les connexions entre vos films préférés sur grand écran. Que vous recherchiez des films partagés par des acteurs spécifiques ou que vous souhaitiez repérer les talents communs à différentes productions, notre fonctionnalité "Liens" est conçue pour mettre en lumière ces parcours croisés passionnants.
+
+
+
+
+</p>
+      <a href='?controller=trouver' style="text-decoration: none;">
+      <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+     Liens
+        </button>
+                                    </a>
+    </div>
+  </div>
+  <div class="feature-box">
+    <img src="./Images/networkjaune.png" alt="Chemin le plus court" class="feature-icon">
+    <div class="feature-text">
+      <p style="margin: 50px;">"Chemin le plus court" vous invite à tracer les sentiers cachés qui relient vos étoiles et spectacles préférés. Que ce soit pour cartographier les collaborations entre des acteurs spécifiques ou pour déceler les fils ténus qui lient différentes œuvres, notre outil dévoile les itinéraires les plus directs et les associations les plus inattendues de l'univers du divertissement.</p>
+      <a href='?controller=rapprochement' style="text-decoration: none;">
+      <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+Chemins le plus court       
+ </button>
+</a>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+    <div class="row mx-auto">
+        <h1 class="m-5 text-center col-md-11" style="color: #FFCC00"><img src="./Images/icons8-movie-100.png" style="transform: scale(0.5);">Catalogue<img src="./Images/icons8-movie-100.png" style="transform: scale(0.5);"></h1>
+    </div>
+</div>
+
+
 <?php
     if(isset($_SESSION['username'])){
         $m = Model::getModel();
@@ -283,8 +340,8 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
     }
 ?>
  <?php foreach ($filmsParGenre as $index => $movieGroup) : ?>
-    <div class="container films-section" style="margin-top:20px;">
-        <h5 style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top:80px;"><?= $index ?></h5>
+    <div class="container films-section" style="">
+        <h3 style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top: 50px"><?= $index ?></h3>
         <div class="scrolling-container">
             <div class="scrolling-wrapper">
 
@@ -365,40 +422,40 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
     </div>
 <?php endforeach; ?>
 
-<h3 class="m-5" style="border-left:2px solid #FFCC00;padding-left: 6px;"> Fonctionnalités </h3>
+<h3 class="m-5" style="border-left:2px solid #FFCC00;padding-left: 6px; margin-top: 50px !important;"> Fonctionnalités Avancées</h3>
 
 <div class="feature-container">
   <div class="feature-box">
-    <img src="./Images/searchjaune.png" alt="Recherche Avancée" class="feature-icon">
+    <img src="./Images/icons8-login-100.png" alt="Recherche Avancée" class="feature-icon" style="">
     <div class="feature-text">
       
-      <p>
-Plongez dans l'univers captivant de Findercine, où notre fonctionnalité de recherche avancée dévoile un monde infini de divertissement, guidant chaque curiosité vers sa destination cinématographique idéale...</p>
-<a href='?controller=recherche' style="text-decoration: none;">     
+      <p style="margin: 50px;">
+      Notre fonctionnalité de compte, vous offre bien plus qu'un simple accès à votre compte. En effet, elle vous permet de profiter pleinement de votre expérience cinématographique en offrant une historisation de vos activités, vous permettant ainsi de retrouver facilement les films que vous avez consultés. Mais ce n'est pas tout ! Vous pouvez également mettre vos films préférés en favoris pour les retrouver rapidement</p>
+<a href='?controller=connect' style="text-decoration: none;">     
 <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
-      Recherche Avancée
+      Connectez-vous
         </button>
     </a>
     </div>
   </div>
   <div class="feature-box">
-    <img src="./Images/lienjaune.png" alt="Liens" class="feature-icon">
+    <img src="./Images/icons8-mail-50.png" alt="Liens" class="feature-icon">
     <div class="feature-text">
-    <p>Plongez dans le réseau des collaborations artistiques et révélez les liens entre vos favoris du grand écran. Que ce soit pour trouver les films partagés par des acteurs spécifiques ou pour repérer les talents communs à différentes productions, notre fonction "Liens" est conçue pour éclairer ces parcours croisés passionnants.</p>
-      <a href='?controller=trouver' style="text-decoration: none;">
+    <p style="margin: 50px;">Notre fonctionnalité de contact vous permet d'entrer en communication directe avec notre équipe dévouée. Que vous ayez des questions, des suggestions ou des commentaires, nous sommes là pour vous aider. Notre interface conviviale vous permet d'envoyer vos messages rapidement et facilement, assurant ainsi une réponse rapide et efficace. Nous sommes impatients de vous entendre et de vous offrir une expérience cinématographique encore plus exceptionnelle.</p>
+      <a href='?controller=contact' style="text-decoration: none;">
       <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
-     Liens
+     Contactez-nous
         </button>
                                     </a>
     </div>
   </div>
   <div class="feature-box">
-    <img src="./Images/networkjaune.png" alt="Chemin le plus court" class="feature-icon">
+    <img src="./Images/icons8-reset-64.png" alt="Chemin le plus court" class="feature-icon">
     <div class="feature-text">
-      <p>"Chemin le plus court" vous invite à tracer les sentiers cachés qui relient vos étoiles et spectacles préférés. Que ce soit pour cartographier les collaborations entre des acteurs spécifiques ou pour déceler les fils ténus qui lient différentes œuvres, notre outil dévoile les itinéraires les plus directs et les associations les plus inattendues de l'univers du divertissement.</p>
-      <a href='?controller=rapprochement' style="text-decoration: none;">
+      <p style="margin: 50px;">Notre fonctionnalité de réinitialisation de mot de passe vous offre une expérience sécurisée et sans tracas. Si jamais vous oubliez votre mot de passe, notre système vous guide étape par étape pour le réinitialiser en toute sécurité. Nous utilisons des protocoles de sécurité avancés pour garantir la confidentialité de vos informations personnelles à chaque étape du processus. Avec FinderCine, vous pouvez avoir l'esprit tranquille, sachant que votre compte est protégé et que vous pouvez facilement récupérer l'accès en cas de besoin. </p>
+      <a href='?controller=resetPassWord' style="text-decoration: none;">
       <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
-Chemins le plus court       
+      Renitialisez votre mot de passe      
  </button>
 </a>
     </div>
