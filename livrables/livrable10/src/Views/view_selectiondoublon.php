@@ -1,5 +1,10 @@
 <?php require "Views/view_navbar.php"; ?>
+<style>
+.no-scroll{
 
+overflow : hidden;
+}
+</style>
 
 <h1 style="margin-top :100px">Sélection des éléments</h1>
 <p>Veuillez choisir un élément de chaque tableau</p>
@@ -38,9 +43,24 @@
         <button type="submit" id="buttondoublon" class="btn btn-warning mt-3 mx-auto" style =" color: white;display: block;" >Confirmer les deux éléments</button>
 
     </form>
-    
+    <div id="loadingOverlay">
+    <div class="loader"></div>
+</div>
 <script src="Js/function.js"></script>
 <script>
+
+
+function showLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+  window.scrollTo(0, 0);
+  document.body.classList.add("no-scroll"); // Empêche le défilement
+}
+
+function hideLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "none";
+  document.body.classList.remove("no-scroll"); // Réactive le défilement
+}
+
  var titre1 = "<?php echo $titre1; ?>";
  var titre2 = "<?php echo $titre2; ?>";
  errorDisplayed = false;
@@ -57,6 +77,7 @@
 
 
 async function displayMovies() {
+    showLoadingOverlay();
     const list1 = document.getElementById("movie-list1");
     const list2 = document.getElementById("movie-list2");
     const paginationContainer1 = document.getElementById("pagination-container1");
@@ -121,6 +142,7 @@ async function displayMovies() {
             list2.innerHTML += cardContent;
         }
     }
+    hideLoadingOverlay();
     submitButton.disabled = errorDisplayed;
     renderPagination1(movies1);
     renderPagination2(movies2);

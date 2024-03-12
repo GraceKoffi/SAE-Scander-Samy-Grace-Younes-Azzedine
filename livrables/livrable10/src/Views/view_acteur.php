@@ -479,9 +479,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let imageback = document.getElementById("imageCourante");
     let couvertures = [];
     const acteur = <?php echo json_encode($info); ?>;
-    document.querySelector('.nom').textContent = acteur.primaryname;
-    document.querySelector('.annee').textContent = acteur.birthyear;
-    document.querySelector('.metier').textContent = acteur.primaryprofession;
+    document.querySelector('.nom').textContent = acteur.primaryname || "Inconnu";
+    document.querySelector('.annee').textContent = acteur.birthyear || "Inconnu";
+    document.querySelector('.metier').textContent = acteur.primaryprofession || "Inconnu";
 
 
 

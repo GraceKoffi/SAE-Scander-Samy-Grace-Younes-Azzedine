@@ -88,11 +88,10 @@
 </div> -->
 <div id="rapprochement" class="container">
     <div class="row align-items-center">   
-            <h1 class="titreRapprochement">Rapprochement</h1>
+            <h1 class="titreRapprochement">Chemin le plus court</h1>
             
-            <p  style="border-left:2px solid #FFCC00;padding-left: 6px; padding-bottom : 20px" class="paragrapheRapprochement">Avec "Rapprochement" sur Findercine, explorez profondément les interconnexions des réseaux du divertissement pour mettre en lumière les liens surprenants entre vos personnalités et titres favoris. 
-                Que vous souhaitiez révéler les projets partagés entre deux acteurs, plonger dans les collaborations entre divers titres, 
-                ou dévoiler les connexions insoupçonnées dans le monde du spectacle, "Rapprochement" se présente comme l'outil idéal.</p>
+            <p  style="padding-left: 6px; padding-bottom : 20px;font-size:20px;" class="paragrapheRapprochement">Découvrez "Chemin le plus court" sur Findercine et parcourez les réseaux d'interactions du monde du divertissement. Cet outil astucieux vous permet de dévoiler les connexions les moins évidentes entre vos artistes et œuvres de prédilection. Que ce soit pour identifier les collaborations entre deux acteurs ou tracer les itinéraires croisés de différents projets cinématographiques, "Chemin le plus court" est votre allié pour révéler les chemins les plus courts et les plus surprenants qui unissent le septième art.
+</p>
         </div>    
     </div>
 </div>
@@ -110,8 +109,8 @@
     <div class="row">
 <div class="formulaire mx-auto col-md rapprochement">
         <div class="d-flex align-items-center">
-        <img id="imageRapprochement" src="./images/data1.png" alt="Filtre">
-        <h3 class="m-5">Rapprochement</h3>
+        <img id="imageRapprochement" src="./Images/networkjaune.png" alt="Filtre">
+        <h3 class="m-5">Chemin le plus court</h3>
         </div>
         <form action="?controller=rapprochement&action=rapprochement" method="post" class="m-5">
 

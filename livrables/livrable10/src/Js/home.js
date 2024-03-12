@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         groups[currentIndex].style.display = 'block'; // Affiche le prochain groupe
     }, 3000); // Change toutes les 3 secondes
 });
-
 document.addEventListener("DOMContentLoaded", function() {
     const apiKey = '9e1d1a23472226616cfee404c0fd33c1';
 
@@ -38,20 +37,21 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('img[data-tconst]').forEach(img => {
         const tconst = img.getAttribute('data-tconst');
         
-        // Utiliser l'endpoint de recherche multi de TMDB pour trouver des informations basées sur tconst
-        const url = `https://api.themoviedb.org/3/find/${tconst}?api_key=${apiKey}&language=en-US&external_source=imdb_id`;
+        const url = `https://api.themoviedb.org/3/find/${tconst}?api_key=${apiKey}&language=fr&external_source=imdb_id`;
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                let imagePath = './images/depannage.jpg'; // Chemin de l'image par défaut
+                let imagePath = './images/depannage.jpg'; // Chemin par défaut
 
-                ['movie_results', 'person_results', 'tv_results', 'tv_episode_results', 'tv_season_results'].forEach(resultType => {
-                    if (data[resultType].length > 0 && data[resultType][0].poster_path) {
-                        imagePath = `https://image.tmdb.org/t/p/w500${data[resultType][0].poster_path}`;
-                        return;
+                for (const resultType of ['movie_results', 'person_results', 'tv_results', 'tv_episode_results', 'tv_season_results']) {
+                    if (data[resultType].length > 0 && (data[resultType][0].poster_path || data[resultType][0].still_path)) {
+                        const path = data[resultType][0].poster_path || data[resultType][0].still_path;
+                        imagePath = `https://image.tmdb.org/t/p/w500${path}`;
+                        // Assigner l'ID TMDB ici
+                        break;
                     }
-                });
+                }
 
                 img.src = imagePath;
             })
@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Erreur lors de la récupération des images:', error);
                 img.src = './images/depannage.jpg';
             });
-            
     });
 });
 
@@ -67,15 +66,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const apiKey = '9e1d1a23472226616cfee404c0fd33c1';
     const modal = document.getElementById('videoModal');
     const iframe = document.getElementById('videoFrame');
+    const videoUnavailable = document.getElementById('videoUnavailable');
 
     document.addEventListener('click', function(event) {
-        // Vérifier si le clic n'est pas sur la modale et que la modale est affichée
         if (!modal.contains(event.target) && modal.style.display === 'block') {
-            modal.style.display = 'none'; // Cacher la modale
-            iframe.src = ''; // Réinitialiser la source de l'iframe pour arrêter la vidéo
+            modal.style.display = 'none';
+            iframe.style.display = 'none';
+            iframe.src = '';
+            videoUnavailable.style.display = 'none';
         }
     });
-    // Attacher des événements click aux liens "Bande-annonce"
+
     document.querySelectorAll('.openModal').forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
@@ -86,31 +87,42 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.results.length > 0) {
-                        // Essayer de trouver une vidéo de type "Trailer" en premier
                         let trailer = data.results.find(video => video.type.toLowerCase() === "trailer" && video.site.toLowerCase() === "youtube");
-                        // Si aucun trailer n'est trouvé, utiliser la première vidéo disponible
                         let videoData = trailer || data.results[0];
 
                         if (videoData && videoData.site.toLowerCase() === 'youtube') {
                             const videoUrl = `https://www.youtube.com/embed/${videoData.key}?autoplay=1`;
-                            document.getElementById('videoFrame').src = videoUrl;
-                            document.getElementById('videoModal').style.display = 'block';
+                            iframe.src = videoUrl;
+                            iframe.style.display = 'block';
+                            videoUnavailable.style.display = 'none';
+                            modal.style.display = 'block';
+                        } else {
+                            iframe.style.display = 'none';
+                            videoUnavailable.style.display = 'block';
+                            modal.style.display = 'block';
                         }
+                    } else {
+                        iframe.style.display = 'none';
+                        videoUnavailable.style.display = 'block';
+                        modal.style.display = 'block';
                     }
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    console.log(error);
+                    iframe.style.display = 'none';
+                    videoUnavailable.style.display = 'block';
+                    modal.style.display = 'block';
+                });
         });
     });
 
-
-
-    // Fermer la modal
     document.getElementById('closeModal').addEventListener('click', function() {
-        document.getElementById('videoModal').style.display = "none";
-        document.getElementById('videoFrame').src = ""; // Arrête la vidéo
+        modal.style.display = "none";
+        iframe.src = "";
+        iframe.style.display = 'none';
+        videoUnavailable.style.display = 'none';
     });
 });
-
 
 
 // Lorsque la souris entre sur la vidéo

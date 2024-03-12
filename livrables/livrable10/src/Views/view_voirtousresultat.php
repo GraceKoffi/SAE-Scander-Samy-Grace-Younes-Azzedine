@@ -1,10 +1,22 @@
 <?php require "Views/view_navbar.php"; ?>
 <style>
 .bouton-favori{
-    border-radius: 10px 5%;
+    border-radius: 5px 5px 5px 5px;
     background-color: #FFCC00;
     padding: 5px 10px;
  }
+
+#favoriButton:hover, 
+#favoriButton:visited:hover, 
+#favoriButton:link:hover, 
+#favoriButton:active:hover,
+#favoriButton {
+    text-decoration: none !important;
+}
+.no-scroll{
+
+overflow : hidden;
+}
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
@@ -13,7 +25,8 @@
         <?php endif; ?>
         <p>
         <a href="?controller=recherche">
-        <button id='favoriButton' class='bouton-favori'> &#8592; Realiser une nouvelle recherche</button>
+        <button type="submit" id="favoriButton" class="bouton-favori" style =" color: white;display: block;" >&#8592; Realiser une nouvelle recherche</button>
+
         </a>
         </p>
     </div>
@@ -70,18 +83,32 @@
             </div>
                 
         
-               
+            <div id="loadingOverlay">
+    <div class="loader"></div>
+</div>
+
+
+
 <script src="Js/function.js"></script>
 <script>
-    
+    function showLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+  window.scrollTo(0, 0);
+  document.body.classList.add("no-scroll"); // Empêche le défilement
+}
+
+function hideLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "none";
+  document.body.classList.remove("no-scroll"); // Réactive le défilement
+}
+
     let movies = [];
     movies = <?php echo json_encode($recherche); ?>;
     let currentPage = 1;
-    let moviesPerPage = 10
-
-;
+    let moviesPerPage = 10;
 
 async function displayMovies() {
+  showLoadingOverlay();
     const list = document.getElementById("movie-list");
     list.innerHTML = ""; // Efface la liste actuelle
     let endIndex = currentPage * moviesPerPage;
@@ -107,7 +134,7 @@ async function displayMovies() {
         cardContent += `</div></div></a>`;
         list.innerHTML += cardContent;
     }
-
+    hideLoadingOverlay(); 
     document.getElementById("count").innerText = `Résultat : ${movies.length}`;
     window.scrollTo({ top: 0 });
     renderPagination();

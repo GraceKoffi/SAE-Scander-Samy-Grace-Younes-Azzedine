@@ -272,10 +272,17 @@ else if(isset($_GET['filmId'])){
         <div class="col-md-1"></div> <!-- Espace entre le portrait et le bloc d'info -->
         <div class="col-md-7 mr-3">
             <div class="blocinfo" style="background-color: transparent;"> <!-- Le fond peut être ajusté pour améliorer la lisibilité -->
+              
                 <h1><?= ($info[0]['primarytitle'] ?? 'Inconnu'); ?>
                 </h1>
-                <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?></p>
-                <h6  style="margin-top: 50px;">Synopsis</h6>
+                <?php if ($info[0]['titletype']=="tvEpisode" ) : ?>
+                <h6>Série : <?= ($nomserie['seriesname'] ?? 'Inconnu'); ?></h6>
+                
+                <?php endif ; ?>
+                <p>Durée : <?= (!empty($info[0]['runtimeminutes']) ? $info[0]['runtimeminutes'] . ' minutes' : 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Année : <?= ($info[0]['startyear'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp;<span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  Genres : <?= ($info[0]['genres'] ?? 'Inconnu'); ?> &nbsp;&nbsp;&nbsp; <?php if ($info[0]['titletype'] == "movie" || $info[0]['titletype'] == "tvSeries"  || $info[0]['titletype'] == "tvMiniSeries") : ?><span class="middot">&middot;</span> &nbsp;&nbsp;&nbsp;  <a href="#" class="openModal" data-tconst=" <?php echo $_GET['id'] ?>"> <img src="./Images/playwhite.png" alt="Icône Bande-annonce" style="height: 20px; margin-right: 5px; vertical-align: middle;">Bande-annonce </a><?php endif; ?></p>
+                
+
+<h6  style="margin-top: 50px;">Synopsis</h6>
                 <p class="synopsie"></p>
                 <div class="row" style="margin-top: 50px;margin-bottom: 50px;">
                     <div class="col-md-4">
@@ -487,10 +494,20 @@ else if(isset($_GET['filmId'])){
     </div>
 </div>
 
-
+<div id="videoModal" style="display:none;">
+    <span id="closeModal">&times;</span>
+    <div id="modalContent">
+        <iframe id="videoFrame" width="660" height="415" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="display:none;"></iframe>
+        <p id="videoUnavailable"  style="display:none; text-align:center;">Vidéo indisponible</p>
+    </div>
+</div>
 
 <script src="Js/function.js"></script>
 <script>
+
+
+
+
 
 document.querySelector('#buttonCommentaire').addEventListener('click', ()=>{
     handleFormValidation();
@@ -618,44 +635,45 @@ function filterEpisodesBySeason() {
 
 }
 
-       function loadMovieDetails(id_imdb) {
+function loadMovieDetails(id_imdb) {
+    const api_key = "9e1d1a23472226616cfee404c0fd33c1";
+    const url = `https://api.themoviedb.org/3/find/${id_imdb}?api_key=${api_key}&external_source=imdb_id&language=fr`;
 
-            const api_key = "9e1d1a23472226616cfee404c0fd33c1";
-            const url = `https://api.themoviedb.org/3/find/${id_imdb}?api_key=${api_key}&external_source=imdb_id&language=fr`;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let couverture = "./Images/cinemadepannage.jpg";
+            let portrait = "./Images/depannage.jpg";
+            let overview = 'Inconnu';
+            let tmdbId = null; // Stocker l'ID TMDB ici
 
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                let couverture = "./Images/cinemadepannage.jpg";
-                let portrait = "./Images/depannage.jpg";
-                let overview = 'Inconnu';
+            const results = [...data.movie_results, ...data.tv_results, ...data.tv_episode_results, ...data.tv_season_results];
 
-                const results = [...data.movie_results, ...data.tv_results, ...data.tv_episode_results, ...data.tv_season_results];
-
-                for (let result of results) {
-                    if (result.backdrop_path || result.still_path) {
-                        couverture = `https://image.tmdb.org/t/p/w1280${result.backdrop_path || result.still_path}`;
-
-                    }
+            for (let result of results) {
+                if (result.backdrop_path || result.still_path) {
+                    couverture = `https://image.tmdb.org/t/p/w1280${result.backdrop_path || result.still_path}`;
                 }
-
-                for (let result of results) {
-                    if (result.poster_path || result.still_path) {
-                        portrait = `https://image.tmdb.org/t/p/w400${result.poster_path || result.still_path}`;
-
-                    }
+                if (result.poster_path || result.still_path) {
+                    portrait = `https://image.tmdb.org/t/p/w400${result.poster_path || result.still_path}`;
                 }
-
-                for (let result of results) {
-                    if (result.overview) {
-                        overview = result.overview;
-
-                    }
+                if (result.overview) {
+                    overview = result.overview;
                 }
-                document.querySelector('.img-fluid').src = couverture;
-                document.querySelectorAll('.img-fluid.w-100').forEach(img => img.src = portrait);
-                document.querySelector('.synopsie').textContent = overview;
-       })};
+                if (result.id) { // Vérifier et stocker l'ID TMDB
+                    tmdbId = result.id;
+                }
+            }
+
+            document.querySelector('.img-fluid').src = couverture;
+            document.querySelectorAll('.img-fluid.w-100').forEach(img => img.src = portrait);
+            document.querySelector('.synopsie').textContent = overview;
+
+            // Stockez l'ID TMDB dans un attribut de l'élément pour une utilisation ultérieure
+            document.querySelectorAll('.openModal').forEach(element => {
+                element.setAttribute('data-tmdb-id', tmdbId);
+            });
+        });
+}
             
 
 
@@ -703,6 +721,82 @@ acteurs.forEach(function(acteur) {
         })
         .catch(error => console.error('Erreur lors de la récupération des données:', error));
     })}
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Configuration initiale
+    const apiKey = '9e1d1a23472226616cfee404c0fd33c1';
+    const modal = document.getElementById('videoModal');
+    const iframe = document.getElementById('videoFrame');
+    const videoUnavailable = document.getElementById('videoUnavailable');
+    const titleType = "<?php echo $info[0]['titletype']; ?>"; // Récupère le type du contenu depuis PHP
+
+    // Fermeture de la modal quand on clique en dehors
+    document.addEventListener('click', function(event) {
+        if (!modal.contains(event.target) && modal.style.display === 'block') {
+            closeModal();
+        }
+    });
+
+    // Ouverture de la modal et récupération de la bande-annonce
+    document.querySelectorAll('.openModal').forEach(link => {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const tmdbId = this.getAttribute('data-tmdb-id'); // Récupérer l'ID TMDB stocké
+        let titleType = "<?php echo $info[0]['titletype']; ?>"; // Le type de titre (movie, tvSeries, etc.)
+        let url;
+
+        if (titleType === "movie") {
+            url = `https://api.themoviedb.org/3/movie/${tmdbId}/videos?api_key=9e1d1a23472226616cfee404c0fd33c1&language=fr`;
+        } else if (titleType === "tvSeries" || titleType === "tvMiniSeries") {
+            url = `https://api.themoviedb.org/3/tv/${tmdbId}/videos?api_key=9e1d1a23472226616cfee404c0fd33c1&language=fr`;
+        } else {
+            console.log("Type non supporté pour la bande-annonce.");
+            return;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                showTrailer(data);
+            })
+            .catch(error => {
+                console.log(error);
+                showUnavailableMessage();
+            });
+    });
+});
+
+    function showTrailer(data) {
+        if (data.results.length > 0) {
+            let trailer = data.results.find(video => video.type.toLowerCase() === "trailer" && video.site.toLowerCase() === "youtube");
+            if (trailer) {
+                iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+                iframe.style.display = 'block';
+                videoUnavailable.style.display = 'none';
+            } else {
+                showUnavailableMessage();
+            }
+        } else {
+            showUnavailableMessage();
+        }
+        modal.style.display = 'block';
+    }
+
+    function showUnavailableMessage() {
+        iframe.style.display = 'none';
+        videoUnavailable.style.display = 'block';
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        iframe.src = '';
+        videoUnavailable.style.display = 'none';
+    }
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
 });
 
         var alertElement = document.getElementById('myAlert');

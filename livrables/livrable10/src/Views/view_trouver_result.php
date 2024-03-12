@@ -6,6 +6,10 @@
     background-color: #FFCC00;
     padding: 5px 10px;
  }
+ .no-scroll{
+
+overflow : hidden;
+}
 </style>
 <div class="row" style="margin-top: 120px;">
     <div class="col-md-8 m-5">
@@ -68,10 +72,24 @@
             <button onclick="nextPage()">></button>
             </div>
                 
-        
+            <div id="loadingOverlay">
+    <div class="loader"></div>
+</div>
+
+ 
                
  <script src="Js/function.js"></script>
 <script>
+ function showLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+  window.scrollTo(0, 0);
+  document.body.classList.add("no-scroll"); // Empêche le défilement
+}
+
+function hideLoadingOverlay() {
+  document.getElementById("loadingOverlay").style.display = "none";
+  document.body.classList.remove("no-scroll"); // Réactive le défilement
+}
     let movies = [];
     movies = <?php echo json_encode($result); ?>;
     let currentPage = 1;
@@ -79,6 +97,7 @@
 
 
 async function displayMovies() {
+  showLoadingOverlay();
     const list = document.getElementById("movie-list");
     list.innerHTML = ""; // Efface la liste actuelle
     let endIndex = currentPage * moviesPerPage;
@@ -105,7 +124,7 @@ async function displayMovies() {
          
         list.innerHTML += cardContent;
     }
-
+    hideLoadingOverlay();
     document.getElementById("count").innerText = `Résultat : ${movies.length}`;
     window.scrollTo({ top: 0 });
     renderPagination();

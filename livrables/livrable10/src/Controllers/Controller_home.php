@@ -76,6 +76,8 @@ Class Controller_home extends Controller{
                   'nbsaison'=> $m->getNbSaison(trim(e($id))),
                   'saisonactuel'=> $m->getSaison(trim(e($id))),
                   'nbepisode'=> $m->getNbEpisode(trim(e($id))),
+                  'nomserie'=> $m->getNameSerie(trim(e($id))),
+                  
             
             ];
             
@@ -257,8 +259,24 @@ Class Controller_home extends Controller{
         }
     }
 
+    public function action_politique(){
 
-    
+        $tab = [
+            
+            
+        ];
+        $this->render("politique", $tab);
+
+    }
+    public function action_sommesnous(){
+
+        $tab = [
+            
+            
+        ];
+        $this->render("sommesnous", $tab);
+
+    }
     public function action_default(){
 
         $this->action_home();

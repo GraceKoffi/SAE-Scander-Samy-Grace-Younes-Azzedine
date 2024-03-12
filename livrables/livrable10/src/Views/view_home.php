@@ -350,11 +350,12 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
                     </span>
 
                     <div id="videoModal" style="display:none;">
-                                <span id="closeModal">&times;</span>
-                                <div id="modalContent">
-                                    <iframe id="videoFrame" width="660"  data-tconst="<?= $movie['tconst'] ?>" height="415" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                                </div>
-                                </div>
+    <span id="closeModal">&times;</span>
+    <div id="modalContent">
+        <iframe id="videoFrame" width="660" height="415" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="display:none;"></iframe>
+        <p id="videoUnavailable" width="660" height="415" style="display:none; text-align:center;">Vidéo indisponible</p>
+    </div>
+</div>
                 <?php endforeach; ?>
 
             </div>
@@ -364,10 +365,54 @@ if ($index != 0) : ?> </div> <?php endif; // Ferme le dernier groupe
     </div>
 <?php endforeach; ?>
 
+<h3 class="m-5" style="border-left:2px solid #FFCC00;padding-left: 6px;"> Fonctionnalités </h3>
+
+<div class="feature-container">
+  <div class="feature-box">
+    <img src="./Images/searchjaune.png" alt="Recherche Avancée" class="feature-icon">
+    <div class="feature-text">
+      
+      <p>
+Plongez dans l'univers captivant de Findercine, où notre fonctionnalité de recherche avancée dévoile un monde infini de divertissement, guidant chaque curiosité vers sa destination cinématographique idéale...</p>
+<a href='?controller=recherche' style="text-decoration: none;">     
+<button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+      Recherche Avancée
+        </button>
+    </a>
+    </div>
+  </div>
+  <div class="feature-box">
+    <img src="./Images/lienjaune.png" alt="Liens" class="feature-icon">
+    <div class="feature-text">
+    <p>Plongez dans le réseau des collaborations artistiques et révélez les liens entre vos favoris du grand écran. Que ce soit pour trouver les films partagés par des acteurs spécifiques ou pour repérer les talents communs à différentes productions, notre fonction "Liens" est conçue pour éclairer ces parcours croisés passionnants.</p>
+      <a href='?controller=trouver' style="text-decoration: none;">
+      <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+     Liens
+        </button>
+                                    </a>
+    </div>
+  </div>
+  <div class="feature-box">
+    <img src="./Images/networkjaune.png" alt="Chemin le plus court" class="feature-icon">
+    <div class="feature-text">
+      <p>"Chemin le plus court" vous invite à tracer les sentiers cachés qui relient vos étoiles et spectacles préférés. Que ce soit pour cartographier les collaborations entre des acteurs spécifiques ou pour déceler les fils ténus qui lient différentes œuvres, notre outil dévoile les itinéraires les plus directs et les associations les plus inattendues de l'univers du divertissement.</p>
+      <a href='?controller=rapprochement' style="text-decoration: none;">
+      <button type="submit" id="favoriButton" class="btn btn-warning mx-auto boutonFonctionnalite" style =" color: white;display: block;" >
+Chemins le plus court       
+ </button>
+</a>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script src="Js/home.js"></script>
 <script>
 
     
+
     document.querySelectorAll('.favori-button').forEach(function (button) {
         button.addEventListener('click', function (event) {
             // Empêcher la propagation de l'événement de clic

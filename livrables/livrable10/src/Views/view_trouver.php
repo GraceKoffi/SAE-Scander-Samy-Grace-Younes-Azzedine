@@ -81,9 +81,9 @@
     <div class="row align-items-center">   
             <h1 class="titreTrouver">Liens</h1>
             
-            <p class="paragrapheTrouver" style="border-left:2px solid #FFCC00;padding-left: 6px; padding-bottom : 20px">Avec "Liens" sur Findercine, plongez au cœur des réseaux du divertissement pour révéler
-                les connexions inattendues entre vos personnalités et titres préférés.</br>Que vous cherchiez à découvrir les projets communs
-                entre deux personnes du monde du spectacle,</br> ou à identifier les collaborations entre différents titres, "Liens" est l'outil parfait.</p>
+            <p class="paragrapheTrouver" style="padding-left: 6px; padding-bottom : 20px;font-size:20px;">
+            Découvrez les connexions inattendues entre vos personnalités et œuvres cinématographiques préférées. Que vous souhaitiez dénicher les projets partagés entre deux acteurs, ou identifier les films et séries où ils ont collaboré, "Liens" est votre outil idéal pour explorer ces intersections fascinantes.</p>
+            
         </div>    
     </div>
 </div>

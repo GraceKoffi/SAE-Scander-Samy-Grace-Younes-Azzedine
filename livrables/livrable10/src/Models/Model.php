@@ -146,6 +146,17 @@ class Model
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+    public function getNameSerie($id){
+        $sql = "SELECT tb.primaryTitle AS seriesName
+        FROM title_basics tb
+        JOIN title_episode te ON tb.tconst = te.parentTconst
+        WHERE te.tconst = :id ;";
+       
+       $query = $this->bd->prepare($sql);
+        $query->bindValue(":id", $id, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function getNbEpisode($id){
         $sql = "SELECT COUNT(*) 
@@ -1177,6 +1188,7 @@ class Model
         FROM title_basics tb
         JOIN title_ratings tr ON tb.tconst = tr.tconst
         WHERE tb.genres ILIKE :genre AND tr.numVotes > 100000
+        AND tb.titletype='movie' 
         ORDER BY RANDOM()
         LIMIT 10 ;");
             $genre = '%' . $genre . '%';
