@@ -11,9 +11,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.js"></script>
-
-
-    <link rel="icon"  sizes="128x128" href="./images/logoofficielle.png" type="image/png">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<link rel="icon" sizes="128x128" href="./images/logoofficielle.png" type="image/png">
 
 
 <link rel="stylesheet" href="./css/style.css">
@@ -42,7 +42,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
             <li><a class="dropdown-item" href="?controller=recherche&action=home"><img src="./images/search1.png" alt="Favicon Trouver">Recherche Avancée</a></li>
             <li><a class="dropdown-item" href="?controller=trouver&action=fom_trouver"> <img src="./images/liens.png" alt="Favicon Liens">Liens</a></li>
-            <li><a class="dropdown-item" href="?controller=rapprochement&action=fom_rapprochement"><img src="./images/networkblanc.png" alt="Favicon data">Chemins le plus court</a></li>
+            <li><a class="dropdown-item" href="?controller=rapprochement&action=fom_rapprochement"><img src="./images/networkblanc.png" alt="Favicon data">Chemin le plus court</a></li>
           </ul>
         </li>
         </ul>
