@@ -365,7 +365,7 @@ Redécouvrez vos explorations grâce à l'historique de vos recherches.
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
-                <p>Rapprochement
+                <p>Chemin le plus court
                 </p>
             </div>
         </div>

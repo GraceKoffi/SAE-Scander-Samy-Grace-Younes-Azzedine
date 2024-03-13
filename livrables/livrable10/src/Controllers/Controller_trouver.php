@@ -17,7 +17,7 @@ class Controller_trouver extends Controller {
             
                 $nombrededoublon1 = $m->doublonFilm($_POST['titre1'], $category1);
                 $nombrededoublon2 = $m->doublonFilm($_POST['titre2'], $category2);
-                }
+
                 if(isset($_SESSION['username'])) {
                     $data = [
                         "UserName" => $_SESSION['username'],
@@ -101,7 +101,7 @@ class Controller_trouver extends Controller {
             $tab = ["tab" => "Une Erreur est survenu"];
             $this->render("error", $tab);
         }
-
+    }
     }
 
     public function action_trouverAprofondiActeur(){
@@ -236,3 +236,4 @@ class Controller_trouver extends Controller {
         $this->action_fom_trouver();
     }
 }
+

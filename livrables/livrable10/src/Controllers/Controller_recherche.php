@@ -9,7 +9,7 @@ class Controller_recherche extends Controller {
 
 
     public function action_rechercher() {
-        $m = Model::getModel();
+         $m = Model::getModel();
         if(isset($_SESSION['username'])){
             $data = [
                 "UserName" => $_SESSION['username'],
@@ -18,7 +18,7 @@ class Controller_recherche extends Controller {
             ];
             $result = $m->addUserRecherche($data);
             
-        }
+        } 
 
         if ($_POST['typeselection'] == 'titre') {
             $titre = isset($_POST['search']) && trim($_POST['search']) !== '' ? $_POST['search'] : null;
@@ -31,12 +31,10 @@ class Controller_recherche extends Controller {
             $genres = $this->buildGenresRegex($genresArray);
             $noteMin = isset($_POST['noteMin']) && $_POST['noteMin'] !== '' ? $_POST['noteMin'] : null;
             $noteMax = isset($_POST['noteMax']) && $_POST['noteMax'] !== '' ? $_POST['noteMax'] : null;
-            $votesMin = isset($_POST['votesMin']) && $_POST['votesMin'] !== '' ? $_POST['votesMin'] : null;
-            $votesMax = isset($_POST['votesMax']) && $_POST['votesMax'] !== '' ? $_POST['votesMax'] : null;
             $type_rech = isset($_POST['modeRecherche']) ? $_POST['modeRecherche'] : null;
 
             $tab = [
-                "recherche" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech), 
+                "recherche" =>  $m->rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, $genres, $noteMin, $noteMax, $type_rech), 
                 "titre" => $titre, 
                 "typereponse" =>$_POST['typeselection'],
                  

@@ -438,7 +438,7 @@ class Model
     
 
     public function rechercheTitre($titre, $types, $dateSortieMin, $dateSortieMax, $dureeMin, $dureeMax, 
-                                    $genres, $noteMin, $noteMax, $votesMin, $votesMax,$type_rech) {
+                                    $genres, $noteMin, $noteMax, $type_rech) {
         $sql = "SELECT tb.tconst, tb.primaryTitle, tb.titletype, tb.startyear, tb.runtimeminutes, tb.genres,tr.averagerating , tr.numvotes
                 FROM title_basics tb
                 LEFT JOIN title_ratings tr ON tr.tconst=tb.tconst
@@ -492,13 +492,6 @@ class Model
             $sql .= " AND tr.averageRating <= :noteMax";
         }
     
-        if ($votesMin !== null) {
-            $sql .= " AND tr.numVotes >= :votesMin";
-        }
-    
-        if ($votesMax !== null) {
-            $sql .= " AND tr.numVotes <= :votesMax";
-        }
 
         $requete = $this->bd->prepare($sql);
     
@@ -546,13 +539,6 @@ class Model
             $requete->bindParam(':noteMax', $noteMax, PDO::PARAM_INT);
         }
     
-        if ($votesMin !== null) {
-            $requete->bindParam(':votesMin', $votesMin, PDO::PARAM_INT);
-        }
-    
-        if ($votesMax !== null) {
-            $requete->bindParam(':votesMax', $votesMax, PDO::PARAM_INT);
-        }
         $requete->execute();
         return $requete->fetchAll(PDO::FETCH_ASSOC);
     }

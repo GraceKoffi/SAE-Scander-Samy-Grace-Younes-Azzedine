@@ -145,7 +145,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 
     <div class="container light-style flex-grow-1 container-p-y settingsTitle">
         <h1 class="font-weight-bold py-3 mb-4">
-            Parametre du compte
+            Paramètre du compte
         </h1>
 
         <div class="card overflow-hidden settings formulaire">
