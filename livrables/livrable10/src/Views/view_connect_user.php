@@ -47,7 +47,11 @@ if(isset($_GET['retour'])){
     .buttonLarge{
         height: 80px;
         background-color: #FFCC00 !important;
-        color: black !important;
+        border:2px solid #FFCC00;
+    }
+    .buttonLarge:hover{
+        background: #b69202;
+        border:2px solid #FFCC00;
     }
 
     .images{
@@ -66,10 +70,17 @@ if(isset($_GET['retour'])){
   }
 
   .bouton-favori{
-    border-radius: 10px 5%;
+    border-radius: 5px 5px 5px 5px;
     background-color: #FFCC00;
     padding: 10px 20px;
     font-size: 15px;
+    color:white;
+    border:1px solid #FFCC00;
+ }
+ .bouton-favori:hover{
+    
+    background-color: #b69202;
+   
  }
  .collaps-beetwen{
     margin-top: 50px;
@@ -90,6 +101,11 @@ if(isset($_GET['retour'])){
  .colapsFavorie{
     margin-bottom: 500px;
  }
+ .histo{
+   
+    color:white;
+ }
+ 
 
 </style>
 
@@ -99,7 +115,7 @@ if(isset($_GET['retour'])){
                 <h1 class="titreTrouver">Salut <?php echo $_SESSION['username']?></h1>
                 
                 <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
-                    <p>Compte est une fonctionnalité inédite, rendant votre expérience magique
+                    <p>La création de compte sur notre site est une fonctionnalité révolutionnaire, conçue pour rendre votre expérience véritablement enchantée.
                     </p>
                 </div>
             </div>
@@ -170,7 +186,8 @@ if(isset($_GET['retour'])){
             <h1 class="titreTrouver">Historique</h1>
             
             <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
-                <p>Redécouvrez vos recherche grace à l'historisation de vos recherche.
+                <p>
+Redécouvrez vos explorations grâce à l'historique de vos recherches.
                 </p>
             </div>
         </div>
@@ -186,7 +203,7 @@ if(isset($_GET['retour'])){
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
-                <p>Recherche
+                <p class="histo">Recherche Avancée
                 </p>
             </div>
         </div>
@@ -425,20 +442,20 @@ if(isset($_GET['retour'])){
 
 </div>
 
-<div id="favoris" class="container-fluid favoris col-md-7 ">
+<div id="favoris" class="container-fluid favoris ">
     <div class="row align-items-center">   
             <div class="col">
             <h1 class="titreTrouver">Favoris</h1>
             
             <div style ="border-left:2px solid #FFCC00; padding-left: 6px;" >
-                <p>Redécouvrez vos recherche grace à l'historisation de vos recherche.
+                <p>Retrouvez facilement vos coups de cœur grâce à l'enregistrement de vos recherches favorites.
                 </p>
             </div>
         </div>
         </div>    
     </div>
 </div>
-<div class="container-fluid colapsFavorie col-md-7">
+<div class="container-fluid colapsFavorie ">
 <div class="collaps-beetwen">
 <p>
   <button class="btn btn-primary btn-lg btn-block buttonLarge" type="button" data-toggle="collapse" data-target="#collapseRecherche" aria-expanded="false" aria-controls="collapseExample">
