@@ -405,8 +405,6 @@ function handleFormValidation() {
         var dureeMaxValue = $('#dureeMax').val().trim();
         var noteMaxValue = $('#noteMax').val().trim();
         var noteMinValue = $('#noteMin').val().trim();
-        var votesMinValue = $('#votesMin').val().trim();
-        var votesMaxValue = $('#votesMax').val().trim();
         var dateNaissanceMinValue = $('#dateNaissanceMin').val().trim();
         var dateNaissanceMaxValue = $('#dateNaissanceMax').val().trim();
         var dateDecesMinValue = $('#dateDecesMin').val().trim();
@@ -415,7 +413,7 @@ function handleFormValidation() {
 
 
 
-
+        debugger;
 
 
         // Valide chaque champ selon les critères spécifiques
@@ -469,20 +467,7 @@ function handleFormValidation() {
             $('#noteMax-error').hide();
             $('#noteMin-error').hide();
             isValid = false;
-        }
-        if (votesMinValue && !/^(0|[1-9]\d{0,6}|10000000)$/.test(votesMinValue)) {
-            $('#votesMin-error').show();
-            isValid = false;
-        }
-        if (votesMaxValue && !/^(0|[1-9]\d{0,6}|10000000)$/.test(votesMaxValue)) {
-            $('#votesMax-error').show();
-            isValid = false;
-        }
-        if (votesMinValue && votesMaxValue && (parseInt(votesMinValue) > parseInt(votesMaxValue) || parseInt(votesMinValue) == parseInt(votesMaxValue))) {
-            $('#votesRange-error').show();
-            $('#votesMax-error').hide();
-            $('#votesMin-error').hide();
-            isValid = false;
+        
         }
         if (dateNaissanceMinValue && (!/^([1-9]|[1-9]\d{1,2}|1\d{3}|20[0-2][0-5])$/.test(dateNaissanceMinValue))) {
             $('#dateNaissanceMin-error').show();
@@ -530,9 +515,6 @@ function handleFormValidation() {
     });
     $('#noteMin, #noteMax').on('input', function() {
         $('#noteRange-error').hide();
-    });
-    $('#votesMin, #votesMax').on('input', function() {
-        $('#votesRange-error').hide();
     });
     $('#dateNaissanceMax, #dateNaissanceMin').on('input', function() {
         $('#dateNaissanceRange-error').hide();
