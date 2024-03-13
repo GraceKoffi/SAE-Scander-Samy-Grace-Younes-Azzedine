@@ -3,11 +3,11 @@
     <div class="row">
         <div class="col-lg-12">
             <ul class="list-inline footer-links">
-                <li class="list-inline-item"><a href="www.facebook.fr"><img src="./Images/facebook.png" alt="Facebook"></a></li>
+                <li class="list-inline-item"><a href="https://www.facebook.com/?locale=fr_FR"><img src="./Images/facebook.png" alt="Facebook"></a></li>
                 <li class="list-inline-item"><a href="https://twitter.com/?lang=fr"><img src="./Images/twitterwhite.png" alt="Twitter"></a></li>
-                <li class="list-inline-item"><a href="www.instagram.com"><img src="./Images/instagram.png" alt="Instagram"></a></li>
-                <li class="list-inline-item"><a href="www.linkedin.com"><img src="./Images/linkedin.png" alt="LinkedIn"></a></li>
-                <li class="list-inline-item"><a href="www.youtube.com"><img src="./Images/youtube.png" alt="YouTube"></a></li>
+                <li class="list-inline-item"><a href="https://www.instagram.com/"><img src="./Images/instagram.png" alt="Instagram"></a></li>
+                <li class="list-inline-item"><a href="https://fr.linkedin.com/"><img src="./Images/linkedin.png" alt="LinkedIn"></a></li>
+                <li class="list-inline-item"><a href="https://www.youtube.com/"><img src="./Images/youtube.png" alt="YouTube"></a></li>
             </ul>
         </div>
     </div>
